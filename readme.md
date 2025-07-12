@@ -1,5 +1,5 @@
 # dots
-Based on https://github.com/mylinuxforwork/dotfiles.
+https://github.com/HyDE-Project/HyDE/.
 
 ## Warning, these dotfiles only work on Arch based distros.
 
