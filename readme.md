@@ -4,7 +4,7 @@ Based on https://github.com/mylinuxforwork/dotfiles.
 ## Warning, these dotfiles only work on Arch based distros.
 
 ## What you're in for
-![Gruvbox colour palette](image-1.png)
+![Monochrome colour palette](image.png)
 
 ### How to install
 Use a pacman wrapper, for this we will be using **yay**.
@@ -23,6 +23,6 @@ Once installed, type these commands:
 
 *Clone this repository*
 
-`git clone https://gitlab.com/goldermanch88/dotfiles.git`
+`git clone https://github.com/krazi49/dotfiles.git`
 
 Once done, open up a file manager (Like, Nautillus, under the pseudonym "Files", the manager you just installed) and start dragging and dropping the files.
