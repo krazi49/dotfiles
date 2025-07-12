@@ -1,0 +1,9 @@
+2025/07/12-10:30:47.403 a09db Reusing MANIFEST /home/pine/.config/equibop/sessionData/Local Storage/leveldb/MANIFEST-000001
+2025/07/12-10:30:47.432 a09db Recovering log #21
+2025/07/12-10:30:47.435 a09db Reusing old log /home/pine/.config/equibop/sessionData/Local Storage/leveldb/000021.log 
+2025/07/12-10:39:51.419 a09db Level-0 table #24: started
+2025/07/12-10:39:51.448 a09db Level-0 table #24: 43445 bytes OK
+2025/07/12-10:39:51.458 a09db Delete type=0 #21
+2025/07/12-12:56:17.575 a09dd Level-0 table #26: started
+2025/07/12-12:56:17.583 a09dd Level-0 table #26: 34271 bytes OK
+2025/07/12-12:56:17.591 a09dd Delete type=0 #23
