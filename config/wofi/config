@@ -1,8 +1,0 @@
-allow_images=true
-hide_scroll=true
-no_actions=true
-term=kitty
-mode=drun
---show
-
-@theme "/home/pine/.local/share/rofi/themes/rounded-purple-dark.rasi"
