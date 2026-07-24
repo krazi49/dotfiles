@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="GtkMenu" id="menu">
+        
+        <child>
+            <object class="GtkMenuItem" id="palette">
+                <property name="label">󱍜  Omnipalette</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkSeparatorMenuItem" id="sep-1" />
+        </child>
+
+        <child>
+            <object class="GtkMenuItem" id="zen-browser">
+                <property name="label">󰾔 Zen</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="term">
+                <property name="label">󰩊 Terminal</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkMenuItem" id="nautilus">
+                <property name="label">󰉋 Files</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkMenuItem" id="blueberry">
+                <property name="label">󰂯 Bluetooth</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkMenuItem" id="info">
+                <property name="label">󰄦 About this PC</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkSeparatorMenuItem" id="sep-2" />
+         </child>
+
+        <child>
+            <object class="GtkMenuItem" id="see_through">
+                <property name="label">󰃚 Transparency mode</property>
+            </object>
+        </child>
+    </object>
+</interface>

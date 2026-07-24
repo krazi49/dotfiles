@@ -1,0 +1,145 @@
+{
+  "layer": "bottom",
+  "position": "bottom",
+  "height": 0,
+  "margin-left": 8,
+  "margin-right": 8,
+  "margin-bottom": 6,
+  "margin-top": 0,
+  "spacing": 6,
+  "tooltips": true,
+  "fixed-center": true,
+  "on-sigusr1": "hide",
+  "on-sigusr2": "show",
+  "start_hidden": false,
+
+  "modules-left": [
+    "custom/clock",
+    "custom/adaptive"
+  ],
+
+  "modules-center": [
+    "custom/space"
+  ],
+
+  "modules-right": [
+    "group/system",
+    "tray",
+    "custom/pitwall",
+    "custom/mood"
+  ],
+
+  "group/system": {
+    "orientation": "horizontal",
+    "modules": [
+      "network",
+      "pulseaudio",
+      "backlight",
+      "custom/bt-battery"
+    ],
+    "on-click": "swaync-client -t -sw"
+  },
+
+  "custom/adaptive": {
+    "interval": 0.1,
+    "format": "{}",
+    "tooltip": true,
+    "exec": "~/.config/waybar/scripts/adaptive.py",
+    "return-type": "json",
+    "signal": 8,
+    "on-click": "~/.config/waybar/scripts/adaptive.py --play-pause",
+    "on-click-right": "~/.config/waybar/scripts/adaptive.py --next",
+    "on-scroll-up": "~/.config/waybar/scripts/adaptive.py --seek-forward",
+    "on-scroll-down": "~/.config/waybar/scripts/adaptive.py --seek-back"
+  },
+
+  "custom/clock": {
+    "exec": "~/.config/waybar/scripts/clock.sh",
+    "return-type": "json",
+    "markup": true,
+    "escape": true,
+    "on-click": "bash -c 'yad --calendar --title=\"Calendar\" --width=320 --height=280 --posx=200 --posy=30 --button=gtk-close:1 --close-on-unfocus'"
+  },
+
+  "custom/pitwall": {
+    "interval": 30,
+    "format": "{}",
+    "tooltip": true,
+    "exec": "~/pitwall/pitwall.py --update",
+    "return-type": "json",
+    "on-click": "bash -c 'if [ -f /tmp/pitwall_url ]; then xdg-open \"$(cat /tmp/pitwall_url)\"; fi'",
+    "on-click-right": "bash -c 'pkill -f pitwall.py; waybar -r'"
+  },
+
+  "custom/space": {
+    "tooltip": true,
+    "format": "{text}",
+    "exec": "~/.config/hypr/scripts/workspace.sh",
+    "escape": false,
+    "return-type": "json",
+    "on-click": "bash ~/.config/hypr/scripts/workspace-overview.sh",
+    "on-click-right": "bash ~/.config/hypr/scripts/workspace-jump.sh",
+    "on-scroll-up": "bash ~/.config/hypr/scripts/workspace-scroll.sh e+1",
+    "on-scroll-down": "bash ~/.config/hypr/scripts/workspace-scroll.sh e-1"
+  },
+
+  "custom/mood": {
+    "interval": 10,
+    "format": "{}",
+    "tooltip": false,
+    "exec-if": "[ -f ~/.config/waybar/current_mood ]",
+    "exec": "~/.config/waybar/scripts/mood.sh",
+    "return-type": "json"
+  },
+
+  "custom/bt-battery": {
+    "interval": 10,
+    "format": " {} ",
+    "exec": "~/.config/waybar/scripts/bt-status.py",
+    "return-type": "json",
+    "on-click": "blueberry"
+  },
+
+  "network": {
+    "tooltip": true,
+    "format-wifi": "{icon}",
+    "format-ethernet": "{icon}",
+    "format-disconnected": "{icon}",
+    "interval": 2,
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ]
+  },
+
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-muted": "{icon}",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "tooltip-format": "Volume: {volume}%"
+  },
+
+  "backlight": {
+    "format": "{icon}",
+    "format-icons": [
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "tooltip-format": "Brightness: {percent}%"
+  },
+
+  "tray": {
+    "icon-size": 12,
+    "spacing": 6
+  }
+}
