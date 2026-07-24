@@ -1,0 +1,23 @@
+-- Curves
+hl.curve("md3_standard", { type = "bezier", points = { { 0.2, 0 }, { 0, 2 } } })
+hl.curve("md3_decel", { type = "bezier", points = { { 0.05, 0.7 }, { 0.1, 1 } } })
+hl.curve("md3_accel", { type = "bezier", points = { { 0.3, 0 }, { 0.8, 2 } } })
+hl.curve("menu_decel", { type = "bezier", points = { { 0.1, 1 }, { 0, 1 } } })
+hl.curve("menu_accel", { type = "bezier", points = { { 0.38, 0.04 }, { 1, 0.07 } } })
+hl.curve("spring", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.05 } } })
+hl.curve("bouncy", { type = "bezier", points = { { 0.05, 0.9 }, { 0.1, 1.12 } } })
+hl.curve("swift_out", { type = "bezier", points = { { 0.0, 0.0 }, { 0.2, 2.0 } } })
+hl.curve("swift_in", { type = "bezier", points = { { 0.4, 0.0 }, { 1.0, 2.0 } } })
+
+-- Animations
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "spring", style = "popin 70%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3.5, bezier = "swift_in", style = "popin 90%" })
+hl.animation({ leaf = "windows", enabled = true, speed = 4, bezier = "bouncy", style = "popin 80%" })
+hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "bouncy" })
+hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "md3_decel" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = 3.5, bezier = "spring", style = "fade" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 2, bezier = "menu_accel", style = "fade" })
+hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 3.5, bezier = "spring" })
+hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 2, bezier = "menu_accel" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5.5, bezier = "bouncy", style = "slide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 4.5, bezier = "spring", style = "slidevert" })
