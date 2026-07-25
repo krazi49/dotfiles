@@ -1,4 +1,5 @@
 #!/bin/bash
+paplay ~/.sounds/omniscript.wav &
 THEME="$HOME/.config/rofi/config.rasi"
 
 ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰅶  Caffeine\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker"

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Configuration
+paplay ~/.sounds/omniscript.wav &
 THEME="$HOME/.config/rofi/config.rasi"
 TERMINAL="kitty"
 

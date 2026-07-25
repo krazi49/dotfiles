@@ -1,5 +1,6 @@
 #!/bin/bash
 
+paplay ~/.sounds/omniscript.wav &
 THEME="$HOME/.config/rofi/config.rasi"
 
 take_screenshot() {
