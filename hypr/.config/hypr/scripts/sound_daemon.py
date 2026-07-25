@@ -19,6 +19,7 @@ sounds expected in ~/.sounds/:
   openwindow.wav
   closewindow.wav
   volume.wav
+  notif.wav
 """
 import os
 import socket
@@ -294,19 +295,38 @@ def watch_volume():
             t.start()
 
 
+def watch_notifications():
+    proc = subprocess.Popen(
+        [
+            "dbus-monitor", "--session",
+            "interface='org.freedesktop.Notifications',member='Notify'",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        bufsize=1,
+    )
+    for line in proc.stdout:
+        if "member=Notify" in line:
+            play("notif.wav")
+
+
 if __name__ == "__main__":
     t1 = threading.Thread(target=watch_special_workspace, daemon=True)
     t2 = threading.Thread(target=watch_usb, daemon=True)
     t3 = threading.Thread(target=watch_battery_plug, daemon=True)
     t4 = threading.Thread(target=watch_battery_low, daemon=True)
     t5 = threading.Thread(target=watch_volume, daemon=True)
+    t6 = threading.Thread(target=watch_notifications, daemon=True)
     t1.start()
     t2.start()
     t3.start()
     t4.start()
     t5.start()
+    t6.start()
     t1.join()
     t2.join()
     t3.join()
     t4.join()
     t5.join()
+    t6.join()
