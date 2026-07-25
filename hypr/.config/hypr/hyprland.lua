@@ -47,6 +47,7 @@ hl.on("hyprland.start", function()
 
 	-- OpenClaw gateway
 	hl.exec_cmd("openclaw gateway start")
+	hl.exec_cmd("hyprctl reload")
 end)
 
 hl.on("config.reloaded", function()
@@ -85,9 +86,9 @@ hl.config({
 			enabled = true,
 			color = "0xcc000000",
 			color_inactive = "0x55000000",
-			offset = { 0, 20 },
-			range = 80,
-			render_power = 3,
+			offset = { 0, 10 },
+			range = 100,
+			render_power = 4,
 			scale = 0.96,
 		},
 	},
