@@ -1,0 +1,72 @@
+#!/bin/bash
+THEME="$HOME/.config/rofi/config.rasi"
+KEYBINDS="$HOME/.config/hypr/keybindings.lua"
+CACHE="$HOME/.cache/omnisearch/omnikeys"
+mkdir -p "$PROMPT"
+
+if [[ ! -f "$KEYBINDS" ]]; then
+  notify-send "Keybindings" "keybindings.lua not found" -t 3000
+  exit 1
+fi
+
+KEYBINDS_TIME=$(stat -c "%Y" "$KEYBINDS")
+CACHE_TIME=$([[ -f "$CACHE" ]] && stat -c "%Y" "$CACHE" || echo 0)
+
+if [[ "$KEYBINDS_TIME" -gt "$CACHE_TIME" ]] || [[ ! -f "$CACHE" ]]; then
+  MAINMOD=$(grep -oP '(?<=local main_mod = ")[^"]*' "$KEYBINDS" | head -n1)
+  [[ -z "$MAINMOD" ]] && MAINMOD="ALT"
+
+  NORMALIZED=$(
+    python3 - "$KEYBINDS" <<'EOF'
+import re, sys
+
+with open(sys.argv[1]) as f:
+    content = f.read()
+
+result = re.sub(r'hl\.bind\((.*?)\)', lambda m: 'hl.bind(' + re.sub(r'\s+', ' ', m.group(1)) + ')', content, flags=re.DOTALL)
+for line in result.splitlines():
+    line = line.strip()
+    if line.startswith('hl.bind('):
+        print(line)
+EOF
+  )
+
+  MAX=0
+  declare -a ENTRIES
+
+  while IFS= read -r line; do
+    COMBO=$(echo "$line" | grep -oP '(?<=hl\.bind\()[^,]+' | tr -d '"' | xargs)
+    COMBO=$(echo "$COMBO" | sed "s/main_mod/$MAINMOD/g; s/ \.\. \"/ + /g; s/\"//g" | xargs)
+    DSP=$(echo "$line" | grep -oP 'hl\.dsp\.\S+\(' | head -n1 | sed 's/hl\.dsp\.//' | sed 's/(//')
+    ARG=$(echo "$line" | grep -oP 'hl\.dsp\.[^(]+\(\{[^}]*\}\)' | grep -oP '\{[^}]*\}' | tr -d '{}' | xargs)
+    if echo "$line" | grep -q 'exec_cmd'; then
+      ARG=$(echo "$line" | grep -oP '(?<=exec_cmd\(")[^"]*' | head -n1)
+      DSP="exec"
+    fi
+
+    [[ -z "$COMBO" ]] && continue
+
+    DESC="${DSP}${ARG:+  $ARG}"
+    LEN=${#COMBO}
+    [[ $LEN -gt $MAX ]] && MAX=$LEN
+
+    ENTRIES+=("$COMBO|||$DESC")
+  done <<<"$NORMALIZED"
+
+  >"$CACHE"
+  for entry in "${ENTRIES[@]}"; do
+    COMBO="${entry%%|||*}"
+    DESC="${entry##*|||}"
+    printf "󰌌  %-${MAX}s  │  %s\n" "$COMBO" "$DESC" >>"$CACHE"
+  done
+fi
+
+if [[ ! -s "$CACHE" ]]; then
+  notify-send "Keybindings" "No keybinds found in keybindings.lua" -t 3000
+  exit 1
+fi
+
+cat "$CACHE" | rofi -normal-window -dmenu \
+  -theme "$THEME" \
+  -i \
+  -p "$PROMPT"

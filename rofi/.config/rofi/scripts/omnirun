@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Configuration
+THEME="$HOME/.config/rofi/config.rasi"
+TERMINAL="kitty"
+
+# 1. Generate the list of commands
+cmd_list=$(compgen -c | sort -u | grep -v '^[[:punct:]]')
+
+# 2. Format the root entry
+formatted_list="Run as root\n$cmd_list"
+
+export PROMPT="󰆍  Run command"
+# 3. Launch Rofi
+choice=$(echo -e "$formatted_list" | rofi -normal-window -dmenu \
+  -theme "$THEME" \
+  -i \
+  -p "$PROMPT")
+
+[[ -z "$choice" ]] && exit 0
+
+# 4. Handle root logic
+if [[ "$choice" == "Run as root" ]]; then
+  sudo_cmd=$(echo -e "$cmd_list" | rofi -normal-window -dmenu -theme "$THEME" -p "$PROMPT")
+  if [[ -n "$sudo_cmd" ]]; then
+    $TERMINAL -e zsh -c "sudo $sudo_cmd; exec zsh"
+  fi
+  exit 0
+fi
+
+# 5. Execution logic
+case "$choice" in
+btop | htop | nvtop | nmtui | ranger | vim | nvim | nano | fzf)
+  $TERMINAL -e zsh -c "$choice; exec zsh" &
+  ;;
+*)
+  $TERMINAL -e zsh -c "$choice; exec zsh" &
+  notify-send "Omnirun" "Executing: $choice"
+  ;;
+esac

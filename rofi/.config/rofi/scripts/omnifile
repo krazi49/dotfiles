@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# Configuration
+THEME="$HOME/.config/rofi/config.rasi"
+UP_ICON="󰁍  .."
+FOLDER_ICON="󰉋   "
+FILE_ICON="󰈔 󰁜  "
+FOLDER_OPTS_ICON="󰮫  Menu"
+
+function context_menu() {
+  local target="$1"
+  local clean_target="${target%/}"
+  local filename=$(basename "$clean_target")
+  local parent_dir
+  parent_dir=$(dirname "$clean_target")
+
+  local size_info=""
+  if [[ -d "$target" ]]; then
+    local item_count=$(ls -1A "$target" 2>/dev/null | wc -l)
+    if [ "$item_count" -le 1 ]; then
+      size_info=" ($item_count item)"
+    else
+      size_info=" ($item_count items)"
+    fi
+  fi
+
+  local options="󰏌  Open\n󰝰  Open in file manager\n󰆊  Move to trash\n󰈔  Open with...\n󰉖  Copy path\n󰁝  Back"
+
+  local choice=$(echo -e "$options" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -p "$PROMPT")
+
+  [[ -z "$choice" ]] && exit 0
+
+  case "$choice" in
+  *"Open")
+    xdg-open "$target" &
+    exit 0
+    ;;
+  *"file manager"*)
+    if [[ -d "$target" ]]; then
+      nautilus "$target" &
+    else
+      nautilus "$parent_dir" &
+    fi
+    exit 0
+    ;;
+  *"trash"*)
+    confirm=$(echo -e "󰆊  Confirm deletion\n󰁝  Cancel" | rofi -normal-window -dmenu \
+      -theme "$THEME" \
+      -p "$PROMPT")
+    if [[ "$confirm" == *"Confirm"* ]]; then
+      if command -v gio >/dev/null; then
+        gio trash "$target" && notify-send "$filename" "Moved to trash"
+      else
+        rm -rf "$target" && notify-send "System" "$filename deleted"
+      fi
+      exit 0
+    fi
+    context_menu "$target"
+    ;;
+  *"Open with"*)
+    local app
+    app=$(ls /usr/share/applications/*.desktop | xargs -n 1 basename | sed 's/\.desktop//' |
+      rofi -normal-window -dmenu -theme "$THEME" -p "$PROMPT")
+    if [[ -n "$app" ]]; then
+      gtk-launch "$app" "$target" &
+      exit 0
+    fi
+    ;;
+  *"Copy path"*)
+    echo -n "$target" | wl-copy
+    notify-send "Clipboard" "Path copied to clipboard"
+    exit 0
+    ;;
+  *"Back"*)
+    return 0
+    ;;
+  esac
+}
+
+function browse() {
+  local dir="$1"
+
+  local list="$UP_ICON\n"
+  list+="$FOLDER_OPTS_ICON\n"
+
+  while IFS= read -r item; do
+    [[ -z "$item" || "$item" == "." || "$item" == ".." ]] && continue
+    [[ "$item" =~ ^(\.cache|\.icons|\.thumbnails|node_modules)/$ ]] && continue
+
+    if [[ "$item" == */ ]]; then
+      list+="$FOLDER_ICON$item\n"
+    else
+      list+="$FILE_ICON$item\n"
+    fi
+  done < <(ls -ap "$dir" 2>/dev/null)
+
+  local choice=$(echo -e "$list" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -i \
+    -p "$PROMPT")
+
+  [[ -z "$choice" ]] && exit 0
+
+  if [[ "$choice" != "$UP_ICON" && "$choice" != "$FOLDER_OPTS_ICON" && "$choice" != "$FOLDER_ICON"* && "$choice" != "$FILE_ICON"* ]]; then
+    global_search "$choice"
+    exit 0
+  fi
+
+  if [[ "$choice" == "$UP_ICON" ]]; then
+    local parent=$(dirname "$dir")
+    [[ "$parent" == "." ]] && parent="$HOME"
+    [[ "$parent" != "/" && "${parent: -1}" != "/" ]] && parent="$parent/"
+    browse "$parent"
+    return
+
+  elif [[ "$choice" == "$FOLDER_OPTS_ICON" ]]; then
+    context_menu "$dir"
+    browse "$dir"
+    return
+
+  elif [[ "$choice" == "$FOLDER_ICON"* ]]; then
+    local clean_name="${choice#$FOLDER_ICON}"
+    browse "$dir$clean_name"
+
+  elif [[ "$choice" == "$FILE_ICON"* ]]; then
+    local clean_name="${choice#$FILE_ICON}"
+    context_menu "$dir$clean_name"
+    browse "$dir"
+  fi
+}
+
+function global_search() {
+  local query="$1"
+  local search_results=$(fd -H \
+    -E .git \
+    -E .cache \
+    -E .icons \
+    -E .thumbnails \
+    -E node_modules \
+    "$query" "$HOME" --max-depth 5 2>/dev/null)
+
+  if [[ -z "$search_results" ]]; then
+    browse "$HOME/"
+    return
+  fi
+
+  local formatted=""
+  while IFS= read -r path; do
+    if [[ -d "$path" ]]; then
+      [[ "$path" != */ ]] && path="$path/"
+      formatted+="$FOLDER_ICON$path\n"
+    else
+      formatted+="$FILE_ICON$path\n"
+    fi
+  done <<<"$search_results"
+
+  local selection=$(echo -e "$formatted" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -i \
+    -p "$PROMPT")
+
+  [[ -z "$selection" ]] && exit 0
+
+  if [[ "$selection" == "$FOLDER_ICON"* ]]; then
+    local final_path="${selection#$FOLDER_ICON}"
+    browse "$final_path"
+  else
+    local final_path="${selection#$FILE_ICON}"
+    context_menu "$final_path"
+  fi
+}
+
+browse "$HOME/"

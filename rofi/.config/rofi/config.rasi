@@ -1,0 +1,59 @@
+@import "colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color:       @on-surface;
+    font:             "neonFlexsans 12";
+}
+
+window {
+    width:            250px;
+    padding:          8px;
+    location:         south east;
+    x-offset:         -12px;
+    y-offset:         -10px;
+    border-radius:    20px;
+    background-color: rgba(27,28,27,0.3);
+}
+
+mainbox {
+    children:         [ inputbar, listview ];
+    spacing:          4px;
+}
+
+inputbar {
+    children:         [ entry ];
+    padding:          10px;
+    background-color: @surface-container;
+    border-radius:    16px;
+}
+
+entry {
+    font:             "neonFlexsans Bold 14";
+    placeholder:      "What?";
+    placeholder-color: @outline;
+}
+
+listview {
+    layout:           vertical;
+    spacing:          2px;
+    lines:            5;
+    padding:          2px;
+}
+
+element {
+    padding:          8px 12px;
+    border-radius:    12px;
+    background-color: transparent;
+}
+
+element selected {
+    background-color: @primary-container;
+    text-color:       @on-primary-container;
+}
+
+element-text {
+    text-color:       inherit;
+    font:             "neonFlexsans 12";
+    vertical-align:   0.5;
+}

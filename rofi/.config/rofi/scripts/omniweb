@@ -1,0 +1,126 @@
+#!/bin/bash
+THEME="$HOME/.config/rofi/config.rasi"
+
+# Help message for prefixes
+PREFIXES_MSG="󰇧 Search: :g Google · :w Wikipedia\n:r Reddit · :yt YouTube · :gh GitHub · :aw Arch Wiki"
+
+encode() {
+  python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$1"
+}
+
+open_with_browser() {
+  local URL="$1"
+  local BROWSER_CHOICE=$(printf "󰖟  Zen Browser\n  Firefox\n󰊯  Floorp\n  Helium\n  Brave" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -p "$PROMPT")
+  [[ -z "$BROWSER_CHOICE" ]] && return
+  case "$BROWSER_CHOICE" in
+  *"Zen"*) zen-browser "$URL" & ;;
+  *"Firefox"*) firefox "$URL" & ;;
+  *"Floorp"*) floorp "$URL" & ;;
+  *"Helium"*) helium-browser "$URL" & ;;
+  *"Brave"*) brave "$URL" & ;;
+  esac
+}
+
+launch_browser() {
+  local CMD="$1"
+  local URL="$2"
+  if ! command -v "$CMD" &>/dev/null; then
+    notify-send "Failed" "Please check if the application is installed" -t 3000
+    return 1
+  fi
+  "$CMD" "$URL" &
+}
+
+context_menu() {
+  local URL="$1"
+  local ACTION=$(printf "󰏌  Open\n󰖟  Open with...\n󰆏  Copy address\n󰁎  Back" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -p "$PROMPT")
+  [[ -z "$ACTION" ]] && return
+
+  case "$ACTION" in
+  *"Open"*)
+    if [[ "$ACTION" == *"with"* ]]; then
+      local BROWSER_CHOICE=$(printf "󰖟  Zen Browser\n  Firefox\n󰊯  Floorp\n  Helium\n  Brave" | rofi -normal-window -dmenu \
+        -theme "$THEME" \
+        -p "$PROMPT")
+      [[ -z "$BROWSER_CHOICE" ]] && return
+      case "$BROWSER_CHOICE" in
+      *"Zen"*) launch_browser "zen-browser" "$URL" ;;
+      *"Firefox"*) launch_browser "firefox" "$URL" ;;
+      *"Floorp"*) launch_browser "floorp" "$URL" ;;
+      *"Helium"*) launch_browser "helium-browser" "$URL" ;;
+      *"Brave"*) launch_browser "brave" "$URL" ;;
+      esac
+    else
+      xdg-open "$URL"
+    fi
+    ;;
+  *"Copy"*)
+    echo -n "$URL" | wl-copy
+    notify-send "Omniweb" "Address copied to clipboard" -t 2000
+    ;;
+  *"Back"*)
+    exec "$0"
+    ;;
+  esac
+}
+
+# Find Helium History database
+HELIUM_HISTORY="$HOME/.config/net.imput.helium/Default/History"
+if [ ! -f "$HELIUM_HISTORY" ]; then
+  notify-send "Omniweb" "Helium history not found at $HELIUM_HISTORY"
+  exit 1
+fi
+
+TMP_DB=$(mktemp /tmp/helium-hist.XXXXX.sqlite)
+cp "$HELIUM_HISTORY" "$TMP_DB"
+
+SQL="SELECT url, title
+     FROM urls
+     WHERE hidden = 0
+       AND visit_count > 0
+     ORDER BY last_visit_time DESC
+     LIMIT 500;"
+
+HISTORY=$(sqlite3 "$TMP_DB" "$SQL" | awk -F'|' '{ print "󰖟  " ($1 == $2 ? $1 : $1 " — " $2) }')
+rm -f "$TMP_DB"
+
+selection=$(echo -e "$HISTORY" | rofi -normal-window -dmenu \
+  -theme "$THEME" \
+  -i \
+  -p "$PROMPT")
+[[ -z "$selection" ]] && exit 0
+
+if [[ "$selection" == 󰖟* ]]; then
+  URL=$(echo "$selection" | sed 's/^󰖟  //' | awk -F' — ' '{print $NF}')
+  [[ "$URL" == http* ]] && context_menu "$URL"
+
+elif [[ "$selection" == ":" ]]; then
+  notify-send "Omniweb — Available prefixes" "$PREFIXES_MSG" -t 4000
+
+elif [[ "$selection" =~ ^:[a-zA-Z]+ ]]; then
+  PREFIX=$(echo "$selection" | awk '{print $1}')
+  QUERY=$(echo "$selection" | cut -d' ' -f2-)
+  ENC=$(encode "$QUERY")
+
+  case "$PREFIX" in
+  :g) URL="https://www.google.com/search?q=$ENC" ;;
+  :w) URL="https://en.wikipedia.org/wiki/Special:Search?search=$ENC" ;;
+  :r) URL="https://www.reddit.com/search/?q=$ENC" ;;
+  :yt) URL="https://www.youtube.com/results?search_query=$ENC" ;;
+  :gh) URL="https://github.com/search?q=$ENC" ;;
+  :aw) URL="https://wiki.archlinux.org/index.php?search=$ENC" ;;
+  *)
+    notify-send "Omniweb — Unknown prefix: $PREFIX" "$PREFIXES_MSG" -t 4000
+    exit 0
+    ;;
+  esac
+  context_menu "$URL"
+
+else
+  URL="https://www.google.com/search?q=$(encode "$selection")"
+  context_menu "$URL"
+fi

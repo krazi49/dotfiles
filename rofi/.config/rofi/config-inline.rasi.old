@@ -1,0 +1,122 @@
+/**
+ * Matugen & Waybar Size-Matched Vertical Theme
+ * Tailored specifically for file navigation without an item counter badge.
+ **/
+
+@import "colors.rasi"
+
+configuration {
+    font:                   "Meridian 11"; /* Clean baseline font matching system tokens */
+    show-icons:             true;
+    icon-theme:             "hicolor";
+    hover-select:           true;
+    me-select-entry:        "";
+    me-accept-entry:        "MousePrimary";
+}
+
+* {
+    text-color:             @on-surface;
+    background-color:       transparent;
+}
+
+window {
+    background-color:       @surface-container-high; /* Exact matching context to system bar segments */
+    border-radius:          24px;                   /* Clean window chassis rounding */
+    width:                  450px;                  /* Comfortable width for long filepath paths */
+    height:                 500px;                  /* Fixed vertical bounds for clear grid scanning */
+    location:               center;                 /* Screen layout placement anchor */
+    anchor:                 center;
+    children:               [ mainbox ];
+}
+
+mainbox {
+    orientation:            vertical;               /* Layout flows strictly down the container */
+    background-color:       transparent;
+    padding:                16px;                   /* Generous interior breathing frame */
+    spacing:                14px;                   /* Gap spacing between search and list bounds */
+    children:               [ inputbar, listview ];
+}
+
+/* ── Search Input (Pill Block) ──────────────────────────── */
+inputbar {
+    background-color:       @surface-container-highest;
+    text-color:             @on-surface;
+    border-radius:          100px;                  
+    padding:                10px 16px;              /* Comfortable padding for vertical inputting */
+    spacing:                8px;
+    /* Removed all result/page counter elements to leave a clean input pipeline */
+    children:               [ prompt, entry ];
+}
+
+prompt {
+    text-color:             @primary;
+    font:                   "Meridian 11";
+    expand:                 false;
+    vertical-align:         0.5;
+}
+
+entry {
+    text-color:             @on-surface;
+    font:                   "Meridian 11";
+    placeholder:            "Quick jump...";
+    placeholder-color:      @on-surface-variant;
+    
+    /* THE FIX: Implemented asymmetric padding shift to align with prompt baseline */
+}
+
+/* ── Global Vertical Centering Rule ─────────────────────── */
+/* Explicitly targets the underlying text elements to handle font discrepancies */
+prompt, entry, element-text, element-icon {
+    vertical-align:         0.5;
+}
+
+/* ── Enclosed List Structure ────────────────────────────── */
+listview {
+    layout:                 vertical;               /* Spawns items downwards in a clean file tree list */
+    background-color:       transparent;
+    scrollbar:              false;                  
+    spacing:                4px;                    /* Tight file index gap listing alignment */
+    cycle:                  true;
+    dynamic:                true;                   /* Allows layout to adapt size based on query length */
+}
+
+/* ── Individual File / Directory Rows ───────────────────── */
+element {
+    background-color:       transparent;
+    text-color:             @on-surface;
+    border-radius:          8px;                    /* Subtly squared capsule shape for file item entries */
+    padding:                8px 12px;               /* Vertical line spacing buffer */
+    spacing:                10px;
+    orientation:            horizontal;             /* Keeps the icon and text aligned left-to-right */
+    
+    /* Crucial: Prevents text shifting by matching selection border spacing in advance */
+    border-color:           transparent;
+}
+
+element-icon {
+    size:                   18px;                   /* Enlarged slightly to clearly distinguish file types */
+    vertical-align:         0.5;
+}
+
+element-text {
+    text-color:             inherit;
+    vertical-align:         0.5;
+}
+
+/* ── Active Selection & Hover States ─────────────────────── */
+element selected {
+    background-color:       @secondary-container;    /* Highlight layer using system Matugen colors */
+    text-color:             @on-secondary-container;
+    
+    /* THE FIX: Replicated padding shift logic for active highlight state uniformity */
+    padding:                9px 12px 7px 12px; 
+}
+
+element normal active {
+    text-color:             @primary;
+    
+    /* THE FIX: Replicated padding shift logic for active text state uniformity */
+    padding:                9px 12px 7px 12px;
+}
+
+

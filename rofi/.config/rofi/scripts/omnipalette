@@ -1,0 +1,97 @@
+#!/bin/bash
+THEME="$HOME/.config/rofi/config.rasi"
+
+ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰅶  Caffeine\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker"
+
+choice=$(echo -e "$ACTIONS" | rofi -normal-window -dmenu \
+  -theme "$THEME" \
+  -i \
+  -p "$PROMPT")
+[[ -z "$choice" ]] && exit 0
+
+case "$choice" in
+*"Launch application"*) rofi -normal-window -show drun -theme "$THEME" ;;
+*"File explorer"*) ~/.config/rofi/scripts/omnifile ;;
+*"Web search"*) ~/.config/rofi/scripts/omniweb ;;
+*"Caffeine"*) ~/.config/hypr/scripts/caffeine.sh ;;
+*"Run command"*) ~/.config/rofi/scripts/omnirun ;;
+*"Keybindings"*) bash ~/.config/rofi/scripts/omnikeys ;;
+*"Clipboard"*)
+  selected=$(cliphist list | rofi -normal-window -dmenu -theme "$THEME" -p "$PROMPT")
+  [[ -z "$selected" ]] && exit 0
+  echo "$selected" | cliphist decode | wl-copy
+  notify-send -t 1500 "Clipboard" "Entry copied to clipboard"
+  ;;
+*"updates"*) kitty -e sudo pacman -Syu & ;;
+*"Network"*) nm-connection-editor & ;;
+*"Bluetooth"*) blueberry & ;;
+*"Audio"*) pavucontrol & ;;
+*"Power"*) ~/.config/hypr/scripts/power-menu.sh ;;
+*"System monitor"*) kitty -e btop & ;;
+*"Screenshot"*)
+  SHOT_CHOICE=$(printf "󰒉  Region\n󰹑  Fullscreen\n󰖲  Active window" | rofi -normal-window -dmenu \
+    -theme "$THEME" \
+    -p "$PROMPT")
+  [[ -z "$SHOT_CHOICE" ]] && exit 0
+  sleep 1
+  case "$SHOT_CHOICE" in
+  *"Region"*) grim -g "$(slurp)" - | satty -f - & ;;
+  *"Fullscreen"*) grim - | satty -f - & ;;
+  *"window"*)
+    GEOM=$(hyprctl activewindow -j | python3 -c "
+import json, sys
+w = json.load(sys.stdin)
+x, y = w['at']
+width, height = w['size']
+print(f'{x},{y} {width}x{height}')
+")
+    grim -g "$GEOM" - | satty -f - &
+    ;;
+  esac
+  ;;
+*"Color picker"*)
+  sleep 0.5
+  hyprpicker -a -n &
+  ;;
+*"Calculator"*)
+  touch /tmp/omnimath
+  if [ ! -s /tmp/omnimath ]; then
+    HISTORY_LIST="󰄱   No history"
+  else
+    HISTORY_LIST=$(tac /tmp/omnimath | head -n 15)
+  fi
+  MENU_OPTIONS="󰪚   New calculation\n$HISTORY_LIST"
+  selection=$(echo -e "$MENU_OPTIONS" | rofi -normal-window -dmenu -theme "$THEME" -p "$PROMPT")
+  [[ -z "$selection" || "$selection" == *"No history"* ]] && exit 0
+  if [[ "$selection" == *"New calculation"* ]]; then
+    expr=$(echo -e "$HISTORY_LIST" | rofi -normal-window -dmenu -theme "$THEME" -p "$PROMPT")
+    [[ -z "$expr" || "$expr" == *"No history"* ]] && exit 0
+    if [[ "$expr" == *" = "* ]]; then
+      past_ans=$(echo "$expr" | awk -F ' = ' '{print $2}')
+      echo "$past_ans" | wl-copy
+      notify-send "Calculator" "Copied: $past_ans"
+    else
+      ans=$(python3 -c "
+import math, sys
+expr = sys.argv[1]
+try:
+    result = eval(expr, {'__builtins__': {}}, vars(math))
+    print(f'{result:.10g}')
+except Exception as e:
+    print(f'Error: {e}')
+" "$expr")
+      if [[ "$ans" == Error* ]]; then
+        notify-send "Calculator" "$ans"
+      else
+        echo "$expr = $ans" >>/tmp/omnimath
+        echo "$ans" | wl-copy
+        notify-send "Calculator" "$expr = $ans"
+      fi
+    fi
+  else
+    past_ans=$(echo "$selection" | awk -F ' = ' '{print $2}')
+    echo "$past_ans" | wl-copy
+    notify-send "Calculator" "Copied: $past_ans"
+  fi
+  ;;
+esac

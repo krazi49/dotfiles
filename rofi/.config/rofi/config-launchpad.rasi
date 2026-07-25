@@ -1,0 +1,114 @@
+@import "colors.rasi"
+
+configuration {
+    font:                   "neonFlexsans 11";
+    show-icons:             true;
+    icon-theme:             "hicolor";
+    hover-select:           true;
+    me-select-entry:        "";
+    me-accept-entry:        "MousePrimary";
+}
+
+* {
+    text-color:             @on-surface;
+    background-color:       transparent;
+}
+
+window {
+    background-color:       rgba(18, 20, 12, 0.75);
+    border-radius:          0;
+    width:                  100%;
+    location:               center;
+    anchor:                 center;
+    fullscreen:             true;
+    padding:                80px 120px 80px 120px;
+    border:                 0;
+    children:               [ mainbox ];
+}
+
+mainbox {
+    orientation:            vertical;
+    background-color:       transparent;
+    padding:                0;
+    spacing:                40px;
+    children:               [ inputbar, listview ];
+}
+
+inputbar {
+    background-color:       rgba(39, 43, 41, 0.6);
+    text-color:             @on-surface;
+    border:                 1px;
+    border-color:           rgba(255, 255, 255, 0.08);
+    border-radius:          12px;
+    padding:                14px 20px;
+    margin:                 0 20%;
+    spacing:                12px;
+    children:               [ prompt, entry ];
+}
+
+prompt {
+    text-color:             @primary;
+    font:                   "neonFlexsans Bold 13";
+    expand:                 false;
+    vertical-align:         0.5;
+    str:                    "󰀈";
+}
+
+entry {
+    text-color:             @on-surface;
+    font:                   "neonFlexsans 13";
+    placeholder:            "Search applications...";
+    placeholder-color:      rgba(255, 255, 255, 0.25);
+    vertical-align:         0.5;
+}
+
+listview {
+    layout:                 vertical;
+    columns:                6;
+    fixed-height:           true;
+    fixed-columns:          true;
+    background-color:       transparent;
+    border-radius:          0;
+    padding:                0;
+    margin:                 0;
+    spacing:                16px;
+    cycle:                  false;
+    dynamic:                true;
+    scrollbar:              false;
+}
+
+element {
+    background-color:       rgba(255, 255, 255, 0.04);
+    text-color:             @on-surface;
+    border-radius:          16px;
+    padding:                20px 10px 14px 10px;
+    spacing:                8px;
+    orientation:            vertical;
+}
+
+element selected {
+    background-color:       rgba(255, 255, 255, 0.12);
+    text-color:             @on-surface;
+    border:                 1px;
+    border-color:           rgba(255, 255, 255, 0.1);
+    padding:                19px 9px 13px 9px;
+}
+
+element normal active {
+    text-color:             @primary;
+}
+
+element-icon {
+    size:                   64px;
+    vertical-align:         0.5;
+    horizontal-align:       0.5;
+}
+
+element-text {
+    text-color:             inherit;
+    font:                   "neonFlexsans 10";
+    vertical-align:         0.5;
+    horizontal-align:       0.5;
+    padding:                0;
+    margin:                 0;
+}

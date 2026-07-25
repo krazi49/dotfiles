@@ -1,0 +1,28 @@
+#!/bin/bash
+
+THEME="$HOME/.config/rofi/config.rasi"
+
+take_screenshot() {
+  local choice=$(printf "󰒉  region\n󰹑  fullscreen\n󰖲  active window" | rofi -dmenu \
+    -theme "$THEME" \
+    -p "$PROMPT")
+
+  [[ -z "$choice" ]] && exit 0
+
+  sleep 0.5
+
+  case "$choice" in
+  *"region"*)
+    grim -g "$(slurp)" - | satty -f -
+    ;;
+  *"fullscreen"*)
+    grim - | satty -f -
+    ;;
+  *"window"*)
+    local geom=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+    grim -g "$geom" - | satty -f -
+    ;;
+  esac
+}
+
+take_screenshot
