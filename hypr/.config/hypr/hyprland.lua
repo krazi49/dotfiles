@@ -23,6 +23,7 @@ hl.on("hyprland.start", function()
 
 	-- system services
 	hl.exec_cmd("udiskie -t")
+	hl.exec_cmd("paplay ~/.sounds/login.wav")
 	hl.exec_cmd("/usr/bin/gnome-keyring-daemon --start --components=secrets")
 	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
