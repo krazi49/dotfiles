@@ -1,0 +1,586 @@
+@import "colors.css";
+
+* {
+    font-family: "neonFlexsans", "Paper Mono";
+    font-size: 13px;
+    outline: none;
+    -gtk-outline-radius: 0;
+}
+
+window#osd {
+    margin: 1030px 0 0 1820px;
+}
+
+*:focus,
+button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.control-center {
+    background: transparent;
+    box-shadow: none;
+    margin: 8px;
+    padding: 6px;
+}
+
+/* ---------------- calendar ---------------- */
+
+.calendar-container {
+    padding: 6px 4px;
+}
+
+.calendar-container .day-label {
+    color: @on_surface_variant;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.calendar-container .date-label {
+    color: @on_surface;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.calendar-container calendar.view {
+    background: transparent;
+    color: @on_surface;
+    border: none;
+    box-shadow: none;
+}
+
+.calendar-container calendar.view header {
+    background: transparent;
+    padding: 0 2px 4px;
+}
+
+.calendar-container calendar.view header label {
+    color: @on_surface;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.calendar-container calendar.view header button {
+    background: transparent;
+    color: @on_surface_variant;
+    border-radius: 100px;
+    border: none;
+    box-shadow: none;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 2px;
+    outline: none;
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.calendar-container calendar.view header button:hover {
+    background: @surface_container_highest;
+    color: @on_surface;
+}
+
+.calendar-container calendar.view .day-name {
+    color: @on_surface_variant;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 4px;
+}
+
+.calendar-container calendar.view .day {
+    color: @on_surface;
+    border-radius: 6px;
+    font-size: 11px;
+    padding: 3px 5px;
+    margin: 1px;
+    transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.calendar-container calendar.view .day:hover {
+    background: @surface_container_highest;
+}
+
+.calendar-container calendar.view .today {
+    background: @primary;
+    color: @on_primary;
+    font-weight: 600;
+}
+
+.calendar-container calendar.view :selected {
+    background: @primary_container;
+    color: @on_primary_container;
+}
+
+.calendar-container calendar.view .other-month {
+    color: @outline;
+}
+
+/* ---------------- notification list container ---------------- */
+
+.widgets > .widget {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 18px;
+    margin: 1px 0;
+    padding: 6px 10px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.widgets > .widget:first-child:not(:last-child) {
+    border-radius: 18px 18px 18px 18px;
+    margin-bottom: 2px;
+}
+
+.widgets > .widget:not(:first-child):not(:last-child) {
+    border-radius: 18px;
+    margin-bottom: 2px;
+}
+
+.widgets > .widget:last-child:not(:first-child) {
+    border-radius: 18px 18px 18px 18px;
+}
+
+.widgets > .widget:only-child {
+    border-radius: 18px;
+}
+
+.widget-label {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 18px;
+    margin: 3px 0;
+    padding: 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.widget-label > label {
+    color: @on_surface_variant;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* FIX: Symmetrical vertical background padding for connected slider groups */
+
+.widgets > .widget-label.display_label,
+.widgets > .widget-label.sound_label,
+.widgets > .widget-volume,
+.widgets > .widget-backlight {
+    background: rgba(50, 53, 52, 0.35);
+}
+
+/* --- Screen Group Card --- */
+.widgets > .widget-label.display_label {
+    border-radius: 16px 16px 0 0;
+    padding: 4px 4px 4px 4px; /* Symmetrical top padding */
+    margin: 4px 0 0 0 !important; 
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.widgets > .widget-backlight {
+    border-radius: 0 0 16px 16px;
+    padding: 4px 4px 4px 4px; /* Symmetrical bottom padding */
+    margin: 0 0 0px 0 !important; 
+    box-shadow: none;
+}
+
+/* --- Sonics Group Card --- */
+.widgets > .widget-label.sound_label {
+    border-radius: 16px 16px 0 0;
+    padding: 4px 4px 4px 4px; /* Symmetrical top padding */
+    margin: 0px 0 0 0 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.widgets > .widget-volume {
+    border-radius: 0 0 16px 16px;
+    padding: 4px 4px 4px 4px; /* Symmetrical bottom padding */
+    margin: 0 0 0px 0 !important;
+    box-shadow: none;
+}
+
+.widget-label.display_label > label,
+.widget-label.sound_label > label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: @on_surface_variant;
+}
+
+/* ---------------- mpris "Now Playing" card ---------------- */
+
+.widgets > .widget-mpris {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 18px;
+    padding: 0;
+    margin: 3px 0;
+}
+
+.widget-mpris-player {
+    background: rgba(50, 53, 52, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    padding: 10px;
+    border-radius: 18px;
+    margin: 0;
+}
+
+.widget-mpris-album-art {
+    border-radius: 10px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    background: rgba(120, 120, 128, 0.24);
+}
+
+.widget-mpris-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: @on_surface;
+}
+
+.widget-mpris-subtitle {
+    font-size: 11px;
+    color: @on_surface_variant;
+}
+
+.widget-mpris-player > box {
+    padding: 0;
+    margin: 0;
+}
+
+.widget-mpris-player button {
+    background: transparent;
+    border: none;
+    border-radius: 100px;
+    color: @on_surface;
+    padding: 6px;
+    outline: none;
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.widget-mpris-player button:hover {
+    background: @primary;
+    color: @on_primary;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.widget-mpris-player button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* ---------------- sliders: Display / Sound style pills ---------------- */
+
+scale trough {
+    background-color: rgba(120, 120, 128, 0.32);
+    border-radius: 100px;
+    min-height: 16px;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
+
+scale highlight {
+    background-color: @primary;
+    border-radius: 100px;
+    box-shadow: none;
+}
+
+scale slider {
+    background-color: transparent;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.widget-dnd {
+    background: rgba(50, 53, 52, 0.35);
+    color: @on_surface;
+    border-radius: 18px;
+    padding: 10px 14px;
+    margin: 3px 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.widget-dnd > label {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.widget-dnd > switch {
+    border-radius: 100px;
+    background: @outline;
+    outline: none;
+}
+
+.widget-dnd > switch:checked {
+    background: @primary;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.widget-dnd > switch:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.widget-volume label,
+.widget-backlight label {
+    font-size: 15px;
+    color: @on_surface;
+    margin-right: 0px;
+    margin-left: 4px;
+    min-width: 18px;
+}
+
+/* ---------------- notifications ---------------- */
+
+.notification-group {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-group > box {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    spacing: 2px;
+}
+
+.notification {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 18px;
+    padding: 8px;
+    margin: 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.notification:hover {
+    background: rgba(50, 53, 52, 0.35);
+}
+
+.notification-summary {
+    font-weight: 700;
+    font-size: 12px;
+    color: @on_surface;
+}
+
+.notification-body {
+    font-size: 11px;
+    color: @on_surface_variant;
+}
+
+.notification-time {
+    font-size: 10px;
+    color: @outline;
+}
+
+.notification-action {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 100px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    color: @on_surface;
+    padding: 3px 10px;
+    margin: 3px 2px 0;
+    font-size: 11px;
+    outline: none;
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.notification-action:hover {
+    background: @primary;
+    color: @on_primary;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.notification-action:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.close-button {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 100px;
+    color: @on_surface_variant;
+    min-width: 22px;
+    min-height: 22px;
+    outline: none;
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.close-button:hover {
+    background: @error_container;
+    color: @on_error_container;
+}
+
+.close-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* ---------------- buttons-grid: macOS pill toggles ---------------- */
+
+.widgets > .widget-buttons-grid.top {
+    background: transparent;
+    margin: 3px 0;
+    padding: 0;
+}
+
+.widget-buttons-grid.top > flowbox {
+    background: transparent;
+}
+
+.widget-buttons-grid.top > flowbox > flowboxchild {
+    padding: 1px;
+    outline: none;
+}
+
+.widget-buttons-grid.top > flowbox > flowboxchild > button {
+    background: rgba(50, 53, 52, 0.35);
+    color: @on_surface;
+    border-radius: 20px;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.widget-buttons-grid.top > flowbox > flowboxchild > button label {
+    font-size: 14px;
+}
+
+.widget-buttons-grid.top > flowbox > flowboxchild > button:hover {
+    background: rgba(50, 53, 52, 0.45);
+}
+
+.widget-buttons-grid.top > flowbox > flowboxchild > button.toggle:checked {
+    background: @primary;
+    color: @on_primary;
+}
+
+.widgets > .widget-buttons-grid.compact {
+    background: transparent;
+    margin: 3px 0;
+    padding: 0;
+}
+
+.widget-buttons-grid.compact > flowbox {
+    margin: 0;
+}
+
+.widget-buttons-grid.compact > flowbox > flowboxchild {
+    padding: 1px;
+    outline: none;
+}
+
+.widget-buttons-grid.compact > flowbox > flowboxchild > button {
+    background: rgba(50, 53, 52, 0.35);
+    color: @on_surface_variant;
+    border-radius: 100px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 15px;
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.widget-buttons-grid.compact > flowbox > flowboxchild > button:hover {
+    background: rgba(50, 53, 52, 0.45);
+    color: @surface;
+}
+
+.widget-buttons-grid.compact > flowbox > flowboxchild > button.toggle:checked {
+    background: @on_primary_container;
+    color: @primary_container;
+}
+
+.widget-buttons-grid {
+    background: rgba(50, 53, 52, 0.35);
+    border-radius: 16px;
+    margin: 3px 0;
+    padding: 5px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild {
+    padding: 2px;
+    outline: none;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+    background: rgba(50, 53, 52, 0.35);
+    color: @on_surface_variant;
+    border-radius: 100px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 15px;
+    outline: none;
+    transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+                color 200ms cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:focus {
+    outline: none;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+    background: @on_primary;
+    color: @primary;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
+    background: @on_primary_container;
+    color: @primary_container;
+}
+
+/* ---------------- popup notifications ---------------- */
+
+.notification-popup {
+    background: rgba(70, 70, 74, 0.6);
+    border-radius: 18px;
+    padding: 10px 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.notification-popup .notification-icon {
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 28px;
+    max-height: 28px;
+    margin-right: 8px;
+    border-radius: 6px;
+}
+
+.notification-popup image {
+    min-width: 28px;
+    min-height: 28px;
+    -gtk-icon-size: 28px;
+}
+
+.notification-popup .notification-summary {
+    font-weight: 700;
+    font-size: 12px;
+    color: @on_surface;
+}
+
+.notification-popup .notification-body {
+    font-size: 11px;
+    color: @on_surface_variant;
+    margin-top: 2px;
+}
