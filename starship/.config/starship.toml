@@ -1,21 +1,22 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """\
+$custom\
 $directory\
 $cmd_duration\
 $status\
 $character"""
 
 [character]
-success_symbol = '[▶](bold #c8c9a5)'
-error_symbol = '[▶](bold #65a1e0)'
+success_symbol = '[󰁔](bold #c8c9a5)'
+error_symbol = '[󰁔](bold #65a1e0)'
 vicmd_symbol = '[◀](bold #c8c9a5)'
 
 [directory]
 truncation_length = 2
-truncation_symbol = '…/'
+truncation_symbol = '󰌍/'
 style = 'bold #e5e2da'
-home_symbol = '~'
+home_symbol = '󰌷'
 
 [cmd_duration]
 min_time = 0
@@ -25,6 +26,12 @@ show_milliseconds = false
 [status]
 disabled = false
 format = ' [$symbol]($style) '
-symbol = '✖'
+symbol = '󰯆'
 style = 'bold #65a1e0'
 pipestatus = false
+
+[custom.greet]
+command = '~/greeting-starship.sh'
+when = true
+shell = ['bash', '--noprofile', '--norc']
+format = "[󰻉 $output](bold #c8c9a5)\n"

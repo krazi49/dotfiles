@@ -77,6 +77,7 @@ plugins=(git zsh-autosuggestions fast-syntax-highlighting zsh-syntax-highlightin
 source $ZSH/oh-my-zsh.sh
 
 # Starship prompt
+precmd() { export STARSHIP_LAST_STATUS=$? }
 eval "$(starship init zsh)"
 
 # eza aliases — modern ls replacement with icons
@@ -90,6 +91,8 @@ alias ll='eza -l --icons=auto --git'
 alias la='eza -la --icons=auto --git'
 alias l='eza -l --icons=auto --git'
 alias tree='eza --tree --icons=auto'
+alias power='sudo'
+alias openclaw tui='clawt'
 
 # User configuration
 
@@ -223,3 +226,52 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 [ -f "/home/em/.openclaw/completions/openclaw.zsh" ] && source "/home/em/.openclaw/completions/openclaw.zsh"
 
 clear && fastfetch
+
+# Toggle Docker data-root between USB and default
+toggle-docker-usb() {
+  local usb_path="/run/media/em/powerdrive/docker-data"
+  local daemon_file="/etc/docker/daemon.json"
+  local current_config
+
+  # Check if jq is installed
+  if ! command -v jq &> /dev/null; then
+    echo "Error: jq is not installed. Please install it first (e.g., poli get jq)."
+    return 1
+  fi
+
+  # Get current data-root setting (empty string if not set or file doesn't exist)
+  if [[ -f "$daemon_file" ]]; then
+    current_config=$(jq -r '.["data-root"] // empty' "$daemon_file" 2>/dev/null)
+  else
+    current_config=""
+  fi
+
+  if [[ "$current_config" == "$usb_path" ]]; then
+    # Switching back to default
+    echo "Switching Docker data-root to default (removing USB setting)..."
+    if [[ -f "$daemon_file" ]]; then
+      # Remove the data-root key
+      jq 'del(.["data-root"])' "$daemon_file" | sudo tee "$daemon_file" > /dev/null
+    else
+      echo "{}" > "$daemon_file"
+    fi
+  else
+    # Switching to USB
+    echo "Switching Docker data-root to USB: $usb_path"
+    # Ensure the USB directory exists
+    if [[ ! -d "$usb_path" ]]; then
+      echo "Error: USB directory $usb_path does not exist. Is the USB plugged in?"
+      return 1
+    fi
+    # Create or update the daemon.json
+    if [[ -f "$daemon_file" ]]; then
+      jq --arg path "$usb_path" '.["data-root"] = $path' "$daemon_file" | sudo tee "$daemon_file" > /dev/null
+    else
+      echo "{\"data-root\": \"$usb_path\"}" | sudo tee "$daemon_file" > /dev/null
+    fi
+  fi
+
+  # Restart Docker
+  echo "Restarting Docker..."
+  sudo systemctl restart docker
+}
