@@ -1,9 +1,9 @@
 #!/bin/bash
-# Clock module: time on bar, week + uptime in tooltip
+# Clock module: time & date on bar, week + uptime in tooltip
 
 uptime_human() {
   local s=$1
-  local d=$((s/86400)) h=$(((s%86400)/3600)) m=$(((s%3600)/60))
+  local d=$((s / 86400)) h=$(((s % 86400) / 3600)) m=$(((s % 3600) / 60))
   local out=""
   ((d > 0)) && out+="${d}d "
   ((h > 0)) && out+="${h}h "
@@ -13,12 +13,14 @@ uptime_human() {
 
 emit() {
   TIME=$(date "+%H:%M")
+  DATE=$(date "+%a, %b %d")
   WEEK=$(date "+%V")
   UPTIME=$(uptime_human "$(awk '{printf "%d", $1}' /proc/uptime)")
 
   TOOLTIP="Week ${WEEK}  •  Up ${UPTIME}"
 
-  printf '{"text":"󰥔  %s","tooltip":"%s"}\n' "$TIME" "$TOOLTIP"
+  # Single quotes around light/small prevent breaking the surrounding JSON string
+  printf '{"text":"󰥔  %s\\n<span size=\x27small\x27>%s</span>","tooltip":"%s"}\n' "$TIME" "$DATE" "$TOOLTIP"
 }
 
 emit

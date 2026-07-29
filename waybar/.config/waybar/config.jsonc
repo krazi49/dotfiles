@@ -53,13 +53,13 @@
     "on-scroll-down": "~/.config/waybar/scripts/adaptive.py --seek-back"
   },
 
-  "custom/clock": {
+"custom/clock": {
     "exec": "~/.config/waybar/scripts/clock.sh",
     "return-type": "json",
     "markup": true,
-    "escape": true,
+    "escape": false,
     "on-click": "bash -c 'yad --calendar --title=\"Calendar\" --width=320 --height=280 --posx=200 --posy=30 --button=gtk-close:1 --close-on-unfocus'"
-  },
+},
 
   "custom/pitwall": {
     "interval": 30,
