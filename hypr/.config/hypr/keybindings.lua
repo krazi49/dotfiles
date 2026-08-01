@@ -2,7 +2,7 @@
 local main_mod = "ALT"
 local TERMINAL = "kitty"
 local EDITOR = "nvim"
-local EXPLORER = "nautilus"
+local EXPLORER = "kitty --class floating_kitty yazi"
 local BROWSER = "helium-browser"
 local OMNIFILE = "~/.config/rofi/scripts/omnifile"
 local OMNIRUN = "~/.config/rofi/scripts/omnirun"
@@ -98,7 +98,7 @@ hl.bind(main_mod .. " + SHIFT + CONTROL + Down", hl.dsp.window.move({ direction 
 hl.bind(main_mod .. " + Space", hl.dsp.exec_cmd("pkill rofi || " .. OMNIPALETTE)) -- main launcher (macOS Spotlight feel)
 hl.bind(main_mod .. " + SHIFT + Space", hl.dsp.exec_cmd("pkill rofi || " .. OMNISEARCH)) -- search (Win Search feel)
 hl.bind(main_mod .. " + R", hl.dsp.exec_cmd("pkill rofi || " .. OMNIRUN)) -- run command (Win Run feel)
-hl.bind(main_mod .. " + E", hl.dsp.exec_cmd("pkill rofi || " .. OMNIFILE)) -- file picker
+hl.bind(main_mod .. " + SHIFT + E", hl.dsp.exec_cmd("dolphin")) -- file picker
 hl.bind(main_mod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill rofi || " .. OMNIWEB)) -- web search
 hl.bind(main_mod .. " + K", hl.dsp.exec_cmd("pkill rofi || " .. OMNIKEYS)) -- keybinds reference
 hl.bind(
@@ -111,7 +111,7 @@ hl.bind(main_mod .. " + T", hl.dsp.exec_cmd("kitty --class floating_kitty")) -- 
 hl.bind(main_mod .. " + CTRL + T", hl.dsp.exec_cmd(TERMINAL)) -- terminal (Enter = open)
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("kitty --class floating_kitty"))
 hl.bind(main_mod .. " + B", hl.dsp.exec_cmd(BROWSER)) -- browser
-hl.bind(main_mod .. " + SHIFT + E", hl.dsp.exec_cmd(EXPLORER)) -- file explorer
+hl.bind(main_mod .. " + E", hl.dsp.exec_cmd(EXPLORER)) -- file explorer
 hl.bind(main_mod .. " + N", hl.dsp.exec_cmd("swaync-client -t")) -- notifications
 hl.bind(main_mod .. " + V", hl.dsp.exec_cmd("bash ~/.config/rofi/scripts/omniclip")) -- clipboard
 hl.bind(main_mod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/workspace-overview.sh")) -- workspace overview (rofi)

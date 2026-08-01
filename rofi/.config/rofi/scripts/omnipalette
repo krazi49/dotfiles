@@ -11,7 +11,7 @@ choice=$(echo -e "$ACTIONS" | rofi -normal-window -dmenu \
 [[ -z "$choice" ]] && exit 0
 
 case "$choice" in
-*"Launch application"*) rofi -normal-window -show drun -theme "$THEME" ;;
+*"Launch application"*) rofi -normal-window -show drun -show-icons -theme "$THEME" ;;
 *"File explorer"*) ~/.config/rofi/scripts/omnifile ;;
 *"Web search"*) ~/.config/rofi/scripts/omniweb ;;
 *"Caffeine"*) ~/.config/hypr/scripts/caffeine.sh ;;

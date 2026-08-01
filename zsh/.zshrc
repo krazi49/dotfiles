@@ -80,6 +80,13 @@ source $ZSH/oh-my-zsh.sh
 precmd() { export STARSHIP_LAST_STATUS=$? }
 eval "$(starship init zsh)"
 
+preexec() {
+    echo "$(date +%s) $1" > /tmp/last_command
+}
+precmd() {
+    echo "$? $1" > /tmp/last_exit
+}
+
 # eza aliases — modern ls replacement with icons
 unalias ls 2>/dev/null
 unalias ll 2>/dev/null
