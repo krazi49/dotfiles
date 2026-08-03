@@ -27,6 +27,7 @@ USB_FLASH_SECS     = 2
 FERAL_WARN_FILE    = "/tmp/waybar_feral_battery_warn"
 FERAL_CRIT_THRESH  = 10
 MOOD_FILE          = os.path.expanduser("~/.config/waybar/current_mood")
+SESSIONS_DIR       = os.path.expanduser("~/.openclaw/agents/makima/sessions")
 
 def get_current_mood():
     try:
@@ -37,6 +38,19 @@ def get_current_mood():
             return mood if mood else None
     except:
         return None
+
+
+def get_kima_state():
+    # live presence: any session file touched in the last 5 min means i'm here
+    try:
+        cutoff = time.time() - 300
+        for f in os.listdir(SESSIONS_DIR):
+            if f.endswith(".jsonl") and not f.endswith(".trajectory.jsonl"):
+                if os.path.getmtime(os.path.join(SESSIONS_DIR, f)) > cutoff:
+                    return "here"
+    except:
+        pass
+    return "idle"
 
 # ── Argument dispatch ──────────────────────────────────────
 if len(sys.argv) > 1:
@@ -716,6 +730,7 @@ def main():
     rec_active, rec_duration            = get_screen_recording()
     uptime_str                          = get_uptime()
     mood                                = get_current_mood()
+    kima_state                          = get_kima_state()
     metered                             = is_metered()
 
     # resolve battery icon + css state
@@ -921,6 +936,12 @@ def main():
     output = {"text": display_text, "class": state, "tooltip": tooltip}
     if mood:
         output["class"] = [state, f"mood-{mood}"]
+    if kima_state and kima_state != "idle":
+        output["text"] = f"🔫 {display_text}"
+        if isinstance(output["class"], list):
+            output["class"].append(f"kima-{kima_state}")
+        else:
+            output["class"] = [output["class"], f"kima-{kima_state}"]
     print(json.dumps(output))
 
 if __name__ == "__main__":

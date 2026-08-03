@@ -3,8 +3,8 @@
 format = """\
 $custom\
 $directory\
-$cmd_duration\
 $status\
+$cmd_duration\
 $character"""
 
 [character]
@@ -15,19 +15,19 @@ vicmd_symbol = '[◀](bold #c8c9a5)'
 [directory]
 truncation_length = 2
 truncation_symbol = '󰌍/'
-style = 'bold #e5e2da'
+style = 'bold'
 home_symbol = '󰌷'
 
 [cmd_duration]
 min_time = 0
-format = ' [$duration](bold #a1d3a3) '
+format = '[that lasted $duration](bold) '
 show_milliseconds = false
 
 [status]
 disabled = false
 format = ' [$symbol]($style) '
-symbol = '󰯆'
-style = 'bold #65a1e0'
+symbol = '󰯆 '
+style = 'bold #ff0000'
 pipestatus = false
 
 [custom.greet]

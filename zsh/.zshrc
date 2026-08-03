@@ -171,7 +171,7 @@ bindkey '^ ' forward-word
 
 # YouTube Music Playlist Function
 playlist() {
-    mpv --no-video --loop-playlist=inf 'https://music.youtube.com/playlist?list=PLceR-IJd9-lJPmrT4QLIx2_BuTFCy3NA-&si=IVgzkRTeF3bURw7i'
+    mpv --no-video --loop-playlist=inf 'https://youtube.com/playlist?list=PLceR-IJd9-lJPmrT4QLIx2_BuTFCy3NA-&si=gOJRu1MsB4H1oor1'
 }
 
 playlist-shuffle() {

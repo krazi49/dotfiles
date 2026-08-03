@@ -19,8 +19,7 @@ emit() {
 
   TOOLTIP="Week ${WEEK}  •  Up ${UPTIME}"
 
-  # Single quotes around light/small prevent breaking the surrounding JSON string
-  printf '{"text":"󰥔  %s\\n<span size=\x27small\x27>%s</span>","tooltip":"%s"}\n' "$TIME" "$DATE" "$TOOLTIP"
+  printf '{"text":"󰥔  %s 🟆 %s","tooltip":"%s"}\n' "$TIME" "$DATE" "$TOOLTIP"
 }
 
 emit

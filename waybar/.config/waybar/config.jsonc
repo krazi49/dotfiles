@@ -2,31 +2,29 @@
   "layer": "top",
   "position": "bottom",
   "height": 0,
-  "margin-left": 8,
-  "margin-right": 8,
-  "margin-bottom": 6,
+  "margin-left": 0,
+  "margin-right": 0,
+  "margin-bottom": 0,
   "margin-top": 0,
-  "spacing": 6,
+  "spacing": 4,
   "tooltips": true,
   "fixed-center": true,
-  "on-sigusr1": "hide",
-  "on-sigusr2": "show",
   "start_hidden": false,
 
   "modules-left": [
     "custom/clock",
-    "custom/adaptive"
-  ],
-
-  "modules-center": [
     "custom/space"
   ],
 
+  "modules-center": [
+    "custom/adaptive"
+  ],
+
   "modules-right": [
-    "group/system",
-    "tray",
+    "custom/mood",
     "custom/pitwall",
-    "custom/mood"
+    "tray",
+    "group/system"
   ],
 
   "group/system": {
