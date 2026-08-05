@@ -1,29 +1,47 @@
 #!/bin/bash
-
 paplay ~/.sounds/omniscript.wav &
 THEME="$HOME/.config/rofi/config.rasi"
-
 take_screenshot() {
+  local tmpfile
+  tmpfile=$(mktemp --suffix=.png)
+  trap "rm -f $tmpfile" EXIT HUP INT TERM
   local choice=$(printf "󰒉  region\n󰹑  fullscreen\n󰖲  active window" | rofi -dmenu \
     -theme "$THEME" \
-    -p "$PROMPT")
-
+    -p "${PROMPT:-screenshot}")
   [[ -z "$choice" ]] && exit 0
-
   sleep 0.5
-
   case "$choice" in
   *"region"*)
-    grim -g "$(slurp)" - | satty -f -
+    grim -g "$(slurp)" "$tmpfile"
     ;;
   *"fullscreen"*)
-    grim - | satty -f -
+    grim "$tmpfile"
     ;;
   *"window"*)
     local geom=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
-    grim -g "$geom" - | satty -f -
+    grim -g "$geom" "$tmpfile"
+    ;;
+  esac
+  [[ ! -s "$tmpfile" ]] && exit 0
+  local post_choice=$(printf "󰳻  save to file\\n󰅏  copy to clipboard\\n󰣕  open in satty" | rofi -dmenu \
+    -theme "$THEME" \
+    -p "action:")
+  [[ -z "$post_choice" ]] && exit 0
+  case "$post_choice" in
+  *"save to file"*)
+    local default_filename="screenshot_$(date +%Y%m%d_%H%M%S).png"
+    local save_path=$(rofi -dmenu -theme "$THEME" -p "save as:" -initial-selection "$HOME/Pictures/Screenshots/$default_filename")
+    [[ -z "$save_path" ]] && exit 0
+    mv "$tmpfile" "$save_path"
+    trap - EXIT
+    ;;
+  *"copy to clipboard"*)
+    wl-copy <"$tmpfile"
+    ;;
+  *"open in satty"*)
+    trap - EXIT HUP INT TERM
+    satty -f "$tmpfile" &
     ;;
   esac
 }
-
 take_screenshot

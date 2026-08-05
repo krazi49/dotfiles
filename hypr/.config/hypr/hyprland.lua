@@ -51,7 +51,7 @@ hl.on("hyprland.start", function()
 end)
 
 hl.on("config.reloaded", function()
-	hl.exec_cmd("pkill swayosd-server; swayosd-server --top-margin 0.85")
+	hl.exec_cmd("pkill swayosd-server; swayosd-server --top-margin 0.96")
 end)
 
 -- ── config ─────────────────────────────────────────────────────────────────────
@@ -86,7 +86,7 @@ hl.config({
 			enabled = true,
 			color = "0xcc000000",
 			color_inactive = "0x55000000",
-			offset = { 0, 10 },
+			offset = { 5, 10 },
 			range = 100,
 			render_power = 4,
 			scale = 0.96,

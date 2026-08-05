@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "neonFlexsans 11";
+    font:                   "neonFlexcode 10";
     show-icons:             true;
     icon-theme:             "hicolor";
     hover-select:           true;
@@ -21,7 +21,6 @@ window {
     location:               north;
     anchor:                 north;
     y-offset:               0;
-    padding:                12px 14px 24px 14px;
     children:               [ mainbox ];
 }
 
@@ -36,9 +35,9 @@ mainbox {
 inputbar {
     background-color:       rgba(39, 43, 41, 0.70);
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:          0px 0px 100px 100px;
     padding:                8px 14px;
-    margin:                 0 8px;
+    margin:                 0 0px;
     spacing:                8px;
     children:               [ prompt, entry ];
 }

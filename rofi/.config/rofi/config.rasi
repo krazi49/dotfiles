@@ -1,59 +1,141 @@
+/**
+ * Matugen & Waybar Size-Matched Rofi Theme
+ * Pure text implementation: entirely removes application icons and icon layouts.
+ **/
+
 @import "colors.rasi"
 
+configuration {
+    font:                   "neonFlexsans 10"; 
+    show-icons:             false;                  /* Disables icon asset loading globally */
+    display-drun:           "󰀻";
+    display-run:            "󰆍";
+    display-dmenu:          "";
+    drun-display-format:    "{name}";
+    hover-select:           true;
+    me-select-entry:        "";
+    me-accept-entry:        "MousePrimary";
+}
+
 * {
-    background-color: transparent;
-    text-color:       @on-surface;
-    font:             "neonFlexsans 12";
+    text-color:             @on-surface;
+    background-color:       transparent;
 }
 
 window {
-    width:            250px;
-    padding:          8px;
-    location:         south east;
-    x-offset:         -12px;
-    y-offset:         -10px;
-    border-radius:    20px;
-    background-color: rgba(27,28,27,0.3);
+    background-color:       rgba(23, 18, 21, 0.55); /* waybar's exact glass: same surface + 0.55 alpha */
+    border-radius:          0px 0px 20px 20px;
+    width:                  100%;                    
+    location:               north;                  
+    y-offset:               0px;                   
+    children:               [ mainbox ];
 }
 
 mainbox {
-    children:         [ inputbar, listview ];
-    spacing:          4px;
+    orientation:            horizontal;
+    background-color:       transparent;
+    padding:                0px 14px 0px 6px;       
+    spacing:                12px;
+    children:               [ inputbar, listview ];
 }
 
+/* ── Search Input (Pill Block Container) ────────────────── */
 inputbar {
-    children:         [ entry ];
-    padding:          10px;
-    background-color: @surface-container;
-    border-radius:    16px;
+    background-color:       @surface-container-highest;
+    text-color:             @on-surface;
+    border-radius:          100px;
+    /* ADJUSTED: Replaced 0px with 6px vertical padding to handle font baseline discrepancies */
+    padding:                6px 14px;               
+    margin:                 6px 0px;                
+    spacing:                8px;
+    children:               [ prompt, entry ];
+}
+
+prompt {
+    text-color:             @primary;
+    font:                   "neonFlexsans Bold 10";
+    /* FIXED: Prevent the prompt from expanding vertically and force the baseline center */
+    expand:                 false;
+    vertical-align:         0.5;
 }
 
 entry {
-    font:             "neonFlexsans Bold 14";
-    placeholder:      "What?";
-    placeholder-color: @outline;
+    text-color:             @on-surface;
+    font:                   "neonFlexsans 10";
+    placeholder:            "Search...";
+    placeholder-color:      @on-surface-variant;
+    width:                  170px;                  
+
+    /* THE FIX: Remove vertical-align and manually nudge it down */
+    /* Syntax: TOP RIGHT BOTTOM LEFT */
 }
 
+
+/* ── Global Vertical Centering Rule ─────────────────────── */
+/* This explicitly targets the underlying text layout engine for input elements */
+prompt, entry, element-text {
+    vertical-align:         0.5;
+}
+
+/* ── Page/Entry Counter Badge ───────────────────────────── */
+num-filtered-rows {
+    text-color:             @primary;
+    font:                   "neonFlexsans SemiBold 10";
+    vertical-align:         0.5;
+}
+
+textbox-num-sep {
+    text-color:             @on-surface-variant;
+    font:                   "neonFlexsans 10";
+    expand:                 false;
+    str:                    "/";                    
+    vertical-align:         0.5;
+}
+
+num-total-rows {
+    text-color:             @on-surface-variant;
+    font:                   "neonFlexsans 10";
+    vertical-align:         0.5;
+}
+
+/* ── Dynamic Horizontal List Grid ────────────────────────── */
 listview {
-    layout:           vertical;
-    spacing:          2px;
-    lines:            5;
-    padding:          2px;
+    layout:                 horizontal;
+    background-color:       transparent;
+    scrollbar:              false;                  
+    spacing:                8px;
+    lines:                  100;                    
+    columns:                1;
 }
 
+/* ── Pure Text Action Pills ─────────────────────────────── */
 element {
-    padding:          8px 12px;
-    border-radius:    12px;
-    background-color: transparent;
-}
-
-element selected {
-    background-color: @primary-container;
-    text-color:       @on-primary-container;
+    background-color:       transparent;
+    text-color:             @on-surface;
+    border-radius:          100px;
+    /* ADJUSTED: Match the vertical padding layout of the inputbar precisely */
+    padding:                6px 14px;               
+    margin:                 6px 0px;                
+    spacing:                0px;
+    orientation:            horizontal;
+    
+    /* Explicitly limits node children to text contents only */
+    children:               [ element-text ];
 }
 
 element-text {
-    text-color:       inherit;
-    font:             "neonFlexsans 12";
-    vertical-align:   0.5;
+    text-color:             inherit;
+    vertical-align:         0.5;                    
 }
+
+element selected {
+    background-color:       @secondary-container;    
+    text-color:             @on-secondary-container;
+    border-color:           rgba(255, 255, 255, 0.15); 
+}
+
+element normal active {
+    text-color:             @primary;
+    padding:                3px 0px 0px 3px;
+}
+

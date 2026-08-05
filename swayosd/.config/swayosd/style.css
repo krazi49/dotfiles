@@ -1,45 +1,72 @@
 @import 'colors.css';
 
+/* Waybar-inspired style for swayosd */
+
+/* Window - frosted glass like waybar */
 window {
-    background-color: rgba(42, 42, 37, 0.7);
-    border-radius: 50px;
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-    min-height: 34px;
-    max-height: 34px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 35%),
+        rgba(23, 18, 21, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    margin: 0;
+    padding: 2px 6px;
+    min-height: 0px;
 }
 
+/* Container holding icon and label - like waybar modules */
 #container {
-    margin: 0 10px;
-    min-height: 30px;
-    padding: 0 5px;
+    margin: 2px 2px;
+    padding: 3px 4px;
+    background: transparent;
+    color: @on_surface;
+    opacity: 0.75;
+    border-radius: 16px;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
 }
 
+#container:hover {
+    background: rgba(255, 255, 255, 0.08);
+    opacity: 1;
+}
+
+/* Progress bar trough */
 progressbar trough {
     background-color: @surface-variant;
     border-radius: 100px;
-    min-height: 14px;
+    min-height: 8px;
     border: 1px solid rgba(255,255,255,0.06);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    margin: 2px 0;
 }
 
+/* Progress bar fill */
 progressbar progress {
     background-color: @primary;
     border-radius: 100px;
-    min-height: 14px;
+    min-height: 8px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+    margin: 2px 0;
 }
 
+/* Icon */
 #icon {
     color: @on-surface;
-    opacity: 0.7;
-    margin-right: 8px;
-    font-size: 12px;
+    opacity: 0.75;
+    margin-right: 6px;
+    font-size: 4px;
 }
 
+/* Label */
 #label {
     color: @on-surface;
-    opacity: 0.7;
+    opacity: 0.75;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 11px;
 }

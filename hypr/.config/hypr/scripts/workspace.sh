@@ -24,8 +24,7 @@ classify_class() {
   case "$cls" in
   *zen*) echo "󰾔" ;;
   *firefox* | *librewolf* | *waterfox*) echo "󰈹" ;;
-  *helium*) echo "" ;;
-  *chromium* | *chrome* | *brave* | *vivaldi* | *opera* | *edge*) echo "󰖟" ;;
+  *chromium* | *helium* | *chrome* | *brave* | *vivaldi* | *opera* | *edge*) echo "󰖟" ;;
   *kitty* | *alacritty* | *foot* | *wezterm* | *ghostty*) echo "" ;;
   *konsole* | *gnome-terminal* | *xterm*) echo "󰆍" ;;
   *code* | *vscodium* | *codium*) echo "󰨞" ;;
@@ -171,7 +170,7 @@ print_workspace() {
     tooltip="${tooltip}${marker}  ${ws_idx}  ${icon}"
     [ -n "$classes" ] && tooltip="${tooltip}  ${classes}"
     tooltip="${tooltip}\n"
-  done <<< "$all_ws"
+  done <<<"$all_ws"
 
   [ "$special_open" = true ] && tooltip="${tooltip}●  S 󰆧  special"
 

@@ -76,6 +76,7 @@ hl.layer_rule({ ignore_alpha = "0.5", match = { namespace = "^(notifications)$" 
 
 hl.layer_rule({ blur = "1", match = { namespace = "^(swaync-control-center)$" } })
 hl.layer_rule({ blur = "1", match = { namespace = "^(swaync-notification-window)$" } })
+hl.layer_rule({ ignore_alpha = "0.05", match = { namespace = "^(swayosd)$" } })
 hl.layer_rule({ ignore_alpha = "0.05", match = { namespace = "^(swaync-control-center)$" } })
 hl.layer_rule({ ignore_alpha = "0.05", match = { namespace = "^(swaync-notification-window)$" } })
 hl.layer_rule({ ignore_alpha = "0.05", match = { namespace = "^(waybar)$" } })

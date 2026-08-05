@@ -2,7 +2,11 @@
 paplay ~/.sounds/omniscript.wav &
 THEME="$HOME/.config/rofi/config.rasi"
 
-ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰅶  Caffeine\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker"
+# Prompt shown by rofi – give it a clear label.
+export PROMPT="󰍜  Choose action"
+
+# Core menu actions. Added "Settings" entry.
+ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰅶  Caffeine\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker\n󰈚  Clipboard\n󰌢  Settings"
 
 choice=$(echo -e "$ACTIONS" | rofi -normal-window -dmenu \
   -theme "$THEME" \
@@ -23,7 +27,13 @@ case "$choice" in
   echo "$selected" | cliphist decode | wl-copy
   notify-send -t 1500 "Clipboard" "Entry copied to clipboard"
   ;;
-*"updates"*) kitty -e sudo pacman -Syu & ;;
+*"updates"*)
+  if command -v poli >/dev/null 2>&1; then
+    kitty -e poli upgrade &
+  else
+    kitty -e sudo pacman -Syu &  # fallback to pacman if poli not found
+  fi
+  ;;
 *"Network"*) nm-connection-editor & ;;
 *"Bluetooth"*) blueberry & ;;
 *"Audio"*) pavucontrol & ;;
@@ -94,5 +104,9 @@ except Exception as e:
     echo "$past_ans" | wl-copy
     notify-send "Calculator" "Copied: $past_ans"
   fi
+  ;;
+*"Settings"*)
+  # Open hyprland settings or similar
+  kitty -e nvim ~/.config/hypr/ &
   ;;
 esac
