@@ -31,13 +31,13 @@
   "hide-on-action": false,
   "script-fail-notify": true,
   "widgets": [
-    "buttons-grid#top",
-    "buttons-grid#compact",
     "mpris",
     "backlight",
     "volume",
     "title",
-    "notifications"
+    "notifications",
+    "buttons-grid#top",
+    "buttons-grid#compact"
   ],
   "widget-config": {
     "title": {

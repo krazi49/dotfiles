@@ -18,6 +18,11 @@ button:focus {
 }
 
 .control-center {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 35%),
+        rgba(23, 18, 21, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
     background: transparent;
     box-shadow: none;
     margin: 8px;
@@ -118,7 +123,12 @@ button:focus {
 /* ---------------- notification list container ---------------- */
 
 .widgets > .widget {
-    background: rgba(50, 53, 52, 0.35);
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 18px;
     margin: 1px 0;
     padding: 6px 10px;
@@ -144,7 +154,12 @@ button:focus {
 }
 
 .widget-label {
-    background: rgba(50, 53, 52, 0.35);
+    background: transparent;
+    box-shadow: none;
+    margin: 4px 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 18px;
     margin: 3px 0;
     padding: 12px;
@@ -163,7 +178,7 @@ button:focus {
 .widgets > .widget-label.sound_label,
 .widgets > .widget-volume,
 .widgets > .widget-backlight {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(23, 18, 21, 0.55);
 }
 
 /* --- Screen Group Card --- */
@@ -217,7 +232,12 @@ button:focus {
 }
 
 .widget-mpris-player {
-    background: rgba(50, 53, 52, 0.35);
+    background: transparent;
+    box-shadow: none;
+    padding: 10px 12px;
+    margin: 4px 0;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     padding: 10px;
     border-radius: 18px;
@@ -261,6 +281,8 @@ button:focus {
 }
 
 .widget-mpris-player button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     background: @primary;
     color: @on_primary;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -299,7 +321,12 @@ scale slider {
 }
 
 .widget-dnd {
-    background: rgba(50, 53, 52, 0.35);
+    background: transparent;
+    box-shadow: none;
+    margin: 4px 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     color: @on_surface;
     border-radius: 18px;
     padding: 10px 14px;
@@ -330,6 +357,7 @@ scale slider {
 
 .widget-volume label,
 .widget-backlight label {
+.widget-backlight label {
     font-size: 15px;
     color: @on_surface;
     margin-right: 0px;
@@ -343,6 +371,9 @@ scale slider {
     background: transparent;
     padding: 0;
     margin: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 .notification-group > box {
@@ -353,7 +384,12 @@ scale slider {
 }
 
 .notification {
-    background: rgba(50, 53, 52, 0.35);
+    background: transparent;
+    box-shadow: none;
+    padding: 8px 10px;
+    margin: 4px 0;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 18px;
     padding: 8px;
     margin: 0;
@@ -363,7 +399,9 @@ scale slider {
 }
 
 .notification:hover {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: rgba(23, 18, 21, 0.55);
 }
 
 .notification-summary {
@@ -383,7 +421,7 @@ scale slider {
 }
 
 .notification-action {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 100px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     color: @on_surface;
@@ -407,7 +445,7 @@ scale slider {
 }
 
 .close-button {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 100px;
     color: @on_surface_variant;
     min-width: 22px;
@@ -445,7 +483,10 @@ scale slider {
 }
 
 .widget-buttons-grid.top > flowbox > flowboxchild > button {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     color: @on_surface;
     border-radius: 20px;
     min-height: 44px;
@@ -463,7 +504,8 @@ scale slider {
 }
 
 .widget-buttons-grid.top > flowbox > flowboxchild > button:hover {
-    background: rgba(50, 53, 52, 0.45);
+    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .widget-buttons-grid.top > flowbox > flowboxchild > button.toggle:checked {
@@ -487,7 +529,10 @@ scale slider {
 }
 
 .widget-buttons-grid.compact > flowbox > flowboxchild > button {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    border-radius: 12px;
+    background: rgba(23, 18, 21, 0.55);
     color: @on_surface_variant;
     border-radius: 100px;
     min-width: 44px;
@@ -500,7 +545,8 @@ scale slider {
 }
 
 .widget-buttons-grid.compact > flowbox > flowboxchild > button:hover {
-    background: rgba(50, 53, 52, 0.45);
+    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     color: @surface;
 }
 
@@ -510,7 +556,7 @@ scale slider {
 }
 
 .widget-buttons-grid {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 16px;
     margin: 3px 0;
     padding: 5px;
@@ -522,7 +568,7 @@ scale slider {
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button {
-    background: rgba(50, 53, 52, 0.35);
+    background: rgba(23, 18, 21, 0.55);
     color: @on_surface_variant;
     border-radius: 100px;
     min-width: 44px;
@@ -551,7 +597,7 @@ scale slider {
 /* ---------------- popup notifications ---------------- */
 
 .notification-popup {
-    background: rgba(70, 70, 74, 0.6);
+    background: rgba(23, 18, 21, 0.55);
     border-radius: 18px;
     padding: 10px 12px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
