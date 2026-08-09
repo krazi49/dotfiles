@@ -6,7 +6,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "neonFlexsans 10"; 
+    font:                   "neonSupersans 10"; 
     show-icons:             false;                  /* Disables icon asset loading globally */
     display-drun:           "󰀻";
     display-run:            "󰆍";
@@ -61,7 +61,7 @@ prompt {
 
 entry {
     text-color:             @on-surface;
-    font:                   "neonFlexsans 10";
+    font:                   "neonSupersans 10";
     placeholder:            "Search...";
     placeholder-color:      @on-surface-variant;
     width:                  170px;                  
@@ -80,13 +80,13 @@ prompt, entry, element-text {
 /* ── Page/Entry Counter Badge ───────────────────────────── */
 num-filtered-rows {
     text-color:             @primary;
-    font:                   "neonFlexsans SemiBold 10";
+    font:                   "neonSupersans SemiBold 10";
     vertical-align:         0.5;
 }
 
 textbox-num-sep {
     text-color:             @on-surface-variant;
-    font:                   "neonFlexsans 10";
+    font:                   "neonSupersans 10";
     expand:                 false;
     str:                    "/";                    
     vertical-align:         0.5;
@@ -94,7 +94,7 @@ textbox-num-sep {
 
 num-total-rows {
     text-color:             @on-surface-variant;
-    font:                   "neonFlexsans 10";
+    font:                   "neonSupersans 10";
     vertical-align:         0.5;
 }
 

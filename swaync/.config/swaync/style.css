@@ -1,7 +1,7 @@
 @import "colors.css";
 
 * {
-    font-family: "neonFlexsans", "Paper Mono";
+    font-family: "neonSupersans", "Paper Mono";
     font-size: 13px;
     outline: none;
     -gtk-outline-radius: 0;

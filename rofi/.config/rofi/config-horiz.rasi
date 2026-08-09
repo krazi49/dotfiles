@@ -44,14 +44,14 @@ inputbar {
 
 prompt {
     text-color:             @primary;
-    font:                   "neonFlexsans Bold 11";
+    font:                   "neonSupersans Bold 11";
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "neonFlexsans 11";
+    font:                   "neonSupersans 11";
     placeholder:            "Quick jump...";
     placeholder-color:      @on-surface-variant;
     vertical-align:         0.5;
