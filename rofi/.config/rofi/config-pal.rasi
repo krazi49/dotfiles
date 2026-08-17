@@ -15,7 +15,7 @@ configuration {
 
 window {
     background-color:       transparent;
-    border-radius:          0;
+    border-radius:           0;
     width:                  100%;
     location:               north;
     anchor:                 north;
@@ -35,7 +35,7 @@ mainbox {
 inputbar {
     background-color:       rgba(39, 43, 41, 0.70);
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:           0;
     padding:                8px 14px;
     margin:                 0 8px;
     spacing:                8px;
@@ -60,7 +60,7 @@ entry {
 listview {
     layout:                 horizontal;
     background-color:       rgba(39, 43, 41, 0.70);
-    border-radius:          100px;
+    border-radius:           0;
     padding:                4px 6px;
     margin:                 0 8px;
     spacing:                4px;
@@ -72,7 +72,7 @@ listview {
 element {
     background-color:       transparent;
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:           0;
     padding:                6px 12px;
     spacing:                0;
     orientation:            horizontal;

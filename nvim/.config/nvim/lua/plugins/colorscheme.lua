@@ -78,8 +78,8 @@ return {
         lualine_a = {
           {
             "mode",
-            separator = { left = "", right = "" },
-            padding = 0,
+            separator = { left = "", right = "" },
+            padding = 1,
             fmt = function(str)
               return str:lower()
             end,
@@ -93,7 +93,7 @@ return {
             padding = 0,
             color = { bg = "NONE" },
           },
-          { "branch", icon = "", separator = { left = "", right = "" }, padding = 0 },
+          { "branch", icon = "", separator = { left = "", right = "" }, padding = 0 },
         },
         lualine_c = {
           {
@@ -105,7 +105,7 @@ return {
           },
           { "filename", path = 1, separator = "", padding = 0 },
         },
-        lualine_x = { { "filetype", separator = { left = "", right = "" }, padding = 0 } },
+        lualine_x = { { "filetype", separator = { left = "", right = "" }, padding = 0 } },
         lualine_y = {
           {
             function()
@@ -114,7 +114,7 @@ return {
             padding = 0,
             color = { bg = "NONE" },
           },
-          { "progress", separator = { left = "", right = "" }, padding = 0 },
+          { "progress", separator = { left = "", right = "" }, padding = 0 },
         },
         lualine_z = {
           {
@@ -124,7 +124,7 @@ return {
             padding = 0,
             color = { bg = "NONE" },
           },
-          { "location", separator = { left = "", right = "" }, padding = 0 },
+          { "location", separator = { left = "", right = "" }, padding = 1 },
         },
       }
       opts.winbar = {}

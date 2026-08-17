@@ -15,7 +15,7 @@ configuration {
 
 window {
     background-color:       transparent;
-    border-radius:          0;
+    border-radius:           0;
     width:                  300px;
     location:               center;
     anchor:                 center;
@@ -35,7 +35,7 @@ mainbox {
 inputbar {
     background-color:       rgba(39, 43, 41, 0.70);
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:           0;
     padding:                6px 12px;
     margin:                 0;
     spacing:                6px;

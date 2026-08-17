@@ -126,7 +126,7 @@
     "mpris": {
       "autohide": true,
       "image-size": 86,
-      "image-radius": 12
+      "image-radius": 0
     },
     "backlight": {
       "label": "󰳲",

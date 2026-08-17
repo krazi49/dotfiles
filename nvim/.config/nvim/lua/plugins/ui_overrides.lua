@@ -5,7 +5,7 @@ return {
     priority = 1000,
     opts = {
       win = {
-        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+        border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
         wo = {
           winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
         },
@@ -15,19 +15,19 @@ return {
           preset = "modern", -- Kept your modern layout, but stripped the clutter below
         },
         win = {
-          input = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
-          list = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
-          preview = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
+          input = { border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" } },
+          list = { border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" } },
+          preview = { border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" } },
         },
       },
       explorer = {
         win = {
-          border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+          border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
         },
       },
       input = {
         win = {
-          border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+          border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
         },
       },
       -- Redirect snacks native alerts to use a tiny, compact corner layout instead
@@ -76,7 +76,7 @@ return {
         layout_config = {
           horizontal = { prompt_position = "top" },
         },
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       },
     },
   },

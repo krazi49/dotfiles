@@ -18,9 +18,9 @@
 window#waybar {
     background-color: rgba(23, 18, 21, 0.2);
     border: none;
-    border-radius: 18px 18px 0 0;
+    border-radius: 0px 0px 0 0;
     margin: 0;
-    padding: 4px 10px;
+    padding: 10px 4px;
     color: @on_surface;
 }
 
@@ -38,10 +38,10 @@ window#waybar {
 #group-system {
     background: transparent;
     color: @on_surface;
-    margin: 3px 6px;
-    padding: 3px 10px;
+    margin: 6px 3px;
+    padding: 10px 3px;
     font-weight: 500;
-    border-radius: 12px;
+    border-radius: 0;
     font-size: 11px;
     letter-spacing: 0.04em;
     opacity: 0.75;
@@ -223,7 +223,7 @@ window#waybar {
 }
 
 #group-system {
-    padding: 1px 4px;
+    padding: 4px 1px;
     opacity: 0.6;
 }
 
@@ -236,7 +236,7 @@ window#waybar {
 #backlight {
     opacity: 0.7;
     margin: 0;
-    padding: 2px 5px;
+    padding: 5px 2px;
 }
 
 #network:hover,
@@ -265,7 +265,7 @@ window#waybar {
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
     background: @error_container;
-    border-radius: 10px;
+    border-radius: 0;
     opacity: 1;
 }
 
@@ -274,7 +274,7 @@ window#waybar {
 tooltip {
     background-color: rgba(23, 18, 21, 0.95);
     border: none;
-    border-radius: 18px;
+    border-radius: 0;
     padding: 6px 10px;
     font-size: 11px;
     font-weight: 500;
@@ -291,7 +291,7 @@ menu {
     margin-top: 8px;
     background-color: @surface;
     color: @on_surface;
-    border-radius: 14px;
+    border-radius: 0;
     box-shadow: none;
     padding: 2px;
     font-size: 12px;
@@ -300,13 +300,13 @@ menu {
 menuitem {
     margin: 2px 5px;
     padding: 3px 3px;
-    border-radius: 4px;
+    border-radius: 0;
     transition: all 0.2s ease-out;
 }
 
-menuitem:first-child  { border-radius: 12px 12px 4px 4px; margin-top: 5px; }
-menuitem:last-child   { border-radius: 4px 4px 12px 12px; margin-bottom: 5px; }
-menuitem:only-child   { border-radius: 12px; margin: 2px; }
+menuitem:first-child  { border-radius: 0; margin-top: 5px; }
+menuitem:last-child   { border-radius: 0; margin-bottom: 5px; }
+menuitem:only-child   { border-radius: 0; margin: 2px; }
 
 menuitem:hover {
     background-color: @primary_container;
@@ -317,7 +317,7 @@ menu separator {
     background-color: @outline_variant;
     margin: 8px 15px;
     min-height: 1px;
-    border-radius: 999px;
+    border-radius: 0;
     opacity: 0.5;
 }
 

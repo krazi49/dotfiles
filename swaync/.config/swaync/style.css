@@ -22,7 +22,7 @@ button:focus {
         linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 35%),
         rgba(23, 18, 21, 0.55);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
+    border-radius:  0;
     background: transparent;
     box-shadow: none;
     margin: 8px;
@@ -69,7 +69,7 @@ button:focus {
 .calendar-container calendar.view header button {
     background: transparent;
     color: @on_surface_variant;
-    border-radius: 100px;
+    border-radius:  0;
     border: none;
     box-shadow: none;
     min-width: 24px;
@@ -94,7 +94,7 @@ button:focus {
 
 .calendar-container calendar.view .day {
     color: @on_surface;
-    border-radius: 6px;
+    border-radius:  0;
     font-size: 11px;
     padding: 3px 5px;
     margin: 1px;
@@ -127,30 +127,30 @@ button:focus {
     box-shadow: none;
     margin: 0;
     padding: 0;
-    border-radius: 0;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 18px;
+    border-radius:  0;
     margin: 1px 0;
     padding: 6px 10px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .widgets > .widget:first-child:not(:last-child) {
-    border-radius: 18px 18px 18px 18px;
+    border-radius:  0;
     margin-bottom: 2px;
 }
 
 .widgets > .widget:not(:first-child):not(:last-child) {
-    border-radius: 18px;
+    border-radius:  0;
     margin-bottom: 2px;
 }
 
 .widgets > .widget:last-child:not(:first-child) {
-    border-radius: 18px 18px 18px 18px;
+    border-radius:  0;
 }
 
 .widgets > .widget:only-child {
-    border-radius: 18px;
+    border-radius:  0;
 }
 
 .widget-label {
@@ -158,9 +158,9 @@ button:focus {
     box-shadow: none;
     margin: 4px 0;
     padding: 10px 12px;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 18px;
+    border-radius:  0;
     margin: 3px 0;
     padding: 12px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -183,14 +183,14 @@ button:focus {
 
 /* --- Screen Group Card --- */
 .widgets > .widget-label.display_label {
-    border-radius: 16px 16px 0 0;
+    border-radius:  0;
     padding: 4px 4px 4px 4px; /* Symmetrical top padding */
     margin: 4px 0 0 0 !important; 
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .widgets > .widget-backlight {
-    border-radius: 0 0 16px 16px;
+    border-radius:  0;
     padding: 4px 4px 4px 4px; /* Symmetrical bottom padding */
     margin: 0 0 0px 0 !important; 
     box-shadow: none;
@@ -198,14 +198,14 @@ button:focus {
 
 /* --- Sonics Group Card --- */
 .widgets > .widget-label.sound_label {
-    border-radius: 16px 16px 0 0;
+    border-radius:  0;
     padding: 4px 4px 4px 4px; /* Symmetrical top padding */
     margin: 0px 0 0 0 !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .widgets > .widget-volume {
-    border-radius: 0 0 16px 16px;
+    border-radius:  0;
     padding: 4px 4px 4px 4px; /* Symmetrical bottom padding */
     margin: 0 0 0px 0 !important;
     box-shadow: none;
@@ -226,7 +226,7 @@ button:focus {
     background: transparent;
     border: none;
     box-shadow: none;
-    border-radius: 18px;
+    border-radius:  0;
     padding: 0;
     margin: 3px 0;
 }
@@ -236,16 +236,16 @@ button:focus {
     box-shadow: none;
     padding: 10px 12px;
     margin: 4px 0;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     padding: 10px;
-    border-radius: 18px;
+    border-radius:  0;
     margin: 0;
 }
 
 .widget-mpris-album-art {
-    border-radius: 10px;
+    border-radius:  0;
     min-width: 48px;
     min-height: 48px;
     max-width: 48px;
@@ -272,7 +272,7 @@ button:focus {
 .widget-mpris-player button {
     background: transparent;
     border: none;
-    border-radius: 100px;
+    border-radius:  0;
     color: @on_surface;
     padding: 6px;
     outline: none;
@@ -297,7 +297,7 @@ button:focus {
 
 scale trough {
     background-color: rgba(120, 120, 128, 0.32);
-    border-radius: 100px;
+    border-radius:  0;
     min-height: 16px;
     margin: 0;
     border: none;
@@ -306,7 +306,7 @@ scale trough {
 
 scale highlight {
     background-color: @primary;
-    border-radius: 100px;
+    border-radius:  0;
     box-shadow: none;
 }
 
@@ -325,10 +325,10 @@ scale slider {
     box-shadow: none;
     margin: 4px 0;
     padding: 10px 12px;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
     color: @on_surface;
-    border-radius: 18px;
+    border-radius:  0;
     padding: 10px 14px;
     margin: 3px 0;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -340,7 +340,7 @@ scale slider {
 }
 
 .widget-dnd > switch {
-    border-radius: 100px;
+    border-radius:  0;
     background: @outline;
     outline: none;
 }
@@ -388,9 +388,9 @@ scale slider {
     box-shadow: none;
     padding: 8px 10px;
     margin: 4px 0;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 18px;
+    border-radius:  0;
     padding: 8px;
     margin: 0;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
@@ -422,7 +422,7 @@ scale slider {
 
 .notification-action {
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 100px;
+    border-radius:  0;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     color: @on_surface;
     padding: 3px 10px;
@@ -446,7 +446,7 @@ scale slider {
 
 .close-button {
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 100px;
+    border-radius:  0;
     color: @on_surface_variant;
     min-width: 22px;
     min-height: 22px;
@@ -485,10 +485,10 @@ scale slider {
 .widget-buttons-grid.top > flowbox > flowboxchild > button {
     background: rgba(255, 255, 255, 0.08);
     box-shadow: none;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
     color: @on_surface;
-    border-radius: 20px;
+    border-radius:  0;
     min-height: 44px;
     padding: 0 12px;
     font-size: 13px;
@@ -531,10 +531,10 @@ scale slider {
 .widget-buttons-grid.compact > flowbox > flowboxchild > button {
     background: rgba(255, 255, 255, 0.08);
     box-shadow: none;
-    border-radius: 12px;
+    border-radius:  0;
     background: rgba(23, 18, 21, 0.55);
     color: @on_surface_variant;
-    border-radius: 100px;
+    border-radius:  0;
     min-width: 44px;
     min-height: 44px;
     font-size: 15px;
@@ -557,7 +557,7 @@ scale slider {
 
 .widget-buttons-grid {
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 16px;
+    border-radius:  0;
     margin: 3px 0;
     padding: 5px;
 }
@@ -570,7 +570,7 @@ scale slider {
 .widget-buttons-grid > flowbox > flowboxchild > button {
     background: rgba(23, 18, 21, 0.55);
     color: @on_surface_variant;
-    border-radius: 100px;
+    border-radius:  0;
     min-width: 44px;
     min-height: 44px;
     font-size: 15px;
@@ -598,7 +598,7 @@ scale slider {
 
 .notification-popup {
     background: rgba(23, 18, 21, 0.55);
-    border-radius: 18px;
+    border-radius:  0;
     padding: 10px 12px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
                 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -610,7 +610,7 @@ scale slider {
     max-width: 28px;
     max-height: 28px;
     margin-right: 8px;
-    border-radius: 6px;
+    border-radius:  0;
 }
 
 .notification-popup image {

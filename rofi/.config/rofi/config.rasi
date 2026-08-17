@@ -24,7 +24,7 @@ configuration {
 
 window {
     background-color:       rgba(23, 18, 21, 0.55); /* waybar's exact glass: same surface + 0.55 alpha */
-    border-radius:          0px 0px 20px 20px;
+    border-radius:           0;
     width:                  100%;                    
     location:               north;                  
     y-offset:               0px;                   
@@ -43,7 +43,7 @@ mainbox {
 inputbar {
     background-color:       @surface-container-highest;
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:           0;
     /* ADJUSTED: Replaced 0px with 6px vertical padding to handle font baseline discrepancies */
     padding:                6px 14px;               
     margin:                 6px 0px;                
@@ -112,7 +112,7 @@ listview {
 element {
     background-color:       transparent;
     text-color:             @on-surface;
-    border-radius:          100px;
+    border-radius:           0;
     /* ADJUSTED: Match the vertical padding layout of the inputbar precisely */
     padding:                6px 14px;               
     margin:                 6px 0px;                

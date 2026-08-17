@@ -52,7 +52,7 @@ hl.window_rule({ center = "1", match = { class = "^(floating_kitty)$" } })
 hl.window_rule({ animation = "popin 90%", match = { class = "^(wofi)$" } })
 hl.window_rule({ border_size = 0, match = { class = "^(wofi)$" } })
 hl.window_rule({ float = "1", match = { class = "^(wofi)$" } })
-hl.window_rule({ match = { class = "^(wofi)$" }, rounding = 20 })
+hl.window_rule({ match = { class = "^(wofi)$" }, rounding = 0 })
 hl.window_rule({ match = { class = "^(wofi)$" }, no_shadow = "1" })
 
 hl.layer_rule({ animation = "slide bottom", match = { namespace = "swaync-control-center" } })
