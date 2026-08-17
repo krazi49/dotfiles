@@ -103,7 +103,7 @@ hl.bind(main_mod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill rofi || " .. OMNIWEB)
 hl.bind(main_mod .. " + K", hl.dsp.exec_cmd("pkill rofi || " .. OMNIKEYS)) -- keybinds reference
 hl.bind(
 	main_mod .. " + period",
-	hl.dsp.exec_cmd("pkill rofi || rofi -show emoji -p Omniemoji -theme ~/.config/rofi/config.rasi")
+	hl.dsp.exec_cmd("pkill rofi || rofi -show emoji -p Omniemoji -theme ~/.config/rofi/config-horiz.rasi")
 )
 
 -- --- Apps ---

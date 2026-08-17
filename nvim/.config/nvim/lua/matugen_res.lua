@@ -1,21 +1,21 @@
 require("base16-colorscheme").setup({
-	base00 = "#171309",
-	base01 = "#110e05",
-	base02 = "#1f1b10",
-	base03 = "#4e4632",
-	base04 = "#d1c6ab",
-	base05 = "#ebe2d0",
-	base06 = "#353024",
-	base07 = "#3e392c",
+	base00 = "#181210",
+	base01 = "#120d0b",
+	base02 = "#201a18",
+	base03 = "#52443e",
+	base04 = "#d7c2ba",
+	base05 = "#ece0dc",
+	base06 = "#362f2c",
+	base07 = "#3f3835",
 
-	base08 = "#d2fa4c",
-	base09 = "#d8fb65",
-	base0A = "#dec47a",
-	base0B = "#ffebb8",
-	base0C = "#bcde4b",
-	base0D = "#fbcb02",
-	base0E = "#594707",
-	base0F = "#d4b251",
+	base08 = "#cbc06e",
+	base09 = "#d2c881",
+	base0A = "#e5beae",
+	base0B = "#feb695",
+	base0C = "#b6ad68",
+	base0D = "#c58466",
+	base0E = "#5e4337",
+	base0F = "#d99f87",
 })
 
 -- We first theme base16, but we also need to fix some other colors that don't
@@ -30,31 +30,31 @@ end
 
 -- Make selected text stand out more
 vim.api.nvim_set_hl(0, "Visual", {
-	bg = "#fbcb02",
-	fg = "#4b3b00", -- normal text contrast
+	bg = "#c58466",
+	fg = "#000000", -- normal text contrast
 })
 
 -- Make "string" text contrast better
 set_hl_mutliple({ "String", "TSString" }, {
-	fg = "#c5f91a",
+	fg = "#beaf49",
 })
 
 -- Grey out comments
 set_hl_mutliple({ "TSComment", "Comment" }, {
-	fg = "#9a9078",
+	fg = "#9f8d85",
 	italic = true,
 })
 
 -- Color in other highlight groups as you see fit!
 
 set_hl_mutliple({ "TSMethod", "Method" }, {
-	fg = "#d8fb65",
+	fg = "#d2c881",
 })
 
 set_hl_mutliple({ "TSFunction", "Function" }, {
-	fg = "#dec47a",
+	fg = "#e5beae",
 })
 
 set_hl_mutliple({ "Keyword", "TSKeyword", "TSKeywordFunction", "TSRepeat" }, {
-	fg = "#735c00",
+	fg = "#885036",
 })

@@ -38,7 +38,8 @@ def pick_mood():
 
 def main():
     state_path = Path("/tmp/bex_mood.json")
-    mood_path = Path("/home/em/.config/waybar/current_mood")
+    mood_path = Path(os.environ.get("WAYBAR_MOOD_DIR", str(Path.home() / ".config/waybar"))) / "current_mood"
+    # ponytail: was hardcoded to /home/em; now derives from $WAYBAR_MOOD_DIR or $HOME so it survives renames
 
     # Load existing state if exists
     if state_path.exists():

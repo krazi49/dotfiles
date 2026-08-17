@@ -66,11 +66,11 @@ hl.config({
 		active_opacity = 1,
 		inactive_opacity = 1,
 		rounding = 20,
-		rounding_power = 2.0,
+		rounding_power = 1.7,
 
 		blur = {
 			enabled = true,
-			passes = 2,
+			passes = 1,
 			size = 3,
 			new_optimizations = true,
 			xray = false,
@@ -89,7 +89,7 @@ hl.config({
 			offset = { 5, 10 },
 			range = 100,
 			render_power = 4,
-			scale = 0.96,
+			scale = 0.94,
 		},
 	},
 
@@ -131,14 +131,14 @@ hl.config({
 		allow_small_split = false,
 		mfact = 0.9,
 		new_status = "slave",
-		orientation = "bottom",
+		orientation = "right",
 	},
 
 	misc = {
 		animate_manual_resizes = true,
 		animate_mouse_windowdragging = true,
 		disable_hyprland_logo = true,
-		font_family = "neonFlexsans",
+		font_family = "neonSupersans",
 	},
 
 	xwayland = {

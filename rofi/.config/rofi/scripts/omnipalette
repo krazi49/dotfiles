@@ -6,7 +6,7 @@ THEME="$HOME/.config/rofi/config.rasi"
 export PROMPT="󰍜  Choose action"
 
 # Core menu actions. Added "Settings" entry.
-ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰅶  Caffeine\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker\n󰈚  Clipboard\n󰌢  Settings"
+ACTIONS="󰀻  Launch application\n󰍜  File explorer\n󰇧  Web search\n󰆍  Run command\n󰌌  Keybindings\n󰪚  Calculator\n󰃭  System monitor\n󰄀  Screenshot\n󰹬  Color picker\n󰈚  Clipboard\n󰌢  Settings"
 
 choice=$(echo -e "$ACTIONS" | rofi -normal-window -dmenu \
   -theme "$THEME" \
@@ -18,7 +18,6 @@ case "$choice" in
 *"Launch application"*) rofi -normal-window -show drun -show-icons -theme "$THEME" ;;
 *"File explorer"*) ~/.config/rofi/scripts/omnifile ;;
 *"Web search"*) ~/.config/rofi/scripts/omniweb ;;
-*"Caffeine"*) ~/.config/hypr/scripts/caffeine.sh ;;
 *"Run command"*) ~/.config/rofi/scripts/omnirun ;;
 *"Keybindings"*) bash ~/.config/rofi/scripts/omnikeys ;;
 *"Clipboard"*)
@@ -31,7 +30,7 @@ case "$choice" in
   if command -v poli >/dev/null 2>&1; then
     kitty -e poli upgrade &
   else
-    kitty -e sudo pacman -Syu &  # fallback to pacman if poli not found
+    kitty -e sudo pacman -Syu & # fallback to pacman if poli not found
   fi
   ;;
 *"Network"*) nm-connection-editor & ;;
@@ -110,3 +109,4 @@ except Exception as e:
   kitty -e nvim ~/.config/hypr/ &
   ;;
 esac
+
