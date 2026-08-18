@@ -83,7 +83,7 @@ hl.config({
 
 		-- lumina: deep cinematic shadows, clean falloff, tight scale
 		shadow = {
-			enabled = true,
+			enabled = false,
 			color = "0xcc000000",
 			color_inactive = "0x55000000",
 			offset = { 5, 10 },
@@ -104,8 +104,8 @@ hl.config({
 
 	general = {
 		border_size = 2,
-		gaps_in = 5,
-		gaps_out = 6,
+		gaps_in = 3,
+		gaps_out = 3,
 		resize_on_border = true,
 		col = {
 			active_border = "rgba(ffffff28)",

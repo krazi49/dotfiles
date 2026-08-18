@@ -216,12 +216,6 @@ help() {
 
 export CHROMIUM_FLAGS="--password-store=basic"
 
-export GROQ_API_KEY="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"
-
-export MISTRAL_API_KEY="1gS84Uv8T5x8cXXxBTdbEZ84Efj78Mgn"
-
-export DISCORD_BOT_TOKEN="MTUxNjA5NTE5MDA3MzQ3NTE4Mg.GSBLt-.2fsH7biYkpTXxWQuWtFgWw_djNEQEWXiARc2Rc"
-
 export YAY_ANSI=1
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -229,7 +223,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # opencode
 export PATH=/home/em/.opencode/bin:$PATH
 
-alias ai="crush"
+alias ai="openclaw"
 
 
 # Added by Antigravity CLI installer
