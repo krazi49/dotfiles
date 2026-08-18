@@ -135,36 +135,14 @@ def make_bar(filled, total):
     half   = total // 2
     f      = filled // 2
     e      = half - f
-    left   = ("━" * f) + (f"<span alpha='20%'>{'╌' * e}</span>" if e else "")
-    right  = (f"<span alpha='20%'>{'╌' * e}</span>" if e else "") + ("━" * f)
+    left   = ("•" * f) + (f"<span alpha='20%'>{'•' * e}</span>" if e else "")
+    right  = (f"<span alpha='20%'>{'•' * e}</span>" if e else "") + ("•" * f)
     return left, right
 
 def make_bar_str(filled, total):
     """Plain left-to-right bar for tooltips (no pango markup)."""
     filled = max(0, min(filled, total))
-    empty = total - filled
-    return "━" * filled + (f"<span alpha='20%'>{'╌' * empty}</span>" if empty else "")
-
-def make_bar_ltr(filled, total):
-    """Left-to-right fill — icon sits left, bar flows right."""
-    filled = max(0, min(filled, total))
-    empty  = total - filled
-    return "━" * filled + (f"<span alpha='20%'>{'╌' * empty}</span>" if empty else "")
-
-def make_bar_wave(t, total):
-    """Animated sine wave pulse — left-to-right, wave travels rightward."""
-    import math
-    chars = []
-    for i in range(total):
-        phase = (i / max(total - 1, 1)) * math.pi * 2 - t * 2.5
-        val   = (math.sin(phase) + 1) / 2
-        if val > 0.65:
-            chars.append("━")
-        elif val > 0.3:
-            chars.append("<span alpha='50%'>╌</span>")
-        else:
-            chars.append("<span alpha='15%'>╌</span>")
-    return "".join(chars)
+    return "\u2b2c" * filled + "\u2b2d" * (total - filled)
 
 def fmt_time(seconds):
     s = int(round(seconds))
@@ -785,12 +763,18 @@ def main():
     if extra_lines:
         bat_tooltip += "\n<span alpha='40%'>·  ·  ·  ·  ·</span>\n" + "\n".join(extra_lines)
 
-    def ltr_text(icon, bar):
-        return f"{icon} <span font_family='Paper Mono'>{bar}</span>"
+    def split_text(icon, left, right, alpha=None):
+        a = f" alpha='{alpha}'" if alpha else ""
+        return (
+            f"<span font_family='Paper Mono'{a}>{left}</span> "
+            f"{icon} "
+            f"<span font_family='Paper Mono'{a}>{right}</span>"
+        )
 
-    _full_b  = make_bar_ltr(BAR_WIDTH_COMPACT, BAR_WIDTH_COMPACT)
-    _empty_b = make_bar_ltr(0, BAR_WIDTH_COMPACT)
-    bat_text = ltr_text(bat_icon, make_bar_ltr((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT))
+    _bl, _br    = make_bar((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT)
+    _full_l, _full_r = make_bar(BAR_WIDTH_COMPACT, BAR_WIDTH_COMPACT)
+    _empty_l, _empty_r = make_bar(0, BAR_WIDTH_COMPACT)
+    bat_text    = split_text(bat_icon, _bl, _br)
     low_battery = cap < LOW_BAT_THRESHOLD and stat == "Discharging"
 
     # ── Priority chain ─────────────────────────────────────
@@ -812,13 +796,13 @@ def main():
 
     if temp_warn:
         blink        = (time.time() % 0.75) < 0.5
-        _tb          = make_bar_ltr(BAR_WIDTH_COMPACT if blink else 0, BAR_WIDTH_COMPACT)
-        display_text = ltr_text("󱃃", _tb)
+        _tl, _tr     = make_bar(BAR_WIDTH_COMPACT if blink else 0, BAR_WIDTH_COMPACT)
+        display_text = split_text("󱃃", _tl, _tr)
         state        = "temp-warning"
         tooltip      = live_activity_tooltip(f"<b>󱃃 High temperature</b>\n{temp_msg}", cap, stat)
 
     elif auth_active:
-        display_text = ltr_text("󰌾", _empty_b)
+        display_text = split_text("󰌾", _empty_l, _empty_r)
         state        = "auth-waiting"
         tooltip      = live_activity_tooltip("<b>Waiting for password</b>", cap, stat)
 
@@ -827,10 +811,10 @@ def main():
         feral_low = mood == "feral" and cap <= 20
         if feral_low:
             messages = ["☠️⚡", "🔴NO", "🦞🔥", "💀🔋", "PLUG", "😡🔌"]
-            idx      = int(time.time() / 0.5) % len(messages)
-            bars_on  = (time.time() % 0.4) < 0.2
-            _fb      = make_bar_ltr(BAR_WIDTH_COMPACT if bars_on else 0, BAR_WIDTH_COMPACT)
-            display_text = ltr_text(messages[idx], _fb)
+            idx = int(time.time() / 0.5) % len(messages)
+            bars_on = (time.time() % 0.4) < 0.2
+            _fl, _fr = make_bar(BAR_WIDTH_COMPACT if bars_on else 0, BAR_WIDTH_COMPACT)
+            display_text = split_text(messages[idx], _fl, _fr)
             state = "feral-critical"
             insults = [
                 "you had one job",
@@ -858,12 +842,12 @@ def main():
                     os.system("swaync-client -s 'I'M NOT MAD, I'M JUST DISAPPOINTED' 2>/dev/null")
                     os.remove(FERAL_WARN_FILE)
         else:
-            state        = "critical" if (time.time() % 0.75) < 0.5 else "critical-pulse"
+            state = "critical" if (time.time() % 0.75) < 0.5 else "critical-pulse"
             display_text = bat_text
-            tooltip      = bat_tooltip
+            tooltip = bat_tooltip
 
     elif flash_active:
-        display_text = ltr_text(flash_icon, _full_b)
+        display_text = split_text(flash_icon, _full_l, _full_r)
         state        = bat_state
         tooltip      = bat_tooltip
 
@@ -874,52 +858,60 @@ def main():
 
     elif rec_active:
         dur_str      = f" {rec_duration}" if rec_duration else ""
-        display_text = ltr_text(f"󰹑{dur_str}", _full_b)
+        display_text = split_text(f"󰹑{dur_str}", _full_l, _full_r)
         state        = "screen-recording"
         tooltip      = live_activity_tooltip("<b>󰹑  screen recording</b>", cap, stat)
 
     elif bt_flash:
-        display_text = ltr_text(bt_icon, _full_b)
+        display_text = split_text(bt_icon, _full_l, _full_r)
         state        = "bt-flash"
         tooltip      = bat_tooltip
 
     elif usb_flash:
-        display_text = ltr_text(usb_icon, _full_b)
+        display_text = split_text(usb_icon, _full_l, _full_r)
         state        = "usb-flash"
         tooltip      = live_activity_tooltip("<b>USB device changed</b>", cap, stat)
 
     elif pomo_active:
         pomo_str     = f"{pomo_mins}:{pomo_secs:02d}"
-        elapsed_fill = int((25*60 - (pomo_mins*60 + pomo_secs)) * BAR_WIDTH_COMPACT / (25*60))
-        display_text = ltr_text(f"󰅐 {pomo_str}", make_bar_ltr(elapsed_fill, BAR_WIDTH_COMPACT))
+        _pl, _pr     = make_bar(int((25*60 - (pomo_mins*60 + pomo_secs)) * BAR_WIDTH_COMPACT / (25*60)), BAR_WIDTH_COMPACT)
+        display_text = split_text(f"󰅐 {pomo_str}", _pl, _pr)
         state        = "pomodoro"
         tooltip      = live_activity_tooltip(f"<b>󰅐  Pomodoro</b> — focus for {pomo_mins}:{pomo_secs:02d} left", cap, stat)
 
     elif clip_flash:
-        display_text = ltr_text(clip_icon, _full_b)
+        display_text = split_text(clip_icon, _full_l, _full_r)
         state        = "clipboard-flash"
         tooltip      = live_activity_tooltip("<b>📋  clipboard updated</b>", cap, stat)
 
     elif hw_alert:
         duration     = get_recording_duration()
         dur_str      = f" {duration}" if duration else ""
-        display_text = ltr_text(f"󰍬{dur_str}", _full_b)
+        display_text = split_text(f"󰍬{dur_str}", _full_l, _full_r)
         state        = "hardware-alert"
         tooltip      = live_activity_tooltip("<b>󰍬  recording</b>", cap, stat)
 
     elif notif_count > 0:
-        _nb          = make_bar_ltr(min(notif_count, BAR_WIDTH_COMPACT), BAR_WIDTH_COMPACT)
-        display_text = ltr_text("󰂚", _nb)
-        state        = "notification"
-        plural       = "s" if notif_count != 1 else ""
-        tooltip      = live_activity_tooltip(f"<b>{notif_count} notification{plural}</b>", cap, stat)
+        NOTIF_MAX_HALF  = 5
+        half_filled     = min(notif_count, NOTIF_MAX_HALF)
+        phase           = time.time() % 0.45
+        bars_on         = phase < 0.3
+        lf = rf         = half_filled if bars_on else 0
+        _nl, _nr        = make_bar(lf + rf, BAR_WIDTH_COMPACT)
+        display_text    = split_text("󰂚", _nl, _nr)
+        state           = "notification"
+        plural          = "s" if notif_count != 1 else ""
+        tooltip         = live_activity_tooltip(
+            f"<b>{notif_count} notification{plural}</b>", cap, stat
+        )
 
     elif m is not None and m["status"] in ("Playing", "Paused"):
         is_paused    = m["status"] == "Paused"
         state        = "music-paused" if is_paused else "music"
         music_icon   = "󰏤" if is_paused else "󰝚"
         pct          = min(1.0, max(0.0, m["position"] / m["length"])) if m["length"] > 0 else 0.0
-        display_text = ltr_text(music_icon, make_bar_ltr(int(pct * BAR_WIDTH_COMPACT), BAR_WIDTH_COMPACT))
+        _ml, _mr     = make_bar(int(pct * BAR_WIDTH_COMPACT), BAR_WIDTH_COMPACT)
+        display_text = split_text(music_icon, _ml, _mr)
         tooltip_bar  = make_bar_str(int(pct * 30), 30)
         tooltip      = live_activity_tooltip(
             f"<b>{html.escape(m['title'])}</b>\n"
@@ -931,12 +923,13 @@ def main():
         )
 
     elif dnd_active:
-        display_text = ltr_text("󰂛", make_bar_wave(time.time(), BAR_WIDTH_COMPACT))
+        _dl, _dr     = make_bar((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT)
+        display_text = split_text("󰂛", _dl, _dr, alpha="55%")
         state        = "dnd"
         tooltip      = live_activity_tooltip("<b>Do not disturb</b>", cap, stat)
 
     else:
-        display_text = ltr_text(bat_icon, make_bar_wave(time.time(), BAR_WIDTH_COMPACT))
+        display_text = bat_text
         state        = bat_state
         tooltip      = bat_tooltip
 
