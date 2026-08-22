@@ -43,7 +43,7 @@ window#waybar {
     border: 2px solid @on_surface;
     border-radius: 0;
     box-shadow: 2px 2px 0 0 @outline_variant;
-    margin: 6px 6px;
+    margin: 6px 3px;
     padding: 10px 3px;
     font-weight: 500;
     font-size: 11px;

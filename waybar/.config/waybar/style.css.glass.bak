@@ -2,9 +2,9 @@
 @import 'mood-overrides.css';
 
 /* ═══════════════════════════════════════════════════════════
-   LUMINA EDITION — brutalist, square, hard shadows
-   No rounded corners. No blur. No glass.
-   Colours come from matugen via theme.css — never hardcoded.
+   ONE SOLID GLASS BAR — bottom, unified, frosted
+   The three pills are gone. One bar, one look.
+   Dead module css buried. Only what runs stays.
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Root ────────────────────────────────────────────────── */
@@ -14,19 +14,17 @@
     font-family: "neonSupersans", "JetBrains Mono NF Propo";
 }
 
-/* ── Bar — solid slab, square ────────────────────────────── */
+/* ── Bar — frosted glass slab ────────────────────────────── */
 window#waybar {
-    background-color: @surface;
+    background-color: rgba(23, 18, 21, 0.2);
     border: none;
-    border-radius: 0;
+    border-radius: 0px 0px 0 0;
     margin: 0;
-    padding: 8px 4px;
+    padding: 10px 4px;
     color: @on_surface;
 }
 
-/* ── Modules — flat, bordered, hard offset shadow ────────── */
-/* inactive shadow = outline_variant (lumina border grey)     */
-/* active/hover shadow = on_surface (lumina white)            */
+/* ── Modules — flat inside the glass, glow on hover ──────── */
 #custom-adaptive,
 #custom-clock,
 #custom-mood,
@@ -38,27 +36,21 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #group-system {
-    background: @surface_container;
+    background: transparent;
     color: @on_surface;
-    border: 2px solid @on_surface;
-    border-radius: 0;
-    box-shadow: 2px 2px 0 0 @outline_variant;
-    margin: 6px 6px;
+    margin: 6px 3px;
     padding: 10px 3px;
     font-weight: 500;
+    border-radius: 0;
     font-size: 11px;
     letter-spacing: 0.04em;
-    opacity: 0.85;
+    opacity: 0.75;
     transition:
-        background-color 0.1s ease,
-        color 0.1s ease,
-        border-color 0.1s ease,
-        box-shadow 0.1s ease,
-        transform 0.1s ease,
-        opacity 0.1s ease;
+        background-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
 }
 
-/* hover — lumina elevation shift: lift up, shadow grows white */
 #custom-adaptive:hover,
 #custom-clock:hover,
 #custom-mood:hover,
@@ -70,10 +62,7 @@ window#waybar {
 #pulseaudio:hover,
 #backlight:hover,
 #group-system:hover {
-    background: @surface_container_high;
-    color: @on_surface;
-    border-color: @on_surface;
-    box-shadow: 4px 4px 0 0 @on_surface;
+    background: rgba(255, 255, 255, 0.08);
     opacity: 1;
 }
 
@@ -82,14 +71,12 @@ window#waybar {
 #custom-clock {
     font-weight: 700;
     letter-spacing: 0.04em;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 #custom-clock.alt {
     background: @primary_container;
     color: @on_primary_container;
-    border-color: @on_surface;
-    box-shadow: 2px 2px 0 0 @on_surface;
     opacity: 1;
 }
 
@@ -102,41 +89,48 @@ window#waybar {
 }
 
 #custom-space:hover {
-    background: @surface_container_high;
-    color: @primary;
+    opacity: 0.9;
+}
+
+/* ── CENTER — adaptive hero ──────────────────────────────── */
+
+#custom-adaptive {
+    font-family: "neonFlexsans", "neonFlexcode";
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+/* adaptive state classes — emitted by adaptive.py */
+#custom-adaptive.file-picker {
+    background: @secondary_container;
+    color: @on_secondary_container;
+    opacity: 1;
+    font-weight: 700;
+}
+
+#custom-adaptive.mirroring {
+    background: @tertiary_container;
+    color: @on_tertiary_container;
     opacity: 1;
 }
 
-/* ── CENTER — adaptive island ────────────────────────────── */
-
-#custom-adaptive {
-    font-family: "neonFlexcode";
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    opacity: 0.6;
-    box-shadow: 3px 3px 0 0 @outline_variant;
-}
-
-#custom-adaptive:hover {
+#custom-adaptive.charging {
     background: @surface_container_high;
     color: @primary;
-    box-shadow: 5px 5px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.resource-fault {
     background: @error_container;
     color: @on_error_container;
-    border-color: @on_error_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.temp-warning {
     background: @error_container;
     color: @on_error_container;
-    border-color: @on_error_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
     font-weight: 700;
 }
@@ -144,8 +138,6 @@ window#waybar {
 #custom-adaptive.screen-recording {
     background: @error_container;
     color: @on_error_container;
-    border-color: @on_error_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
     font-weight: 700;
 }
@@ -153,47 +145,36 @@ window#waybar {
 #custom-adaptive.bt-flash {
     background: @secondary_container;
     color: @on_secondary_container;
-    border-color: @on_secondary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.auth-waiting {
     background: @tertiary_container;
     color: @on_tertiary_container;
-    border-color: @on_tertiary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.downloading {
     background: @primary_container;
     color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.music-paused {
     background: @surface_container;
     color: @outline;
-    border-color: @outline;
     opacity: 0.7;
 }
 
 #custom-adaptive.plugged {
     background: @primary_container;
     color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.critical {
     background: @error_container;
     color: @on_error_container;
-    border-color: @on_error_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
     font-weight: 700;
 }
@@ -201,16 +182,12 @@ window#waybar {
 #custom-adaptive.music {
     background: @tertiary_container;
     color: @on_tertiary_container;
-    border-color: @on_tertiary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
 }
 
 #custom-adaptive.hardware-alert {
     background: @tertiary_container;
     color: @on_tertiary_container;
-    border-color: @on_tertiary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
     font-weight: 700;
 }
@@ -218,8 +195,6 @@ window#waybar {
 #custom-adaptive.notification {
     background: @primary_container;
     color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 3px 3px 0 0 @on_surface;
     opacity: 1;
     font-weight: 700;
 }
@@ -250,12 +225,10 @@ window#waybar {
 #group-system {
     padding: 4px 1px;
     opacity: 0.6;
-    box-shadow: 2px 2px 0 0 @outline_variant;
 }
 
 #group-system:hover {
     opacity: 1;
-    box-shadow: 4px 4px 0 0 @on_surface;
 }
 
 #network,
@@ -292,23 +265,22 @@ window#waybar {
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
     background: @error_container;
-    border-color: @on_error_container;
-    box-shadow: 2px 2px 0 0 @on_surface;
     border-radius: 0;
     opacity: 1;
 }
 
-/* ── Tooltip + menu — solid, square, hard shadow ─────────── */
+/* ── Tooltip + menu ──────────────────────────────────────── */
+
 tooltip {
-    background-color: @surface;
-    border: 2px solid @on_surface;
+    background-color: rgba(23, 18, 21, 0.95);
+    border: none;
     border-radius: 0;
-    box-shadow: 3px 3px 0 0 @outline_variant;
     padding: 6px 10px;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.04em;
     color: @on_surface;
+    box-shadow: none;
 }
 
 tooltip label {
@@ -319,9 +291,8 @@ menu {
     margin-top: 8px;
     background-color: @surface;
     color: @on_surface;
-    border: 2px solid @on_surface;
     border-radius: 0;
-    box-shadow: 3px 3px 0 0 @outline_variant;
+    box-shadow: none;
     padding: 2px;
     font-size: 12px;
 }
@@ -330,7 +301,7 @@ menuitem {
     margin: 2px 5px;
     padding: 3px 3px;
     border-radius: 0;
-    transition: all 0.1s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 menuitem:first-child  { border-radius: 0; margin-top: 5px; }
@@ -340,7 +311,6 @@ menuitem:only-child   { border-radius: 0; margin: 2px; }
 menuitem:hover {
     background-color: @primary_container;
     color: @on_primary_container;
-    box-shadow: 2px 2px 0 0 @on_surface;
 }
 
 menu separator {

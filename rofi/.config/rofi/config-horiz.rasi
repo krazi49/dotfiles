@@ -17,10 +17,14 @@ configuration {
 window {
     background-color:       transparent;
     border-radius:           0;
-    width:                  100%;
+    width:                  96%;
     location:               north;
     anchor:                 north;
-    y-offset:               0;
+    y-offset:               6px;
+    shadow:                 true;
+    shadow-radius:           0;
+    shadow-offset:           2px 2px;
+    shadow-color:            @outline-variant;
     children:               [ mainbox ];
 }
 
@@ -33,7 +37,9 @@ mainbox {
 }
 
 inputbar {
-    background-color:       rgba(39, 43, 41, 0.70);
+    background-color:       @surface-container-high;
+    border:                 2px;
+    border-color:           @on-surface;
     text-color:             @on-surface;
     border-radius:           0;
     padding:                8px 14px;
@@ -59,7 +65,9 @@ entry {
 
 listview {
     layout:                 vertical;
-    background-color:       rgba(39, 43, 41, 0.70);
+    background-color:       @surface-container;
+    border:                 2px;
+    border-color:           @outline-variant;
     border-radius:           0;
     padding:                4px 6px;
     margin:                 0 8px;

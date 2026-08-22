@@ -23,11 +23,17 @@ configuration {
 }
 
 window {
-    background-color:       rgba(23, 18, 21, 0.55); /* waybar's exact glass: same surface + 0.55 alpha */
+    background-color:       @surface; /* lumina: solid surface, no glass */
+    border:                 2px;
+    border-color:           @outline-variant;
     border-radius:           0;
-    width:                  100%;                    
-    location:               north;                  
-    y-offset:               0px;                   
+    width:                  96%;
+    location:               north;
+    y-offset:               6px;
+    shadow:                 true;
+    shadow-radius:           0;
+    shadow-offset:           2px 2px;
+    shadow-color:            @outline-variant;
     children:               [ mainbox ];
 }
 
@@ -44,6 +50,8 @@ inputbar {
     background-color:       @surface-container-highest;
     text-color:             @on-surface;
     border-radius:           0;
+    border:                 2px;
+    border-color:           @on-surface;
     /* ADJUSTED: Replaced 0px with 6px vertical padding to handle font baseline discrepancies */
     padding:                6px 14px;               
     margin:                 6px 0px;                
@@ -53,7 +61,7 @@ inputbar {
 
 prompt {
     text-color:             @primary;
-    font:                   "neonFlexsans Bold 10";
+    font:                   "neonSupersans Bold 10";
     /* FIXED: Prevent the prompt from expanding vertically and force the baseline center */
     expand:                 false;
     vertical-align:         0.5;
@@ -131,7 +139,8 @@ element-text {
 element selected {
     background-color:       @secondary-container;    
     text-color:             @on-secondary-container;
-    border-color:           rgba(255, 255, 255, 0.15); 
+    border-color:           @outline-variant;
+    border:                 2px; 
 }
 
 element normal active {

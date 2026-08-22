@@ -33,7 +33,9 @@ mainbox {
 }
 
 inputbar {
-    background-color:       rgba(39, 43, 41, 0.70);
+    background-color:       @surface-container-high;
+    border:                 2px;
+    border-color:           @on-surface;
     text-color:             @on-surface;
     border-radius:           0;
     padding:                6px 12px;

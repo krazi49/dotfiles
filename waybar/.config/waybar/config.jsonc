@@ -29,10 +29,10 @@
   "group/system": {
     "orientation": "vertical",
     "modules": [
+      "custom/bt-battery",
       "network",
       "pulseaudio",
-      "backlight",
-      "custom/bt-battery"
+      "backlight"
     ],
     "on-click": "swaync-client -t -sw"
   },

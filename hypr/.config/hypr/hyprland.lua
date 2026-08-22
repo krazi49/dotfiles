@@ -13,6 +13,8 @@ require("monitors")
 hl.env("GTK_MODULES", "appmenu-gtk-module")
 hl.env("UBUNTU_MENUPROXY", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
+hl.env("XCURSOR_THEME", "Hackneyed-Dark-24px")
+hl.env("XCURSOR_SIZE", "24")
 
 -- ── startup ────────────────────────────────────────────────────────────────────
 
@@ -35,7 +37,7 @@ hl.on("hyprland.start", function()
 
 	-- theming
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
-	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 20")
+	hl.exec_cmd("hyprctl setcursor Hackneyed-Dark-24px 18")
 
 	-- ui layer
 	hl.exec_cmd("swaync")
@@ -47,6 +49,7 @@ hl.on("hyprland.start", function()
 
 	-- OpenClaw gateway
 	hl.exec_cmd("openclaw gateway start")
+	hl.exec_cmd("omniroute &")
 	hl.exec_cmd("hyprctl reload")
 end)
 
@@ -83,13 +86,13 @@ hl.config({
 
 		-- lumina: deep cinematic shadows, clean falloff, tight scale
 		shadow = {
-			enabled = false,
-			color = "0xcc000000",
-			color_inactive = "0x55000000",
-			offset = { 5, 10 },
-			range = 100,
-			render_power = 4,
-			scale = 0.94,
+			enabled = true,
+			color = "0xffffffff",
+			color_inactive = "0xff444444",
+			offset = { 10, 10 },
+			range = 1,
+			render_power = 1,
+			scale = 1,
 		},
 	},
 
@@ -103,13 +106,13 @@ hl.config({
 	},
 
 	general = {
-		border_size = 2,
-		gaps_in = 3,
-		gaps_out = 3,
+		border_size = 3,
+		gaps_in = 10,
+		gaps_out = 15,
 		resize_on_border = true,
 		col = {
-			active_border = "rgba(ffffff28)",
-			inactive_border = "rgba(ffffff08)",
+			active_border = "0xffffffff",
+			inactive_border = "0xff444444",
 		},
 		snap = {
 			enabled = false,
