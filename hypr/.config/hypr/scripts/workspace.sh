@@ -1,14 +1,12 @@
 #!/bin/bash
 
-# ── Workspace switcher — all 12 workspaces + special ──────
-# Module text: compact summary (active WS, occupied count, window count)
-# Tooltip: full workspace list with icons + apps
-
+# ── Single-instance guard ─────────────────────────────────
 LOCKFILE="/tmp/waybar-workspace.lock"
 
 if [ -f "$LOCKFILE" ]; then
   OLD_PID=$(cat "$LOCKFILE")
   if kill -0 "$OLD_PID" 2>/dev/null; then
+    # Old instance is alive — kill it and wait for it to die
     kill "$OLD_PID" 2>/dev/null
     sleep 0.3
   fi
@@ -22,49 +20,61 @@ trap '' PIPE
 classify_class() {
   local cls="${1,,}"
   case "$cls" in
+  # Browsers
   *zen*) echo "󰾔" ;;
   *firefox* | *librewolf* | *waterfox*) echo "󰈹" ;;
-  *chromium* | *helium* | *chrome* | *brave* | *vivaldi* | *opera* | *edge*) echo "󰖟" ;;
-  *kitty* | *alacritty* | *foot* | *wezterm* | *ghostty*) echo "" ;;
+  *chromium* | *chrome* | *brave* | *vivaldi* | *opera* | *edge*) echo "󰖟" ;;
+  # Terminals
+  *kitty* | *alacritty* | *foot* | *wezterm* | *ghostty*) echo "󰩊" ;;
   *konsole* | *gnome-terminal* | *xterm*) echo "󰆍" ;;
+  # Editors / IDEs
   *code* | *vscodium* | *codium*) echo "󰨞" ;;
   *sublime*) echo "󰺿" ;;
   *neovide* | *nvim*) echo "" ;;
   *vim* | *emacs*) echo "󰏖" ;;
   *jetbrains* | *idea* | *pycharm* | *goland* | *clion* | *rider*) echo "󱃖" ;;
+  # File managers
   *nautilus* | *files*) echo "󰉋" ;;
   *thunar* | *nemo*) echo "󰉖" ;;
   *dolphin*) echo "󰉗" ;;
   *ranger* | *yazi* | *lf*) echo "󰙅" ;;
+  # Media
   *spotify*) echo "󰓇" ;;
   *vlc*) echo "󰕼" ;;
   *mpv*) echo "󰎁" ;;
   *rhythmbox* | *lollypop* | *strawberry*) echo "󰝚" ;;
   *celluloid* | *totem*) echo "󰿎" ;;
+  # Communication
   *discord* | *equibop* | *vesktop*) echo "󰙯" ;;
   *telegram*) echo "󰔁" ;;
   *slack*) echo "󰒱" ;;
   *thunderbird* | *geary*) echo "󰇮" ;;
   *signal*) echo "󰍕" ;;
   *element* | *nheko*) echo "󰭻" ;;
+  # Notes / Docs
   *obsidian*) echo "󱓧" ;;
   *notion*) echo "󰟣" ;;
   *libreoffice* | *soffice*) echo "󱎺" ;;
   *evince* | *okular* | *zathura* | *mupdf*) echo "󰈦" ;;
+  # Graphics / Design
   *gimp*) echo "󰃉" ;;
   *inkscape*) echo "󰺾" ;;
   *krita* | *blender*) echo "󰂫" ;;
   *figma*) echo "󰖟" ;;
+  # Games
   *steam*) echo "󰓓" ;;
   *lutris* | *heroic*) echo "󰺵" ;;
+  # System tools
   *htop* | *btop* | *nvtop*) echo "󰓠" ;;
   *pavucontrol* | *easyeffects*) echo "󰕾" ;;
   *nm-connection* | *networkmanager*) echo "󰤨" ;;
   *blueman* | *bluetooth*) echo "󰂯" ;;
   *virt-manager* | *qemu* | *virtualbox*) echo "󰟀" ;;
   *docker*) echo "󰡨" ;;
+  # Misc
   *bitwarden* | *keepassxc*) echo "󰌋" ;;
-  *feh* | *imv* | *eog* | *shotwell* | *satty*) echo "󰋩" ;;
+  *feh* | *imv* | *eog* | *shotwell*) echo "󰋩" ;;
+  *xournalpp* | *xournal*) echo "󱓧" ;;
   *zoom* | *teams*) echo "󰤄" ;;
   *) echo "󱂬" ;;
   esac
@@ -78,17 +88,19 @@ get_ws_icon() {
   all_classes=$(hyprctl clients -j 2>/dev/null | jq -r ".[] | select(.workspace.id == $ws_id) | .class")
 
   if [[ -z "$all_classes" ]]; then
-    echo "󱂬"
+    echo "󰿚"
     return
   fi
 
+  # If the focused window is on this workspace, prioritise it
   if [[ -n "$focused_class" ]] && echo "$all_classes" | grep -qF "$focused_class"; then
     classify_class "$focused_class"
     return
   fi
 
+  # Otherwise pick by priority
   local priority=(
-    zen firefox librewolf helium chromium brave vivaldi
+    zen firefox librewolf chromium brave vivaldi
     code vscodium neovide sublime jetbrains idea pycharm
     spotify vlc mpv
     discord equibop vesktop telegram slack
@@ -107,76 +119,100 @@ get_ws_icon() {
   classify_class "$(echo "$all_classes" | head -1)"
 }
 
-get_ws_classes() {
-  local ws_id=$1
-  hyprctl clients -j 2>/dev/null | jq -r ".[] | select(.workspace.id == $ws_id) | .class" | sort -u | tr '\n' ', ' | sed 's/,$//'
+# ── Friendly names ────────────────────────────────────────
+friendly_name() {
+  local cls="${1,,}"
+  case "$cls" in
+  *zen* | *firefox* | *librewolf* | *waterfox* | *chromium* | *helium* | *chrome* | *brave* | *vivaldi* | *opera* | *edge*) echo "browser" ;;
+  *kitty* | *alacritty* | *foot* | *wezterm* | *ghostty* | *konsole* | *gnome-terminal* | *xterm*) echo "terminal" ;;
+  *code* | *vscodium* | *codium* | *sublime* | *neovide* | *nvim* | *vim* | *emacs*) echo "editor" ;;
+  *jetbrains* | *idea* | *pycharm* | *goland* | *clion* | *rider*) echo "ide" ;;
+  *nautilus* | *files* | *thunar* | *nemo* | *dolphin*) echo "files" ;;
+  *ranger* | *yazi* | *lf*) echo "files" ;;
+  *spotify*) echo "spotify" ;;
+  *vlc* | *mpv* | *celluloid* | *totem* | *rhythmbox* | *lollypop* | *strawberry*) echo "media" ;;
+  *discord* | *equibop* | *vesktop*) echo "discord" ;;
+  *telegram*) echo "telegram" ;;
+  *slack*) echo "slack" ;;
+  *signal*) echo "signal" ;;
+  *element* | *nheko*) echo "matrix" ;;
+  *obsidian*) echo "obsidian" ;;
+  *notion*) echo "notion" ;;
+  *steam* | *lutris* | *heroic*) echo "games" ;;
+  *gimp* | *inkscape* | *krita* | *blender* | *figma*) echo "design" ;;
+  *libreoffice* | *soffice* | *evince* | *okular* | *zathura* | *mupdf*) echo "docs" ;;
+  *) echo "${1#org.gnome.}" ;;
+  esac
 }
 
-# ── Output ────────────────────────────────────────────────
 print_workspace() {
-  local active_ws
-  active_ws=$(hyprctl activeworkspace -j 2>/dev/null | jq -r '.id // empty')
+  local all_clients ws_data ws_id ws_name title win_count total_count \
+    special_open special_id special_count \
+    active_workspaces tooltip text cls
 
-  local occupied_ws
-  occupied_ws=$(hyprctl clients -j 2>/dev/null | jq -r '.[].workspace.id' | sort -nu)
+  all_clients=$(hyprctl clients -j 2>/dev/null)
+  ws_data=$(hyprctl activeworkspace -j 2>/dev/null)
+  ws_id=$(echo "$ws_data" | jq -r '.id')
+  ws_name=$(echo "$ws_data" | jq -r '.name')
+  active_workspaces=$(echo "$all_clients" | jq '[.[].workspace.id] | unique | length')
 
-  # Detect special workspace
-  local special_open=false
-  local special_id
-  special_id=$(hyprctl activeworkspace -j 2>/dev/null | jq -r '.id // empty')
-  if [[ "$special_id" =~ ^- ]]; then
+  if [[ "$ws_name" == special* ]]; then
     special_open=true
-    active_ws=$(hyprctl monitors -j 2>/dev/null | jq -r '.[0].activeWorkspace.id // empty')
+  else
+    special_open=false
   fi
 
-  local ws_count
-  ws_count=$(echo "$occupied_ws" | wc -w)
-
-  local total_windows
-  total_windows=$(hyprctl clients -j 2>/dev/null | jq 'length')
-
-  # ── Module text: compact summary ────────────────────────
-  local active_icon=""
-  if [[ "$active_ws" =~ ^[0-9]+$ ]]; then
-    active_icon=$(get_ws_icon "$active_ws")
+  special_id=$(echo "$all_clients" | jq -r '[.[] | select(.workspace.name | startswith("special")) | .workspace.id] | first // empty')
+  if [[ -n "$special_id" ]]; then
+    special_count=$(echo "$all_clients" | jq "[.[] | select(.workspace.name | startswith(\"special\"))] | length")
+  else
+    special_count=0
   fi
-  local TOTAL_WS=12
-  local win_word="window"
-  [ "$total_windows" -ne 1 ] && win_word="windows"
-  local active_window_title=""
-  if [[ "$active_ws" =~ ^[0-9]+$ ]]; then
-    active_window_title=$(hyprctl activewindow -j 2>/dev/null | jq -r '.title // empty')
+
+  title=$(hyprctl activewindow -j 2>/dev/null | jq -r '.title // empty' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  if [[ ${#title} -gt 30 ]]; then
+    title="$(printf '%s' "${title:0:29}" | sed 's/[[:space:]]*$//')…"
   fi
-  local text="${active_icon} ${active_ws}/${TOTAL_WS} · ${active_window_title} · ${total_windows} ${win_word}"
-  [ "$special_open" = true ] && text="${text} 󰆧"
+  win_count=$(echo "$all_clients" | jq "[.[] | select(.workspace.id == $ws_id)] | length")
+  total_count=$(echo "$all_clients" | jq '[.[] | select(.mapped)] | length')
 
-  # ── Tooltip: occupied workspaces + active ──────────────
-  local all_ws
-  all_ws=$(echo "$occupied_ws" | tr ' ' '\n' | grep -v '^$' | sort -n)
-  echo "$occupied_ws" | grep -q "^${active_ws}$" || all_ws="$all_ws\n$active_ws"
+  if $special_open && [[ -n "$special_id" ]]; then
+    text="󰜉 $special_count"
+    cls="special"
+  elif [[ -n "$title" ]]; then
+    text="$ws_id/12 • $title • $total_count windows open"
+    [[ "$total_count" -eq 1 ]] && text="$ws_id/12 • $title • 1 window open"
+    cls="ws-$ws_id"
+  else
+    text="$ws_id/12 • empty • $total_count windows open"
+    [[ "$total_count" -eq 1 ]] && text="$ws_id/12 • empty • 1 window open"
+    cls="ws-$ws_id"
+  fi
 
-  local tooltip=""
-  while IFS= read -r ws_idx; do
-    [[ -z "$ws_idx" ]] && continue
-    local icon="" classes="" marker=" "
+  tooltip=""
+  local ws classes names line c
+  for ws in $(seq 1 12); do
+    classes=$(echo "$all_clients" | jq -r --arg id "$ws" '.[] | select(.workspace.id == ($id | tonumber)) | .class' | sort -u)
+    [[ -z "$classes" ]] && continue
+    names=""
+    while IFS= read -r c; do
+      [[ -z "$c" ]] && continue
+      [[ -n "$names" ]] && names="$names, "
+      names="$names$(friendly_name "$c")"
+    done <<< "$classes"
+    line="○ ws $ws [$names]"
+    [[ "$ws" == "$ws_id" ]] && line="●${line:1}"
+    tooltip="$tooltip$line\n"
+  done
+  if [[ -n "$special_id" ]]; then
+    tooltip="${tooltip}────────────\n󰜉 special [$special_count window(s)]\n"
+  fi
+  tooltip="<span font_family='Monaspace Krypton NF'>${tooltip%\\n}</span>"
 
-    icon=$(get_ws_icon "$ws_idx")
-    classes=$(get_ws_classes "$ws_idx")
-
-    if [[ "$ws_idx" == "$active_ws" ]] && [ "$special_open" = false ]; then
-      marker="●"
-    fi
-
-    tooltip="${tooltip}${marker}  ${ws_idx}  ${icon}"
-    [ -n "$classes" ] && tooltip="${tooltip}  ${classes}"
-    tooltip="${tooltip}\n"
-  done <<<"$all_ws"
-
-  [ "$special_open" = true ] && tooltip="${tooltip}●  S 󰆧  special"
-
-  printf '{"text": "%s", "tooltip": "%s", "class": "workspaces"}\n' "$text" "$tooltip"
+  printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$cls"
 }
 
+# ── Main ──────────────────────────────────────────────────
 print_workspace
 
 socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" |
@@ -190,8 +226,7 @@ socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.soc
       movewindow\>\>* | \
       urgent\>\>* | \
       fullscreen\>\>* | \
-      changefloatingmode\>\>* | \
-      specialworkspace\>\>*)
+      changefloatingmode\>\>*)
       print_workspace
       ;;
     esac

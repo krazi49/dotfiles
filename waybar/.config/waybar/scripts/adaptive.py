@@ -766,9 +766,9 @@ def main():
     def split_text(icon, left, right, alpha=None):
         a = f" alpha='{alpha}'" if alpha else ""
         return (
-            f"<span font_family='Paper Mono'{a}>{left}</span> "
+            f"<span font_family='Monaspace Krypton'{a}>{left}</span> "
             f"{icon} "
-            f"<span font_family='Paper Mono'{a}>{right}</span>"
+            f"<span font_family='Monaspace Krypton'{a}>{right}</span>"
         )
 
     _bl, _br    = make_bar((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT)
@@ -917,7 +917,7 @@ def main():
             f"<b>{html.escape(m['title'])}</b>\n"
             f"{html.escape(m['artist'])}\n"
             f"{html.escape(m['album'])}\n\n"
-            f"<span font_family=\"Paper Mono\" font_features=\"tnum\">"
+            f"<span font_family=\"Monaspace Krypton\" font_features=\"tnum\">"
             f"{fmt_time(m['position'])} {tooltip_bar} {fmt_time(m['length'])}</span>",
             cap, stat
         )

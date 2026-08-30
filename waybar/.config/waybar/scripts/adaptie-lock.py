@@ -14,7 +14,7 @@
 #   label {
 #       monitor =
 #       text     = cmd[update:1000] /path/to/power-vert-lock.py
-#       font_family = Paper Mono
+#       font_family = Monaspace Krypton
 #       font_size   = 14
 #       color       = rgba(cdd6f4ff)
 #       position    = 0, -40
@@ -77,9 +77,9 @@ def fmt_time(seconds):
 def split_text(icon, left, right, alpha=None):
     a = f" alpha='{alpha}'" if alpha else ""
     return (
-        f"<span font_family='Paper Mono'{a}>{left}</span> "
+        f"<span font_family='Monaspace Krypton'{a}>{left}</span> "
         f"{icon} "
-        f"<span font_family='Paper Mono'{a}>{right}</span>"
+        f"<span font_family='Monaspace Krypton'{a}>{right}</span>"
     )
 
 

@@ -2,7 +2,7 @@
 local main_mod = "ALT"
 local TERMINAL = "kitty"
 local EDITOR = "nvim"
-local EXPLORER = "kitty --class floating_kitty yazi"
+local EXPLORER = "nautilus"
 local BROWSER = "helium-browser"
 local OMNIFILE = "~/.config/rofi/scripts/omnifile"
 local OMNIRUN = "~/.config/rofi/scripts/omnirun"

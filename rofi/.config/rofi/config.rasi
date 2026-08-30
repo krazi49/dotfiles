@@ -6,7 +6,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "neonSupersans 10"; 
+    font:                   "TikTok Sans 10"; 
     show-icons:             false;                  /* Disables icon asset loading globally */
     display-drun:           "󰀻";
     display-run:            "󰆍";
@@ -61,7 +61,7 @@ inputbar {
 
 prompt {
     text-color:             @primary;
-    font:                   "neonSupersans Bold 10";
+    font:                   "TikTok Sans Bold 10";
     /* FIXED: Prevent the prompt from expanding vertically and force the baseline center */
     expand:                 false;
     vertical-align:         0.5;
@@ -69,7 +69,7 @@ prompt {
 
 entry {
     text-color:             @on-surface;
-    font:                   "neonSupersans 10";
+    font:                   "TikTok Sans 10";
     placeholder:            "Search...";
     placeholder-color:      @on-surface-variant;
     width:                  170px;                  
@@ -88,13 +88,13 @@ prompt, entry, element-text {
 /* ── Page/Entry Counter Badge ───────────────────────────── */
 num-filtered-rows {
     text-color:             @primary;
-    font:                   "neonSupersans SemiBold 10";
+    font:                   "TikTok Sans SemiBold 10";
     vertical-align:         0.5;
 }
 
 textbox-num-sep {
     text-color:             @on-surface-variant;
-    font:                   "neonSupersans 10";
+    font:                   "TikTok Sans 10";
     expand:                 false;
     str:                    "/";                    
     vertical-align:         0.5;
@@ -102,7 +102,7 @@ textbox-num-sep {
 
 num-total-rows {
     text-color:             @on-surface-variant;
-    font:                   "neonSupersans 10";
+    font:                   "TikTok Sans 10";
     vertical-align:         0.5;
 }
 

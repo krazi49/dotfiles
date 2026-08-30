@@ -101,7 +101,7 @@ def main():
         
     elif music_bar is not None:
         state = "music"
-        display_text = f"󰎈 <span font_family='Paper Mono'>{music_bar}</span>"
+        display_text = f"󰎈 <span font_family='Monaspace Krypton'>{music_bar}</span>"
         
     else:
         # Standalone Battery Presentation Logic
@@ -111,7 +111,7 @@ def main():
         else:
             filled = (cap * BAR_WIDTH) // 100
             bat_bar = "━" * filled + "╌" * (BAR_WIDTH - filled)
-            display_text = f"{icon} <span font_family='Paper Mono'>{bat_bar}</span>"
+            display_text = f"{icon} <span font_family='Monaspace Krypton'>{bat_bar}</span>"
 
     tooltip = f"<b>Status:</b> {stat}\n<b>Battery:</b> {cap}%"
     print(json.dumps({"text": display_text, "class": state, "tooltip": tooltip}))

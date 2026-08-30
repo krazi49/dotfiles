@@ -41,6 +41,7 @@ hl.on("hyprland.start", function()
 
 	-- ui layer
 	hl.exec_cmd("swaync")
+	hl.exec_cmd("hyprpm reload")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("awww-daemon")
@@ -60,7 +61,6 @@ end)
 -- ── config ─────────────────────────────────────────────────────────────────────
 
 hl.config({
-
 	cursor = {
 		inactive_timeout = 0,
 	},
@@ -72,7 +72,7 @@ hl.config({
 		rounding_power = 0,
 
 		blur = {
-			enabled = true,
+			enabled = false,
 			passes = 1,
 			size = 3,
 			new_optimizations = true,
@@ -141,11 +141,26 @@ hl.config({
 		animate_manual_resizes = true,
 		animate_mouse_windowdragging = true,
 		disable_hyprland_logo = true,
-		font_family = "neonSupersans",
+		font_family = "TikTok Sans",
 	},
 
 	xwayland = {
 		enabled = true,
 		force_zero_scaling = false,
+	},
+
+	plugin = {
+		hyprbars = {
+			bar_height = 10,
+			bar_color = "0xffffffff",
+			inactive_button_color = "0xff444444",
+			bar_part_of_window = true,
+			bar_title_enabled = false,
+			bar_precedence_over_border = false,
+			on_double_click = "hyprctl dispatch fullscreen 1",
+			col = {
+				text = "0xff1c110c",
+			},
+		},
 	},
 })

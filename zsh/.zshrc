@@ -82,9 +82,19 @@ eval "$(starship init zsh)"
 
 preexec() {
     echo "$(date +%s) $1" > /tmp/last_command
+    echo "$1" > /tmp/current_process
+    echo "$PWD" > /tmp/current_cwd
 }
 precmd() {
-    echo "$? $1" > /tmp/last_exit
+    echo "$?" > /tmp/last_exit
+    # command duration = now - when the last command started
+    if [[ -f /tmp/last_command ]]; then
+        local started=$(awk '{print $1}' /tmp/last_command)
+        local now=$(date +%s)
+        echo $(( now - started )) > /tmp/last_command_duration
+    fi
+    echo "" > /tmp/current_process
+    echo "$PWD" > /tmp/current_cwd
 }
 
 # eza aliases — modern ls replacement with icons
@@ -154,7 +164,7 @@ if [[ $TERM == "linux" ]]; then
     clear
 fi
 
-alias startgnome="XDG_SESSION_TYPE=wayland dbus-run-session gnome-session"
+alias opsec="cmatrix"
 
 if [[ -z "$DISPLAY" && "$(tty)" == /dev/tty1 ]]; then
     exec start-hyprland

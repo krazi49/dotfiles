@@ -54,8 +54,8 @@ json_escape() { printf '%s' "$1" | python3 -c "import sys,json; print(json.dumps
 TITLE_J=$(json_escape "$(pango_escape "$TITLE")")
 ARTIST_J=$(json_escape "$(pango_escape "$ARTIST")")
 ALBUM_J=$(json_escape "$(pango_escape "$ALBUM")")
-TEXT_J=$(json_escape "<span font_family=\"Paper Mono\">$(pango_escape "$SCROLL_TITLE")</span>")
+TEXT_J=$(json_escape "<span font_family=\"Monaspace Krypton\">$(pango_escape "$SCROLL_TITLE")</span>")
 
-TOOLTIP="<b>${TITLE_J}</b>\\n${ARTIST_J}\\n${ALBUM_J}\\n\\n<span font_family=\\\"Paper Mono\\\" font_features=\\\"tnum\\\">${POS_FMT} ${BAR} ${LEN_FMT}</span>"
+TOOLTIP="<b>${TITLE_J}</b>\\n${ARTIST_J}\\n${ALBUM_J}\\n\\n<span font_family=\\\"Monaspace Krypton\\\" font_features=\\\"tnum\\\">${POS_FMT} ${BAR} ${LEN_FMT}</span>"
 
 echo "{\"text\": \"${TEXT_J}\", \"tooltip\": \"${TOOLTIP}\", \"class\": \"${STATUS}\"}"

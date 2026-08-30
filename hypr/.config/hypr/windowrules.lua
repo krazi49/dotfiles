@@ -55,8 +55,8 @@ hl.window_rule({ float = "1", match = { class = "^(wofi)$" } })
 hl.window_rule({ match = { class = "^(wofi)$" }, rounding = 0 })
 hl.window_rule({ match = { class = "^(wofi)$" }, no_shadow = "1" })
 
-hl.layer_rule({ animation = "slide bottom", match = { namespace = "swaync-control-center" } })
-hl.layer_rule({ animation = "slide bottom", match = { namespace = "swaync-notification-window" } })
+hl.layer_rule({ animation = "slide left", match = { namespace = "swaync-control-center" } })
+hl.layer_rule({ animation = "slide left", match = { namespace = "swaync-notification-window" } })
 
 -- ── no_blur: save perf on fullscreen + known media/games ──────────────────────
 

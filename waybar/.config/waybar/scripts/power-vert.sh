@@ -116,7 +116,7 @@ fi
 
 # --- Content Engine (Bar vs Percentage Toggle) ---
 SYMBOL="<span font_weight='black' size='small' rise='-600' alpha='65%'>%</span>"
-BAR_SPAN="<span font_family='Paper Mono' font_features='tnum'>$BAR</span>"
+BAR_SPAN="<span font_family='Monaspace Krypton' font_features='tnum'>$BAR</span>"
 
 if [[ "$FLASH_ACTIVE" == "1" ]]; then
   DISPLAY_TEXT=" $FLASH_ICON "

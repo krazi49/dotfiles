@@ -1,11 +1,11 @@
 {
   "layer": "top",
-  "position": "left",
+  "position": "right",
   "width": 0,
   "margin-left": 0,
-  "margin-right": 0,
-  "margin-bottom": 0,
-  "margin-top": 0,
+  "margin-right": 4,
+  "margin-bottom": 15,
+  "margin-top": 8,
   "spacing": 4,
   "tooltips": true,
   "fixed-center": true,
@@ -94,7 +94,10 @@
 
   "network": {
     "tooltip": true,
+    "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>",
+    "format-linked": "\udb80\ude00 {ifname} (No IP)",
     "format-wifi": "{icon}",
+    "rotate": 90,
     "format-ethernet": "{icon}",
     "format-disconnected": "{icon}",
     "interval": 2,
@@ -109,6 +112,7 @@
 
   "pulseaudio": {
     "format": "{icon}",
+    "rotate": 90,
     "format-muted": "{icon}",
     "format-icons": {
       "default": [
@@ -122,6 +126,7 @@
 
   "backlight": {
     "format": "{icon}",
+    "rotate": 90,
     "format-icons": [
       "󰃞",
       "󰃟",

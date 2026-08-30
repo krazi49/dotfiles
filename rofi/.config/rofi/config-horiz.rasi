@@ -1,7 +1,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "neonFlexcode 10";
+    font:                   "Monaspace Krypton 10";
     show-icons:             true;
     icon-theme:             "hicolor";
     hover-select:           true;
@@ -50,14 +50,14 @@ inputbar {
 
 prompt {
     text-color:             @primary;
-    font:                   "neonSupersans Bold 11";
+    font:                   "TikTok Sans Bold 11";
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "neonSupersans 11";
+    font:                   "TikTok Sans 11";
     placeholder:            "Quick jump...";
     placeholder-color:      @on-surface-variant;
     vertical-align:         0.5;

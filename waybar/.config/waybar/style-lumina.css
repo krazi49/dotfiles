@@ -11,7 +11,7 @@
 * {
     min-height: 0;
     min-width: 0;
-    font-family: "neonSupersans", "JetBrains Mono NF Propo";
+    font-family: "TikTok Sans", "Monaspace Krypton";
 }
 
 /* ── Bar — solid slab, square ────────────────────────────── */
@@ -94,7 +94,7 @@ window#waybar {
 }
 
 #custom-space {
-    font-family: "neonFlexcode";
+    font-family: "Monaspace Krypton";
     font-weight: 700;
     letter-spacing: 0.06em;
     opacity: 0.55;
@@ -110,7 +110,7 @@ window#waybar {
 /* ── CENTER — adaptive island ────────────────────────────── */
 
 #custom-adaptive {
-    font-family: "neonFlexcode";
+    font-family: "Monaspace Krypton";
     font-weight: 700;
     letter-spacing: 0.06em;
     opacity: 0.6;
