@@ -244,7 +244,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 # OpenClaw Completion
 [ -f "/home/em/.openclaw/completions/openclaw.zsh" ] && source "/home/em/.openclaw/completions/openclaw.zsh"
 
-clear && fastfetch
+clear && fastfetch --logo none
 
 # Toggle Docker data-root between USB and default
 toggle-docker-usb() {
