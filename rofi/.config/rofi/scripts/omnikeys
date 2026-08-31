@@ -1,6 +1,6 @@
 #!/bin/bash
 THEME="$HOME/.config/rofi/config-horiz.rasi"
-KEYBINDS="$HOME/.config/hypr/keybindings.lua"
+KEYBINDS="$HOME/dotfiles/hypr/.config/hypr/keybindings.lua"
 CACHE="$HOME/.cache/omnisearch/omnikeys"
 mkdir -p "$PROMPT"
 

@@ -12,12 +12,12 @@
   "start_hidden": false,
 
   "modules-left": [
+    "custom/adaptive",
     "custom/clock",
     "custom/space"
   ],
 
   "modules-center": [
-    "custom/adaptive"
   ],
 
   "modules-right": [
@@ -95,9 +95,10 @@
   "network": {
     "tooltip": true,
     "tooltip-format": "Network: <big><b>{essid}</b></big>\nSignal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>\nFrequency: <b>{frequency}MHz</b>\nInterface: <b>{ifname}</b>\nIP: <b>{ipaddr}/{cidr}</b>\nGateway: <b>{gwaddr}</b>\nNetmask: <b>{netmask}</b>",
-    "format-linked": "\udb80\ude00 {ifname} (No IP)",
+    "format-linked": "{icon}",
     "format-wifi": "{icon}",
-    "rotate": 90,
+    "rotate": 0,
+    "on-click": "nmgui",
     "format-ethernet": "{icon}",
     "format-disconnected": "{icon}",
     "interval": 2,
@@ -112,7 +113,8 @@
 
   "pulseaudio": {
     "format": "{icon}",
-    "rotate": 90,
+    "rotate": 0,
+    "on-click": "pavucontrol",
     "format-muted": "{icon}",
     "format-icons": {
       "default": [
@@ -126,7 +128,7 @@
 
   "backlight": {
     "format": "{icon}",
-    "rotate": 90,
+    "rotate": 0,
     "format-icons": [
       "󰃞",
       "󰃟",

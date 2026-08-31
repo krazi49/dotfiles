@@ -6,7 +6,7 @@ import os
 import time
 import html
 
-BAR_WIDTH_COMPACT  = 12
+BAR_WIDTH_COMPACT  = 10
 TOGGLE_BATTERY     = "/tmp/waybar_battery_toggle"
 FLASH_FILE         = "/tmp/waybar_adaptive_flash"
 PREV_STAT_FILE     = "/tmp/waybar_adaptive_prev_stat"
