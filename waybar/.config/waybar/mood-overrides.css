@@ -51,7 +51,7 @@
     background: @surface_container_low;
     color: @outline;
     border-radius: 100px;
-    opacity: 0.65;
+    opacity: 1;
 }
 
 /* confrontational — border pulse, ready to argue             */
@@ -122,6 +122,7 @@
     color: @outline;
     border-radius: 100px;
     animation: mood-sleepy 3s ease-in-out infinite;
+    opacity: 1;
 }
 
 /* touchy — sharp jitter, tight, defensive                      */
@@ -137,7 +138,7 @@
     background: @surface_dim;
     color: @on_surface;
     border-radius: 100px;
-    opacity: 0.35;
+    opacity: 1;
 }
 
 /* down — muted, slow fade, quiet                                */
@@ -146,7 +147,7 @@
     color: @outline;
     border-radius: 100px;
     animation: mood-glow 3s ease-in-out infinite;
-    opacity: 0.5;
+    opacity: 1;
 }
 
 /* overclocked — hot, unstable, fast erratic pulse               */
@@ -171,7 +172,7 @@
     color: @on_tertiary_container;
     border-radius: 100px;
     animation: mood-restless 0.6s ease-in-out infinite;
-    opacity: 0.85;
+    opacity: 1;
 }
 
 /* unravelling — surface level fine, something underneath        */
@@ -180,7 +181,7 @@
     color: @on_surface;
     border-radius: 100px;
     animation: mood-glow 4s ease-in-out infinite;
-    opacity: 0.6;
+    opacity: 1;
 }
 
 /* ── Animations ──────────────────────────────────────────── */

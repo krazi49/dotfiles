@@ -249,12 +249,12 @@ button:focus {
 .widget-mpris-title {
     font-weight: 700;
     font-size: 14px;
-    color: @on_surface;
+    color: @surface;
 }
 
 .widget-mpris-subtitle {
     font-size: 11px;
-    color: @on_surface_variant;
+    color: @surface_variant;
 }
 
 .widget-mpris-player > box {
@@ -266,7 +266,7 @@ button:focus {
     background: transparent;
     border: none;
     border-radius: 0;
-    color: @on_surface;
+    color: @surface;
     padding: 6px;
     outline: none;
     transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
@@ -377,7 +377,7 @@ scale slider {
     padding: 8px 10px;
     margin: 4px 0;
     border-radius: 0;
-    background: @surface;
+    background: @on_surface_variant;
     padding: 8px;
     margin: 0;
     box-shadow: 2px 2px 0 0 @outline_variant;
@@ -385,23 +385,23 @@ scale slider {
 }
 
 .notification:hover {
-    background: @surface;
+    background: @on_surface;
 }
 
 .notification-summary {
     font-weight: 700;
     font-size: 12px;
-    color: @on_surface;
+    color: @surface;
 }
 
 .notification-body {
     font-size: 11px;
-    color: @on_surface_variant;
+    color: @surface;
 }
 
 .notification-time {
     font-size: 10px;
-    color: @outline;
+    color: @surface;
 }
 
 .notification-action {

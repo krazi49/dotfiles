@@ -19,7 +19,7 @@ window {
     width:                  300px;
     location:               center;
     anchor:                 center;
-    y-offset:               -60;
+    y-offset:               -100;
     padding:                0;
     children:               [ mainbox ];
 }

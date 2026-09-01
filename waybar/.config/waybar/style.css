@@ -20,7 +20,7 @@ window#waybar {
     border: none;
     border-radius: 0;
     margin: 0;
-    padding: 8px 4px;
+    padding: 4px 0px;
     color: @on_surface;
 }
 
@@ -44,18 +44,16 @@ window#waybar {
     border-radius: 0;
     box-shadow: 2px 2px 0 0 @outline_variant;
     margin: 6px 6px;
-    padding: 10px 3px;
+    padding: 0px 10px;
     font-weight: 500;
     font-size: 11px;
     letter-spacing: 0.04em;
-    opacity: 0.85;
     transition:
         background-color 0.1s ease,
         color 0.1s ease,
         border-color 0.1s ease,
         box-shadow 0.1s ease,
-        transform 0.1s ease,
-        opacity 0.1s ease;
+        transform 0.1s ease;
 }
 
 /* hover — lumina elevation shift: lift up, shadow grows white */
@@ -82,7 +80,6 @@ window#waybar {
 #custom-clock {
     font-weight: 700;
     letter-spacing: 0.04em;
-    opacity: 0.9;
 }
 
 #custom-clock.alt {
@@ -97,7 +94,6 @@ window#waybar {
     font-family: "Monaspace Krypton Var";
     font-weight: 700;
     letter-spacing: 0.06em;
-    opacity: 0.55;
     font-size: 10px;
 }
 
@@ -113,7 +109,6 @@ window#waybar {
     font-family: "Monaspace Krypton";
     font-weight: 700;
     letter-spacing: 0.06em;
-    opacity: 0.6;
     box-shadow: 3px 3px 0 0 @outline_variant;
 }
 
@@ -178,7 +173,6 @@ window#waybar {
     background: @surface_container;
     color: @outline;
     border-color: @outline;
-    opacity: 0.7;
 }
 
 #custom-adaptive.plugged {
@@ -230,7 +224,6 @@ window#waybar {
     background: @surface_container;
     font-weight: 500;
     letter-spacing: 0.03em;
-    opacity: 0.75;
 }
 
 #custom-mood:hover {
@@ -239,7 +232,6 @@ window#waybar {
 }
 
 #custom-pitwall {
-    opacity: 0.6;
     font-weight: 700;
 }
 
@@ -249,7 +241,6 @@ window#waybar {
 
 #group-system {
     padding: 4px 1px;
-    opacity: 0.6;
     box-shadow: 2px 2px 0 0 @outline_variant;
 }
 
@@ -262,10 +253,9 @@ window#waybar {
 #pulseaudio,
 #backlight {
     font-family: "JetBrains Mono NerdFont Propo";
-    opacity: 0.7;
-    min-height: 10px;
-    margin: 0px 6px;
-    padding: 2px 5px;
+    min-width: 10px;
+    margin: 6px 0px;
+    padding: 5px 5px;
 }
 
 #network:hover,
@@ -275,7 +265,6 @@ window#waybar {
 }
 
 #custom-bt-battery {
-    opacity: 0.6;
 }
 
 #custom-bt-battery:hover {
@@ -283,11 +272,9 @@ window#waybar {
 }
 
 #tray {
-    opacity: 0.55;
 }
 
 #tray:hover {
-    opacity: 0.9;
 }
 
 #tray > .passive      { -gtk-icon-effect: dim; }
@@ -350,7 +337,6 @@ menu separator {
     margin: 8px 15px;
     min-height: 1px;
     border-radius: 0;
-    opacity: 0.5;
 }
 
 decoration { box-shadow: none; }

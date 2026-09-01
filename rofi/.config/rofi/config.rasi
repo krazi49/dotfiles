@@ -28,8 +28,8 @@ window {
     border-color:           @outline-variant;
     border-radius:           0;
     width:                  96%;
-    location:               north;
-    y-offset:               6px;
+    location:               south;
+    y-offset:               0px;
     shadow:                 true;
     shadow-radius:           0;
     shadow-offset:           2px 2px;

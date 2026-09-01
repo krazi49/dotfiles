@@ -18,9 +18,9 @@ window {
     background-color:       transparent;
     border-radius:           0;
     width:                  96%;
-    location:               north;
-    anchor:                 north;
-    y-offset:               6px;
+    location:               south;
+    anchor:                 south;
+    y-offset:               0px;
     shadow:                 true;
     shadow-radius:           0;
     shadow-offset:           2px 2px;
@@ -33,7 +33,7 @@ mainbox {
     background-color:       transparent;
     padding:                0;
     spacing:                10px;
-    children:               [ inputbar, listview ];
+    children:               [ listview, inputbar ];
 }
 
 inputbar {

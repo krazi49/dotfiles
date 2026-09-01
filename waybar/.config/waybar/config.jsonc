@@ -1,11 +1,11 @@
 {
   "layer": "top",
-  "position": "right",
+  "position": "bottom",
   "width": 0,
-  "margin-left": 0,
-  "margin-right": 4,
-  "margin-bottom": 15,
-  "margin-top": 8,
+  "margin-left": 10,
+  "margin-right": 10,
+  "margin-bottom": 4,
+  "margin-top": 0,
   "spacing": 4,
   "tooltips": true,
   "fixed-center": true,
@@ -27,7 +27,7 @@
   ],
 
   "group/system": {
-    "orientation": "vertical",
+    "orientation": "horizontal",
     "modules": [
       "custom/bt-battery",
       "network",
@@ -40,7 +40,7 @@
   "custom/adaptive": {
     "interval": 0.1,
     "format": "{}",
-    "rotate": 90,
+    "rotate": 0,
     "tooltip": true,
     "exec": "~/.config/waybar/scripts/adaptive.py",
     "return-type": "json",
@@ -54,7 +54,7 @@
 "custom/clock": {
     "exec": "~/.config/waybar/scripts/clock.sh",
     "return-type": "json",
-    "rotate": 90,
+    "rotate": 0,
     "markup": true,
     "escape": false,
     "on-click": "bash -c 'yad --calendar --title=\"Calendar\" --width=320 --height=280 --posx=200 --posy=30 --button=gtk-close:1 --close-on-unfocus'"
@@ -63,7 +63,7 @@
   "custom/space": {
     "tooltip": true,
     "format": "{text}",
-    "rotate": 90,
+    "rotate": 0,
     "exec": "~/.config/hypr/scripts/workspace.sh",
     "escape": false,
     "return-type": "json",
@@ -76,7 +76,7 @@
   "custom/mood": {
     "interval": 10,
     "format": "{}",
-    "rotate": 90,
+    "rotate": 0,
     "tooltip": false,
     "exec-if": "[ -f ~/.config/waybar/current_mood ]",
     "exec": "~/.config/waybar/scripts/mood.sh",
@@ -86,7 +86,7 @@
   "custom/bt-battery": {
     "interval": 10,
     "format": " {} ",
-    "rotate": 90,
+    "rotate": 0,
     "exec": "~/.config/waybar/scripts/bt-status.py",
     "return-type": "json",
     "on-click": "blueberry"

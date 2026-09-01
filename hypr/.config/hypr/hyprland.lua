@@ -80,18 +80,18 @@ hl.config({
 			popups = true,
 		},
 
-		dim_inactive = true,
+		dim_inactive = false,
 		dim_strength = 0.15,
 		dim_special = 0.2,
 
 		-- lumina: deep cinematic shadows, clean falloff, tight scale
 		shadow = {
 			enabled = true,
-			color = "0xffffffff",
-			color_inactive = "0xff444444",
-			offset = { 10, 10 },
-			range = 1,
-			render_power = 1,
+			color = "0xff000000",
+			color_inactive = "0xff555555",
+			offset = { 6, 6 },
+			range = 0,
+			render_power = 0,
 			scale = 1,
 		},
 	},
@@ -111,8 +111,8 @@ hl.config({
 		gaps_out = 15,
 		resize_on_border = true,
 		col = {
-			active_border = "0xffffffff",
-			inactive_border = "0xff444444",
+			active_border = "0xff000000",
+			inactive_border = "0xff555555",
 		},
 		snap = {
 			enabled = false,
@@ -156,7 +156,7 @@ hl.config({
 			inactive_button_color = "0xff444444",
 			bar_part_of_window = true,
 			bar_title_enabled = false,
-			bar_precedence_over_border = false,
+			bar_precedence_over_border = true,
 			on_double_click = "hyprctl dispatch fullscreen 1",
 			col = {
 				text = "0xff1c110c",
