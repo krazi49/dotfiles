@@ -27,7 +27,7 @@ window {
     border:                 2px;
     border-color:           @outline-variant;
     border-radius:           0;
-    width:                  96%;
+    width:                  98.1%;
     location:               south;
     y-offset:               0px;
     shadow:                 true;

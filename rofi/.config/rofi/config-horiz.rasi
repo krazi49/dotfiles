@@ -17,7 +17,7 @@ configuration {
 window {
     background-color:       transparent;
     border-radius:           0;
-    width:                  96%;
+    width:                  98.1%;
     location:               south;
     anchor:                 south;
     y-offset:               0px;
