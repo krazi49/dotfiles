@@ -6,7 +6,7 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "TikTok Sans 10"; 
+    font:                   "TikTok Sans 11"; 
     show-icons:             false;                  /* Disables icon asset loading globally */
     display-drun:           "󰀻";
     display-run:            "󰆍";
@@ -27,9 +27,9 @@ window {
     border:                 2px;
     border-color:           @outline-variant;
     border-radius:           0;
-    width:                  97.5%;
-    location:               north;
-    y-offset:               22px;
+    width:                  98.1%;
+    location:               south;
+    y-offset:               30px;
     shadow:                 true;
     shadow-radius:           0;
     shadow-offset:           2px 2px;
@@ -53,15 +53,15 @@ inputbar {
     border:                 2px;
     border-color:           @on-surface;
     /* ADJUSTED: Replaced 0px with 6px vertical padding to handle font baseline discrepancies */
-    padding:                6px 14px;               
-    margin:                 6px 0px;                
+    padding:                4px 14px;               
+    margin:                 4px 0px;                
     spacing:                8px;
     children:               [ prompt, entry ];
 }
 
 prompt {
     text-color:             @primary;
-    font:                   "TikTok Sans Bold 10";
+    font:                   "TikTok Sans Bold 11";
     /* FIXED: Prevent the prompt from expanding vertically and force the baseline center */
     expand:                 false;
     vertical-align:         0.5;
@@ -69,7 +69,7 @@ prompt {
 
 entry {
     text-color:             @on-surface;
-    font:                   "TikTok Sans 10";
+    font:                   "TikTok Sans 11";
     placeholder:            "Search...";
     placeholder-color:      @on-surface-variant;
     width:                  170px;                  
@@ -94,7 +94,7 @@ num-filtered-rows {
 
 textbox-num-sep {
     text-color:             @on-surface-variant;
-    font:                   "TikTok Sans 10";
+    font:                   "TikTok Sans 11";
     expand:                 false;
     str:                    "/";                    
     vertical-align:         0.5;
@@ -102,7 +102,7 @@ textbox-num-sep {
 
 num-total-rows {
     text-color:             @on-surface-variant;
-    font:                   "TikTok Sans 10";
+    font:                   "TikTok Sans 11";
     vertical-align:         0.5;
 }
 
@@ -122,8 +122,8 @@ element {
     text-color:             @on-surface;
     border-radius:           0;
     /* ADJUSTED: Match the vertical padding layout of the inputbar precisely */
-    padding:                6px 14px;               
-    margin:                 6px 0px;                
+    padding:                4px 14px;               
+    margin:                 4px 0px;                
     spacing:                0px;
     orientation:            horizontal;
     
@@ -147,5 +147,4 @@ element normal active {
     text-color:             @primary;
     padding:                3px 0px 0px 3px;
 }
-
 

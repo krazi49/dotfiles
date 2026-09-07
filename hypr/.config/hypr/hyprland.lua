@@ -48,9 +48,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("gsr-ui")
 	hl.exec_cmd("~/.config/waybar/scripts/adaptive_island_cpu.py")
 
-	-- OpenClaw gateway
-	hl.exec_cmd("openclaw gateway start")
-	hl.exec_cmd("omniroute &")
 	hl.exec_cmd("hyprctl reload")
 end)
 

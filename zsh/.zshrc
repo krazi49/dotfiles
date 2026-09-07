@@ -109,6 +109,7 @@ alias la='eza -la --icons=auto --git'
 alias l='eza -l --icons=auto --git'
 alias tree='eza --tree --icons=auto'
 alias power='sudo'
+alias into-phone="ssh -p 8022 u0_a485@100.86.220.0"
 
 # User configuration
 

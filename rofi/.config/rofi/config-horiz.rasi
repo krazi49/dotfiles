@@ -17,10 +17,10 @@ configuration {
 window {
     background-color:       transparent;
     border-radius:           0;
-    width:                  98.1%;
-    location:               south;
+    width:                  97.5%;
+    location:               north;
     anchor:                 south;
-    y-offset:               0px;
+    y-offset:               22px;
     shadow:                 true;
     shadow-radius:           0;
     shadow-offset:           2px 2px;
@@ -33,7 +33,7 @@ mainbox {
     background-color:       transparent;
     padding:                0;
     spacing:                10px;
-    children:               [ listview, inputbar ];
+    children:               [ inputbar, listview ];
 }
 
 inputbar {

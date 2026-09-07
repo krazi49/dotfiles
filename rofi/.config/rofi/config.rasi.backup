@@ -27,9 +27,9 @@ window {
     border:                 2px;
     border-color:           @outline-variant;
     border-radius:           0;
-    width:                  97.5%;
-    location:               north;
-    y-offset:               22px;
+    width:                  98.1%;
+    location:               south;
+    y-offset:               30px;
     shadow:                 true;
     shadow-radius:           0;
     shadow-offset:           2px 2px;
@@ -147,5 +147,4 @@ element normal active {
     text-color:             @primary;
     padding:                3px 0px 0px 3px;
 }
-
 
