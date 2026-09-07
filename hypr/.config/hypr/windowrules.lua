@@ -49,6 +49,7 @@ hl.window_rule({
 	match = { initial_class = "^(org.gnome.NautilusPreviewer)$" },
 })
 hl.window_rule({ center = "1", match = { class = "^(floating_kitty)$" } })
+hl.window_rule({ match = { class = "^(floating_kitty)$" }, move = "1400 12" })
 hl.window_rule({ animation = "popin 90%", match = { class = "^(wofi)$" } })
 hl.window_rule({ border_size = 0, match = { class = "^(wofi)$" } })
 hl.window_rule({ float = "1", match = { class = "^(wofi)$" } })
@@ -56,6 +57,7 @@ hl.window_rule({ match = { class = "^(wofi)$" }, rounding = 0 })
 hl.window_rule({ match = { class = "^(wofi)$" }, no_shadow = "1" })
 
 hl.layer_rule({ animation = "slide left", match = { namespace = "swaync-control-center" } })
+hl.layer_rule({ animation = "slide top", match = { namespace = "rofi" } })
 hl.layer_rule({ animation = "slide left", match = { namespace = "swaync-notification-window" } })
 
 -- ── no_blur: save perf on fullscreen + known media/games ──────────────────────

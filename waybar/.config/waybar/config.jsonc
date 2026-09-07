@@ -1,30 +1,25 @@
 {
-  "layer": "top",
-  "position": "bottom",
+  "layer": "bottom",
+  "position": "top",
   "width": 0,
-  "margin-left": 120,
-  "margin-right": 120,
-  "margin-bottom": 4,
-  "margin-top": -8,
+  "margin-left": 240,
+  "margin-right": 240,
+  "margin-bottom": -8,
+  "margin-top": 4,
   "spacing": 4,
   "tooltips": true,
   "fixed-center": true,
   "start_hidden": false,
 
-  "modules-left": [
-    "custom/adaptive",
-    "custom/clock",
-    "custom/space"
-  ],
 
   "modules-center": [
-  ],
-
-  "modules-right": [
-    "custom/mood",
+    "custom/adaptive",
+    "custom/clock",
+    "custom/space",
     "tray",
     "group/system"
   ],
+
 
   "group/system": {
     "orientation": "horizontal",
@@ -71,16 +66,6 @@
     "on-click-right": "bash ~/.config/hypr/scripts/workspace-jump.sh",
     "on-scroll-up": "bash ~/.config/hypr/scripts/workspace-scroll.sh e+1",
     "on-scroll-down": "bash ~/.config/hypr/scripts/workspace-scroll.sh e-1"
-  },
-
-  "custom/mood": {
-    "interval": 10,
-    "format": "{}",
-    "rotate": 0,
-    "tooltip": false,
-    "exec-if": "[ -f ~/.config/waybar/current_mood ]",
-    "exec": "~/.config/waybar/scripts/mood.sh",
-    "return-type": "json"
   },
 
   "custom/bt-battery": {

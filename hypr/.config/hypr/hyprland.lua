@@ -84,7 +84,7 @@ hl.config({
 		-- lumina: deep cinematic shadows, clean falloff, tight scale
 		shadow = {
 			enabled = true,
-			color = "0xff000000",
+			color = "0xffd6d3d6",
 			color_inactive = "0xff555555",
 			offset = { 6, 6 },
 			range = 0,
@@ -108,7 +108,7 @@ hl.config({
 		gaps_out = 15,
 		resize_on_border = true,
 		col = {
-			active_border = "0xff000000",
+			active_border = "0xffd6d3d6",
 			inactive_border = "0xff555555",
 		},
 		snap = {
@@ -144,20 +144,5 @@ hl.config({
 	xwayland = {
 		enabled = true,
 		force_zero_scaling = false,
-	},
-
-	plugin = {
-		hyprbars = {
-			bar_height = 10,
-			bar_color = "0xffffffff",
-			inactive_button_color = "0xff444444",
-			bar_part_of_window = true,
-			bar_title_enabled = false,
-			bar_precedence_over_border = true,
-			on_double_click = "hyprctl dispatch fullscreen 1",
-			col = {
-				text = "0xff1c110c",
-			},
-		},
 	},
 })
