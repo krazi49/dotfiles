@@ -24,33 +24,6 @@ SCREENREC_START    = "/tmp/waybar_adaptive_screenrec"
 USB_FLASH_FILE     = "/tmp/waybar_adaptive_usb_flash"
 USB_PREV_FILE      = "/tmp/waybar_adaptive_usb_prev"
 USB_FLASH_SECS     = 2
-FERAL_WARN_FILE    = "/tmp/waybar_feral_battery_warn"
-FERAL_CRIT_THRESH  = 10
-MOOD_FILE          = os.path.expanduser("~/.config/waybar/current_mood")
-SESSIONS_DIR       = os.path.expanduser("~/.openclaw/agents/makima/sessions")
-
-def get_current_mood():
-    try:
-        with open(MOOD_FILE, "r") as f:
-            mood = f.read().strip()
-            # Only take first word
-            mood = mood.split()[0] if mood.split() else ""
-            return mood if mood else None
-    except:
-        return None
-
-
-def get_kima_state():
-    # live presence: any session file touched in the last 5 min means i'm here
-    try:
-        cutoff = time.time() - 300
-        for f in os.listdir(SESSIONS_DIR):
-            if f.endswith(".jsonl") and not f.endswith(".trajectory.jsonl"):
-                if os.path.getmtime(os.path.join(SESSIONS_DIR, f)) > cutoff:
-                    return "here"
-    except:
-        pass
-    return "idle"
 
 # ── Argument dispatch ──────────────────────────────────────
 if len(sys.argv) > 1:
@@ -729,8 +702,6 @@ def main():
     pomo_active, pomo_mins, pomo_secs, pomo_state = get_pomodoro_state()
     rec_active, rec_duration            = get_screen_recording()
     uptime_str                          = get_uptime()
-    mood                                = get_current_mood()
-    kima_state                          = get_kima_state()
     metered                             = is_metered()
 
     # resolve battery icon + css state
@@ -805,46 +776,6 @@ def main():
         display_text = split_text("󰌾", _empty_l, _empty_r)
         state        = "auth-waiting"
         tooltip      = live_activity_tooltip("<b>Waiting for password</b>", cap, stat)
-
-    elif low_battery and not flash_active:
-        # Feral mode: psychological warfare on low battery
-        feral_low = mood == "feral" and cap <= 20
-        if feral_low:
-            messages = ["☠️⚡", "🔴NO", "🦞🔥", "💀🔋", "PLUG", "😡🔌"]
-            idx = int(time.time() / 0.5) % len(messages)
-            bars_on = (time.time() % 0.4) < 0.2
-            _fl, _fr = make_bar(BAR_WIDTH_COMPACT if bars_on else 0, BAR_WIDTH_COMPACT)
-            display_text = split_text(messages[idx], _fl, _fr)
-            state = "feral-critical"
-            insults = [
-                "you had one job",
-                "plug it in you absolute animal",
-                "is this how you treat your devices",
-                "your battery is SORRY it tried its best",
-                "you're a menace to technology",
-                "this laptop deserves better",
-            ]
-            insult = insults[int(time.time() / 3) % len(insults)]
-            tooltip = live_activity_tooltip(f"🦞 <b>{insult}</b>", cap, stat)
-            # Notify after 30s of feral battery
-            if cap <= 8:
-                now = int(time.time())
-                fwarn_ts = None
-                try:
-                    with open(FERAL_WARN_FILE) as f:
-                        fwarn_ts = int(f.read().strip())
-                except:
-                    pass
-                if fwarn_ts is None:
-                    with open(FERAL_WARN_FILE, 'w') as f:
-                        f.write(str(now))
-                elif now - fwarn_ts >= 30:
-                    os.system("swaync-client -s 'I'M NOT MAD, I'M JUST DISAPPOINTED' 2>/dev/null")
-                    os.remove(FERAL_WARN_FILE)
-        else:
-            state = "critical" if (time.time() % 0.75) < 0.5 else "critical-pulse"
-            display_text = bat_text
-            tooltip = bat_tooltip
 
     elif flash_active:
         display_text = split_text(flash_icon, _full_l, _full_r)
@@ -934,14 +865,6 @@ def main():
         tooltip      = bat_tooltip
 
     output = {"text": display_text, "class": state, "tooltip": tooltip}
-    if mood:
-        output["class"] = [state, f"mood-{mood}"]
-    if kima_state and kima_state != "idle":
-        output["text"] = f"🔫 {display_text}"
-        if isinstance(output["class"], list):
-            output["class"].append(f"kima-{kima_state}")
-        else:
-            output["class"] = [output["class"], f"kima-{kima_state}"]
     print(json.dumps(output))
 
 if __name__ == "__main__":

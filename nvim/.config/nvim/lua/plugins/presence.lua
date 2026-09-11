@@ -7,7 +7,7 @@ return {
         auto_update = true,
         neovim_image_text = "neovim",
         main_image = "file",
-        editing_text = "changing %s again",
+        editing_text = "sending %s to tel avi- i mean saving it",
         viewing_text = "watching %s closely",
         git_commit_text = "sending changes to tel avi- i mean github",
         workspace_text = "doing stuff with %s",

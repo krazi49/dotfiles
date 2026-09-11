@@ -2,7 +2,7 @@
   "layer": "bottom",
   "position": "top",
   "width": 0,
-  "margin-left": 240,
+  "margin-left": 14,
   "margin-right": 240,
   "margin-bottom": -8,
   "margin-top": 4,
@@ -12,7 +12,7 @@
   "start_hidden": false,
 
 
-  "modules-center": [
+  "modules-left": [
     "custom/adaptive",
     "custom/clock",
     "custom/space",
