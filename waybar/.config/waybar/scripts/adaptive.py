@@ -105,11 +105,11 @@ def make_bar(filled, total):
     """Split bar — returns (left, right) tuple. Icon goes between them.
     Both sides fill inward from the edges. Empty segments use • at low alpha."""
     filled = max(0, min(filled, total))
-    half   = total // 2
-    f      = filled // 2
+    half   = total
+    f      = filled
     e      = half - f
-    left   = ("•" * f) + (f"<span alpha='20%'>{'•' * e}</span>" if e else "")
-    right  = (f"<span alpha='20%'>{'•' * e}</span>" if e else "") + ("•" * f)
+    left   = ("█" * f) + (f"<span alpha='20%'>{'█' * e}</span>" if e else "")
+    right  = ""
     return left, right
 
 def make_bar_str(filled, total):
@@ -122,7 +122,7 @@ def fmt_time(seconds):
     return f"{s // 60}:{s % 60:02d}"
 
 def live_activity_tooltip(activity_lines, cap, stat):
-    bat_line = f"<b>Battery:</b> {cap}%  {stat}"
+    bat_line = f"<b>Battery:</b> {cap}%"
     return f"{activity_lines}\n<span alpha='40%'>·  ·  ·  ·  ·</span>\n{bat_line}"
 
 
@@ -737,8 +737,8 @@ def main():
     def split_text(icon, left, right, alpha=None):
         a = f" alpha='{alpha}'" if alpha else ""
         return (
-            f"<span font_family='Monaspace Krypton'{a}>{left}</span> "
             f"{icon} "
+            f"<span font_family='Monaspace Krypton'{a}>{left}</span> " 
             f"<span font_family='Monaspace Krypton'{a}>{right}</span>"
         )
 

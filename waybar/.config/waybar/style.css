@@ -42,8 +42,9 @@ window#waybar {
     border: 2px solid @on_surface;
     border-radius: 0;
     box-shadow: 2px 2px 0 0 @outline_variant;
-    margin: 6px 2px;
-    padding: 0px 10px;
+    margin: 4px 2px;
+    min-height: 20px;
+    padding: 0px 6px;
     font-weight: 500;
     font-size: 11px;
     letter-spacing: 0.04em;
@@ -253,8 +254,6 @@ window#waybar {
 #backlight {
     font-family: "JetBrains Mono NerdFont Propo";
     min-width: 10px;
-    margin: 6px 0px;
-    padding: 5px 5px;
 }
 
 #network:hover,
