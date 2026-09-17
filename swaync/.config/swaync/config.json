@@ -1,13 +1,13 @@
 {
   "$schema": "/etc/xdg/swaync/configSchema.json",
   "positionX": "left",
-  "positionY": "top",
+  "positionY": "bottom",
   "control-center-positionX": "left",
-  "control-center-positionY": "bottom",
-  "control-center-margin-top": 8,
+  "control-center-positionY": "top",
+  "control-center-margin-top": 14,
   "control-center-margin-bottom": 7,
-  "control-center-margin-right": 12,
-  "control-center-margin-left": 8,
+  "control-center-margin-right": 14,
+  "control-center-margin-left": 12,
   "control-center-width": 400,
   "control-center-height": -1,
   "fit-to-screen": false,
@@ -46,75 +46,75 @@
       "button-text": "Clear all"
     },
     "buttons-grid#top": {
-      "buttons-per-row": 2,
-      "actions": [
-        {
-          "label": "󰤨   Wi-Fi",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
-          "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
-        },
-        {
-          "label": "󰂯   Bluetooth",
-          "type": "normal",
-          "active": false,
-          "command": "blueberry"
-        },
-        {
-          "label": "󰴽   Communications",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == false ]] && rfkill block all || rfkill unblock all'",
-          "update-command": "sh -c 'rfkill list all | grep -q \"yes\" && echo false || echo true'"
-        },
-        {
-          "label": "󰑊   Screen record",
-          "type": "toggle",
-          "active": false,
-          "command": "gsr-ui"
-        }
-      ]
+  "buttons-per-row": 2,
+  "actions": [
+    {
+      "label": "󰤨   Wi-Fi",
+      "type": "toggle",
+      "active": false,
+      "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
+      "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
     },
-    "buttons-grid#compact": {
-      "buttons-per-row": 4,
-      "actions": [
-        {
-          "label": "󰝟",
-          "type": "toggle",
-          "active": false,
-          "command": "swaync-client -d -sw",
-          "update-command": "sh -c 'swaync-client -D && echo true || echo false'"
-        },
-        {
-          "label": "󰝩",
-          "type": "toggle",
-          "active": false,
-          "active-color": "#5b615c",
-          "command": "sh -c 'pgrep hyprsunset && pkill hyprsunset || hyprsunset -t 2600'",
-          "update-command": "sh -c 'pgrep hyprsunset && echo true || echo false'"
-        },
-        {
-          "label": "󰝟",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && pactl set-sink-mute @DEFAULT_SINK@ 1 || pactl set-sink-mute @DEFAULT_SINK@ 0'",
-          "update-command": "sh -c 'pactl get-sink-mute @DEFAULT_SINK@ | grep -q \"yes\" && echo true || echo false'"
-        },
-        {
-          "label": "󰄀",
-          "type": "normal",
-          "active": false,
-          "command": "bash ~/.config/rofi/scripts/omniscreenshot"
-        },
-        {
-          "label": "󰌾",
-          "type": "normal",
-          "active": false,
-          "command": "hyprlock"
-        }
-      ]
+    {
+      "label": "󰂯   Bluetooth",
+      "type": "normal",
+      "active": false,
+      "command": "blueberry"
     },
+    {
+      "label": "󰴽   Communications",
+      "type": "toggle",
+      "active": false,
+      "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == false ]] && rfkill block all || rfkill unblock all'",
+      "update-command": "sh -c 'rfkill list all | grep -q \"yes\" && echo false || echo true'"
+    },
+    {
+      "label": "󰝩   Night light",
+      "type": "toggle",
+      "active": false,
+      "active-color": "#5b615c",
+      "command": "sh -c 'pgrep hyprsunset && pkill hyprsunset || hyprsunset -t 2600'",
+      "update-command": "sh -c 'pgrep hyprsunset && echo true || echo false'"
+    }
+  ]
+},
+"buttons-grid#compact": {
+  "buttons-per-row": 4,
+  "actions": [
+    {
+      "label": "󰪓",
+      "type": "toggle",
+      "active": false,
+      "command": "swaync-client -d -sw",
+      "update-command": "sh -c 'swaync-client -D && echo true || echo false'"
+    },
+    {
+      "label": "󰑊",
+      "type": "normal",
+      "active": false,
+      "command": "gsr-ui"
+    },
+    {
+      "label": "󰝟",
+      "type": "toggle",
+      "active": false,
+      "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && pactl set-sink-mute @DEFAULT_SINK@ 1 || pactl set-sink-mute @DEFAULT_SINK@ 0'",
+      "update-command": "sh -c 'pactl get-sink-mute @DEFAULT_SINK@ | grep -q \"yes\" && echo true || echo false'"
+    },
+    {
+      "label": "󰄀",
+      "type": "normal",
+      "active": false,
+      "command": "bash ~/.config/rofi/scripts/omniscreenshot"
+    },
+    {
+      "label": "󰌾",
+      "type": "normal",
+      "active": false,
+      "command": "hyprlock"
+    }
+  ]
+},
     "notifications": {
       "vexpand": true
     },

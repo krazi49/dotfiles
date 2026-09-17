@@ -25,72 +25,142 @@ USB_FLASH_FILE     = "/tmp/waybar_adaptive_usb_flash"
 USB_PREV_FILE      = "/tmp/waybar_adaptive_usb_prev"
 USB_FLASH_SECS     = 2
 
-# ── Argument dispatch ──────────────────────────────────────
-if len(sys.argv) > 1:
-    arg = sys.argv[1]
+BADGE_ICON = {
+    "temp-warning":     "󱃃",
+    "auth-waiting":     "󰌾",
+    "screen-recording": "󰹑",
+    "bt-flash":         "󰂱",
+    "usb-flash":        "󰕓",
+    "pomodoro":         "󰅐",
+    "clipboard-flash":  "󰅇",
+    "hardware-alert":   "󰍬",
+    "notification":     "󰂚",
+    "music":            "󰝚",
+    "music-paused":     "󰏤",
+    "dnd":              "󰂛",
+    "charging":         "󱐋",
+    "full":             "󰄬",
+    "plugged":          "󰐧",
+    "critical":         "󰁃",
+    "discharging":      "󰁅",
+}
 
-    if arg == "--play-pause":
-        # Check for notifications first - if any exist, open swaync
-        try:
-            notif_count = subprocess.check_output(
-                ["swaync-client", "-c"], text=True, stderr=subprocess.DEVNULL
-            ).strip()
-            notif_count = int(notif_count) if notif_count else 0
-        except:
-            notif_count = 0
-        
-        if notif_count > 0:
-            subprocess.run(["swaync-client", "-t", "-sw"], stderr=subprocess.DEVNULL)
-        else:
-            try:
-                status = subprocess.check_output(
-                    ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
-                ).strip()
-                is_music = status in ("Playing", "Paused")
-            except:
-                is_music = False
-            if is_music:
-                subprocess.run(["playerctl", "play-pause"], stderr=subprocess.DEVNULL)
-                subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
-            else:
-                subprocess.run(["swaync-client", "-t", "-sw"], stderr=subprocess.DEVNULL)
-        sys.exit(0)
+# Braille sub-cell bar: 8 sub-positions per cell.
+# Left column (dots 1,2,3,7) fills top→bottom first, then right column (4,5,6,8).
+BRAILLE_STEPS = ["⠀", "⠁", "⠃", "⠇", "⡇", "⡗", "⡟", "⡿", "⣿"]
+BRAILLE_SUB   = 8
 
-    if arg == "--next":
-        try:
-            status = subprocess.check_output(
-                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
-            ).strip()
-            if status in ("Playing", "Paused"):
-                subprocess.run(["playerctl", "next"], stderr=subprocess.DEVNULL)
-        except:
-            pass
-        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
-        sys.exit(0)
+# Base urgency: how loudly does this state want to be seen?
+# 100 = critical, 50 = alerting, 30 = activity, 10 = ambient info
+BASE_URGENCY = {
+    "temp-warning":     100,
+    "critical":          90,   # battery < 15%, discharging
+    "auth-waiting":      85,   # you literally cannot proceed
+    "screen-recording":  60,
+    "hardware-alert":    55,   # mic/cam on
+    "bt-flash":          45,   # transient, attention-worthy when it fires
+    "usb-flash":         45,
+    "clipboard-flash":   35,
+    "notification":      40,
+    "pomodoro":          30,
+    "music":             20,
+    "dnd":               15,
+    "charging":          15,
+    "full":              10,
+    "plugged":           10,
+    "discharging":        5,   # ambient — it's the default
+}
 
-    if arg == "--seek-forward":
-        try:
-            status = subprocess.check_output(
-                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
-            ).strip()
-            if status in ("Playing", "Paused"):
-                subprocess.run(["playerctl", "position", "5+"], stderr=subprocess.DEVNULL)
-        except:
-            pass
-        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
-        sys.exit(0)
 
-    if arg == "--seek-back":
-        try:
-            status = subprocess.check_output(
-                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
-            ).strip()
-            if status in ("Playing", "Paused"):
-                subprocess.run(["playerctl", "position", "5-"], stderr=subprocess.DEVNULL)
-        except:
-            pass
-        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
-        sys.exit(0)
+def contextual_score(state, ctx):
+    """
+    Base urgency adjusted for what's happening right now.
+
+    ctx keys:
+      island           — the state the main island is currently showing
+      stat             — battery status string
+      cap              — battery percent
+      notif_count      — unread notifications
+      dnd_active       — bool
+      m                — music dict or None
+      rec_active       — bool
+      pomo_active      — bool
+      hw_alert         — bool
+      auth_active      — bool
+      temp_warn        — bool
+      flash_age        — seconds since the current transient flash fired, or None
+    """
+    score = BASE_URGENCY.get(state, 0)
+
+    # ── Never let the badge duplicate the island ───────────
+    if state == ctx["island"]:
+        return -1
+
+    # ── Ambient states shrink further when something loud is up ──
+    loud_active = ctx["auth_active"] or ctx["temp_warn"] or ctx["rec_active"]
+
+    if state in ("music", "dnd", "charging", "full", "plugged", "discharging"):
+        if loud_active:
+            score -= 20     # don't clutter the badge while you're busy
+        if ctx["island"] in ("temp-warning", "auth-waiting", "screen-recording"):
+            score -= 15     # the island already owns the stage
+
+    # ── Notification handling ──────────────────────────────
+    if state == "notification":
+        if ctx["dnd_active"]:
+            score -= 25     # DND means "don't bother me" — mute the count
+        if ctx["m"] is not None and ctx["m"]["status"] == "Playing":
+            score -= 10     # music playing = you're probably fine
+        if ctx["rec_active"] or ctx["auth_active"]:
+            score += 10     # but if something's live, still worth flagging
+        if ctx["notif_count"] >= 5:
+            score += 15     # a pile-up is louder than one
+
+    # ── DND itself ─────────────────────────────────────────
+    if state == "dnd":
+        # DND only matters if something would otherwise be shown
+        if ctx["notif_count"] == 0 and not loud_active:
+            score -= 30     # nothing to suppress = don't advertise it
+
+    # ── Music ──────────────────────────────────────────────
+    if state == "music":
+        if ctx["m"] and ctx["m"]["status"] == "Paused":
+            score -= 15     # paused music is quiet context, not activity
+        if ctx["pomo_active"]:
+            score -= 10     # pomodoro takes precedence visually
+
+    # ── Transient flashes: novelty boost ───────────────────
+    if state in ("bt-flash", "usb-flash", "clipboard-flash"):
+        age = ctx.get("flash_age")
+        if age is not None:
+            if age < 1.0:
+                score += 40     # just happened — shout about it
+            elif age < 1.5:
+                score += 15     # still fresh
+            # else: fades back to base urgency
+
+    # ── Recording / mic ────────────────────────────────────
+    if state == "hardware-alert":
+        # hardware-alert is only interesting if the island isn't already
+        # shouting something louder
+        if ctx["island"] in ("temp-warning", "screen-recording", "auth-waiting"):
+            score -= 20
+
+    # ── Charging ───────────────────────────────────────────
+    if state == "charging":
+        # charging is worth showing only when the battery was recently low
+        # or something else already surfaced it — otherwise it's ambient
+        if ctx["cap"] >= 80:
+            score -= 10
+
+    # ── Auth ───────────────────────────────────────────────
+    if state == "auth-waiting":
+        # auth is critical, but not if the island is *already* showing it
+        # (handled above), and not if temp is screaming
+        if ctx["temp_warn"]:
+            score -= 15
+
+    return max(0, score)
 
 
 # ── Helpers ────────────────────────────────────────────────
@@ -102,20 +172,50 @@ def read_sysfs(path):
         return None
 
 def make_bar(filled, total):
-    """Split bar — returns (left, right) tuple. Icon goes between them.
-    Both sides fill inward from the edges. Empty segments use • at low alpha."""
-    filled = max(0, min(filled, total))
-    half   = total
-    f      = filled
-    e      = half - f
-    left   = ("█" * f) + (f"<span alpha='20%'>{'█' * e}</span>" if e else "")
-    right  = ""
-    return left, right
+    """
+    Braille sub-cell progress bar.
+
+    `filled` may be a float; it is multiplied by BRAILLE_SUB to get
+    sub-cell resolution (8 sub-positions per cell).
+
+    The returned string always occupies exactly `total` glyph cells,
+    so the bar's width doesn't shift as the fill level changes.
+
+    Returns (left, right) — `right` is always empty, kept for signature
+    compatibility with the old `make_bar`.
+    """
+    filled = max(0.0, min(float(filled), float(total)))
+
+    sub_filled = int(round(filled * BRAILLE_SUB))
+    full_cells, rem = divmod(sub_filled, BRAILLE_SUB)
+
+    # guard against rounding at the ends
+    full_cells = max(0, min(full_cells, int(total)))
+
+    empty_cells = int(total) - full_cells - (1 if rem else 0)
+    empty_cells = max(0, empty_cells)
+
+    on  = "⣿" * full_cells
+    mid = BRAILLE_STEPS[rem] if rem else ""
+    off = (
+        f"<span alpha='15%'>{'⣿' * empty_cells}</span>"
+        if empty_cells > 0 else ""
+    )
+
+    return on + mid + off, ""
 
 def make_bar_str(filled, total):
-    """Plain left-to-right bar for tooltips (no pango markup)."""
-    filled = max(0, min(filled, total))
-    return "\u2b2c" * filled + "\u2b2d" * (total - filled)
+    """Braille bar for tooltips — same visual language as the island bar."""
+    filled = max(0.0, min(float(filled), float(total)))
+    sub_filled = int(round(filled * BRAILLE_SUB))
+    full_cells, rem = divmod(sub_filled, BRAILLE_SUB)
+    full_cells = max(0, min(full_cells, int(total)))
+    empty_cells = max(0, int(total) - full_cells - (1 if rem else 0))
+
+    on  = "⣿" * full_cells
+    mid = BRAILLE_STEPS[rem] if rem else ""
+    off = f"<span alpha='25%'>{'⣿' * empty_cells}</span>" if empty_cells else ""
+    return on + mid + off
 
 def fmt_time(seconds):
     s = int(round(seconds))
@@ -123,7 +223,7 @@ def fmt_time(seconds):
 
 def live_activity_tooltip(activity_lines, cap, stat):
     bat_line = f"<b>Battery:</b> {cap}%"
-    return f"{activity_lines}\n<span alpha='40%'>·  ·  ·  ·  ·</span>\n{bat_line}"
+    return f"{activity_lines}\n<span alpha='40%'>------</span>\n{bat_line}"
 
 
 # ── Battery ────────────────────────────────────────────────
@@ -378,6 +478,7 @@ def get_music_data():
         "title": title, "artist": artist, "album": album,
         "position": pos, "length": length,
     }
+
 
 # ── Temperature ───────────────────────────────────────────
 def get_temps():
@@ -685,6 +786,32 @@ def is_metered():
     return False
 
 
+# ── State picker ───────────────────────────────────────────
+def pick_state(cap, stat, temp_warn, auth_active, flash_active, c_window,
+               rec_active, bt_flash, usb_flash, pomo_active, clip_flash,
+               hw_alert, notif_count, m, dnd_active):
+    """Return the single highest-priority state name, matching main()'s chain."""
+    if temp_warn:                                   return "temp-warning"
+    if auth_active:                                 return "auth-waiting"
+    if flash_active:                                return "charging" if stat == "Charging" else "discharging"
+    if c_window:                                    return "charging" if stat == "Charging" else "discharging"
+    if rec_active:                                  return "screen-recording"
+    if bt_flash:                                    return "bt-flash"
+    if usb_flash:                                   return "usb-flash"
+    if pomo_active:                                 return "pomodoro"
+    if clip_flash:                                  return "clipboard-flash"
+    if hw_alert:                                    return "hardware-alert"
+    if notif_count > 0:                             return "notification"
+    if m is not None and m["status"] in ("Playing", "Paused"):
+        return "music-paused" if m["status"] == "Paused" else "music"
+    if dnd_active:                                  return "dnd"
+    return "critical" if (cap < LOW_BAT_THRESHOLD and stat == "Discharging") else (
+           "charging" if stat == "Charging" else
+           "plugged"  if stat == "Not charging" else
+           "full"     if (stat == "Full" or cap >= 100) else
+           "discharging")
+
+
 # ── Main ───────────────────────────────────────────────────
 def main():
     cap, stat, volt, watt, time_str     = get_battery_info()
@@ -736,13 +863,17 @@ def main():
 
     def split_text(icon, left, right, alpha=None):
         a = f" alpha='{alpha}'" if alpha else ""
+        right_part = (
+            f" <span font_family='Monaspace Krypton'{a}>{right}</span>"
+            if right else ""
+        )
         return (
             f"{icon} "
-            f"<span font_family='Monaspace Krypton'{a}>{left}</span> " 
-            f"<span font_family='Monaspace Krypton'{a}>{right}</span>"
+            f"<span font_family='Monaspace Krypton'{a}>{left}</span>"
+            f"{right_part}"
         )
 
-    _bl, _br    = make_bar((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT)
+    _bl, _br    = make_bar(cap * BAR_WIDTH_COMPACT / 100.0, BAR_WIDTH_COMPACT)
     _full_l, _full_r = make_bar(BAR_WIDTH_COMPACT, BAR_WIDTH_COMPACT)
     _empty_l, _empty_r = make_bar(0, BAR_WIDTH_COMPACT)
     bat_text    = split_text(bat_icon, _bl, _br)
@@ -805,7 +936,10 @@ def main():
 
     elif pomo_active:
         pomo_str     = f"{pomo_mins}:{pomo_secs:02d}"
-        _pl, _pr     = make_bar(int((25*60 - (pomo_mins*60 + pomo_secs)) * BAR_WIDTH_COMPACT / (25*60)), BAR_WIDTH_COMPACT)
+        _pl, _pr     = make_bar(
+            (25*60 - (pomo_mins*60 + pomo_secs)) * BAR_WIDTH_COMPACT / (25*60),
+            BAR_WIDTH_COMPACT
+        )
         display_text = split_text(f"󰅐 {pomo_str}", _pl, _pr)
         state        = "pomodoro"
         tooltip      = live_activity_tooltip(f"<b>󰅐  Pomodoro</b> — focus for {pomo_mins}:{pomo_secs:02d} left", cap, stat)
@@ -827,8 +961,8 @@ def main():
         half_filled     = min(notif_count, NOTIF_MAX_HALF)
         phase           = time.time() % 0.45
         bars_on         = phase < 0.3
-        lf = rf         = half_filled if bars_on else 0
-        _nl, _nr        = make_bar(lf + rf, BAR_WIDTH_COMPACT)
+        lf              = half_filled if bars_on else 0
+        _nl, _nr        = make_bar(lf, BAR_WIDTH_COMPACT)
         display_text    = split_text("󰂚", _nl, _nr)
         state           = "notification"
         plural          = "s" if notif_count != 1 else ""
@@ -841,7 +975,7 @@ def main():
         state        = "music-paused" if is_paused else "music"
         music_icon   = "󰏤" if is_paused else "󰝚"
         pct          = min(1.0, max(0.0, m["position"] / m["length"])) if m["length"] > 0 else 0.0
-        _ml, _mr     = make_bar(int(pct * BAR_WIDTH_COMPACT), BAR_WIDTH_COMPACT)
+        _ml, _mr     = make_bar(pct * BAR_WIDTH_COMPACT, BAR_WIDTH_COMPACT)
         display_text = split_text(music_icon, _ml, _mr)
         tooltip_bar  = make_bar_str(int(pct * 30), 30)
         tooltip      = live_activity_tooltip(
@@ -854,7 +988,7 @@ def main():
         )
 
     elif dnd_active:
-        _dl, _dr     = make_bar((cap * BAR_WIDTH_COMPACT) // 100, BAR_WIDTH_COMPACT)
+        _dl, _dr     = make_bar(cap * BAR_WIDTH_COMPACT / 100.0, BAR_WIDTH_COMPACT)
         display_text = split_text("󰂛", _dl, _dr, alpha="55%")
         state        = "dnd"
         tooltip      = live_activity_tooltip("<b>Do not disturb</b>", cap, stat)
@@ -866,6 +1000,176 @@ def main():
 
     output = {"text": display_text, "class": state, "tooltip": tooltip}
     print(json.dumps(output))
+
+
+# ── Argument dispatch ──────────────────────────────────────
+# NOTE: lives at the bottom so every helper is defined before we dispatch.
+if len(sys.argv) > 1:
+    arg = sys.argv[1]
+
+    if arg == "--play-pause":
+        # Check for notifications first - if any exist, open swaync
+        try:
+            notif_count = subprocess.check_output(
+                ["swaync-client", "-c"], text=True, stderr=subprocess.DEVNULL
+            ).strip()
+            notif_count = int(notif_count) if notif_count else 0
+        except:
+            notif_count = 0
+
+        if notif_count > 0:
+            subprocess.run(["swaync-client", "-t", "-sw"], stderr=subprocess.DEVNULL)
+        else:
+            try:
+                status = subprocess.check_output(
+                    ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
+                ).strip()
+                is_music = status in ("Playing", "Paused")
+            except:
+                is_music = False
+            if is_music:
+                subprocess.run(["playerctl", "play-pause"], stderr=subprocess.DEVNULL)
+                subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
+            else:
+                subprocess.run(["swaync-client", "-t", "-sw"], stderr=subprocess.DEVNULL)
+        sys.exit(0)
+
+    if arg == "--next":
+        try:
+            status = subprocess.check_output(
+                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
+            ).strip()
+            if status in ("Playing", "Paused"):
+                subprocess.run(["playerctl", "next"], stderr=subprocess.DEVNULL)
+        except:
+            pass
+        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
+        sys.exit(0)
+
+    if arg == "--seek-forward":
+        try:
+            status = subprocess.check_output(
+                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
+            ).strip()
+            if status in ("Playing", "Paused"):
+                subprocess.run(["playerctl", "position", "5+"], stderr=subprocess.DEVNULL)
+        except:
+            pass
+        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
+        sys.exit(0)
+
+    if arg == "--seek-back":
+        try:
+            status = subprocess.check_output(
+                ["playerctl", "status"], text=True, stderr=subprocess.DEVNULL
+            ).strip()
+            if status in ("Playing", "Paused"):
+                subprocess.run(["playerctl", "position", "5-"], stderr=subprocess.DEVNULL)
+        except:
+            pass
+        subprocess.run(["pkill", "-RTMIN+8", "waybar"], stderr=subprocess.DEVNULL)
+        sys.exit(0)
+
+    if arg == "--extra":
+        # ── gather the same signals main() uses ──
+        cap, stat, _, _, _          = get_battery_info()
+        flash_active, _, c_window   = handle_flash(stat, cap)
+        hw_alert                    = is_hardware_active()
+        notif_count                 = get_notification_count()
+        dnd_active                  = get_dnd_state()
+        m                           = get_music_data()
+        auth_active                 = is_auth_active()
+        cpu_temp, gpu_temp          = get_temps()
+        temp_warn, temp_msg         = check_temp_warning(cpu_temp, gpu_temp)
+        bt_flash, bt_icon           = handle_bt_flash()
+        usb_flash, usb_icon         = handle_usb_flash()
+        clip_flash, clip_icon       = handle_clipboard_flash()
+        pomo_active, _, _, _        = get_pomodoro_state()
+        rec_active, _               = get_screen_recording()
+
+        # ── how old is the current transient flash? ──
+        flash_age = None
+        for fpath in (BT_FLASH_FILE, USB_FLASH_FILE):
+            if os.path.exists(fpath):
+                try:
+                    ts = int(read_sysfs(fpath).split()[0])
+                    age = time.time() - ts
+                    if flash_age is None or age < flash_age:
+                        flash_age = age
+                except:
+                    pass
+        if os.path.exists("/tmp/clipboard_flash"):
+            try:
+                ts = int(read_sysfs("/tmp/clipboard_flash"))
+                age = time.time() - ts
+                if flash_age is None or age < flash_age:
+                    flash_age = age
+            except:
+                pass
+
+        # ── what is the island showing right now? ──
+        island = pick_state(
+            cap, stat, temp_warn, auth_active, flash_active, c_window,
+            rec_active, bt_flash, usb_flash, pomo_active, clip_flash,
+            hw_alert, notif_count, m, dnd_active,
+        )
+
+        ctx = {
+            "island":      island,
+            "stat":        stat,
+            "cap":         cap,
+            "notif_count": notif_count,
+            "dnd_active":  dnd_active,
+            "m":           m,
+            "rec_active":  rec_active,
+            "pomo_active": pomo_active,
+            "hw_alert":    hw_alert,
+            "auth_active": auth_active,
+            "temp_warn":   temp_warn,
+            "flash_age":   flash_age,
+        }
+
+        # ── candidate pool with icons + tooltips ──
+        candidates = [
+            ("temp-warning",     temp_warn,                                             "󱃃", f"<b>High temperature</b>\n{temp_msg}"),
+            ("auth-waiting",     auth_active,                                           "󰌾", "<b>Waiting for password</b>"),
+            ("critical",         cap < LOW_BAT_THRESHOLD and stat == "Discharging",     "󰁃", "<b>Battery low</b>"),
+            ("screen-recording", rec_active,                                            "󰹑", "<b>Screen recording</b>"),
+            ("hardware-alert",   hw_alert,                                              "󰍬", "<b>Mic or camera active</b>"),
+            ("bt-flash",         bt_flash,                                              bt_icon, "<b>Bluetooth device changed</b>"),
+            ("usb-flash",        usb_flash,                                             usb_icon, "<b>USB device changed</b>"),
+            ("clipboard-flash",  clip_flash,                                            "📋", "<b>Clipboard updated</b>"),
+            ("notification",     notif_count > 0,                                       "󰂚", f"<b>{notif_count} notification{'s' if notif_count != 1 else ''}</b>"),
+            ("pomodoro",         pomo_active,                                           "󰅐", "<b>Pomodoro running</b>"),
+            ("music",            m is not None and m["status"] in ("Playing", "Paused"), "󰝚", "<b>Music playing</b>"),
+            ("dnd",              dnd_active,                                            "󰂛", "<b>Do not disturb</b>"),
+            ("charging",         stat == "Charging",                                    "󱐋", "<b>Charging</b>"),
+        ]
+
+        # ── score them, pick the winner ──
+        best = None
+        best_score = 0
+        for name, active, icon, tip in candidates:
+            if not active:
+                continue
+            s = contextual_score(name, ctx)
+            if s > best_score:
+                best_score = s
+                best = (name, icon, tip)
+
+        if best is None:
+            # Emit a zero-width NBSP so Waybar keeps the widget mounted.
+            # The `.idle` CSS collapses padding/margin/opacity to zero.
+            print(json.dumps({
+                "text":    "<span alpha='0%'>\u00a0</span>",
+                "class":   "idle",
+                "tooltip": "",
+            }))
+        else:
+            name, icon, tip = best
+            print(json.dumps({"text": icon, "class": name, "tooltip": tip}))
+        sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

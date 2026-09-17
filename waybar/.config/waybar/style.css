@@ -27,6 +27,7 @@ window#waybar {
 /* inactive shadow = outline_variant (lumina border grey)     */
 /* active/hover shadow = on_surface (lumina white)            */
 #custom-adaptive,
+#custom-adaptive-extra,
 #custom-clock,
 #custom-mood,
 #custom-pitwall,
@@ -56,8 +57,100 @@ window#waybar {
         transform 0.1s ease;
 }
 
+#custom-adaptive-extra {
+    background: @primary_container;
+    color: @on_primary_container;
+    border: 2px solid @primary_container;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 0 @outline_variant;
+    margin: 4px 2px;
+    min-height: 20px;
+    padding: 0px 8px;
+    font-family: "Monaspace Krypton";
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    min-width: 0;
+    opacity: 1;
+    transition:
+        padding    0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        margin     0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        min-width  0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        opacity    0.18s ease,
+        background-color 0.1s ease,
+        color 0.1s ease,
+        border-color 0.1s ease,
+        box-shadow 0.1s ease;
+}
+
+#custom-adaptive-extra.idle {
+    margin: 0px;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    min-width: 0;
+    opacity: 0;
+}
+
+/* ── Animation baseline for both adaptive modules ─────────── */
+#custom-adaptive,
+#custom-adaptive-extra {
+    transition:
+        background-color 0.22s cubic-bezier(0.4, 0.0, 0.2, 1),
+        color            0.22s cubic-bezier(0.4, 0.0, 0.2, 1),
+        border-color     0.22s cubic-bezier(0.4, 0.0, 0.2, 1),
+        box-shadow       0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+        padding          0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        margin           0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        border-width     0.18s cubic-bezier(0.4, 0.0, 0.2, 1),
+        opacity          0.18s ease;
+}
+
+/* ── Badge collapse — animates padding/margin/opacity to zero ── */
+#custom-adaptive-extra {
+    border-width: 2px;
+    min-width: 0;
+    opacity: 1;
+}
+
+#custom-adaptive-extra.idle {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-color: transparent;
+    box-shadow: none;
+    min-width: 0;
+    opacity: 0;
+}
+
+/* ── Island state change — shadow punch ──────────────────── */
+#custom-adaptive.notification,
+#custom-adaptive.music,
+#custom-adaptive.music-paused,
+#custom-adaptive.temp-warning,
+#custom-adaptive.auth-waiting,
+#custom-adaptive.hardware-alert,
+#custom-adaptive.screen-recording,
+#custom-adaptive.critical,
+#custom-adaptive.bt-flash,
+#custom-adaptive.plugged,
+#custom-adaptive.charging,
+#custom-adaptive.full {
+    box-shadow: 4px 4px 0 0 @on_surface;
+}
+
+/* ── Clock alt — smooth crossfade ─────────────────────────── */
+#custom-clock {
+    transition:
+        background-color 0.22s ease,
+        color 0.22s ease,
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
 /* hover — lumina elevation shift: lift up, shadow grows white */
 #custom-adaptive:hover,
+#custom-adaptive-extra:hover,
 #custom-clock:hover,
 #custom-mood:hover,
 #custom-pitwall:hover,
@@ -78,6 +171,7 @@ window#waybar {
 /* ── LEFT — clock + workspace ────────────────────────────── */
 
 #custom-clock {
+    font-family: "Monaspace Neon Var";
     font-weight: 700;
     letter-spacing: 0.04em;
 }

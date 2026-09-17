@@ -3,7 +3,7 @@
   "position": "top",
   "width": 0,
   "margin-left": 14,
-  "margin-right": 240,
+  "margin-right": 14,
   "margin-bottom": -8,
   "margin-top": 4,
   "spacing": 4,
@@ -11,13 +11,19 @@
   "fixed-center": true,
   "start_hidden": false,
 
-
   "modules-left": [
-    "custom/adaptive",
-    "custom/clock",
     "custom/space",
-    "tray",
-    "group/system"
+    "group/system",
+    "tray"
+  ],
+
+  "modules-center": [
+    "custom/adaptive",
+    "custom/adaptive-extra"
+  ],
+
+  "modules-right": [
+    "custom/clock"
   ],
 
 
@@ -45,6 +51,18 @@
     "on-scroll-up": "~/.config/waybar/scripts/adaptive.py --seek-forward",
     "on-scroll-down": "~/.config/waybar/scripts/adaptive.py --seek-back"
   },
+
+  "custom/adaptive-extra": {
+  "interval": 0.5,
+  "format": "{}",
+  "rotate": 0,
+  "tooltip": true,
+  "exec": "~/.config/waybar/scripts/adaptive.py --extra",
+  "return-type": "json",
+  "signal": 8,
+  "on-click": "swaync-client -t -sw",
+  "on-click-right": "swaync-client -d -sw"
+},
 
 "custom/clock": {
     "exec": "~/.config/waybar/scripts/clock.sh",

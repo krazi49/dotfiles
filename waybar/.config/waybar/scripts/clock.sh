@@ -1,5 +1,6 @@
 #!/bin/bash
-# Clock module: time & date on bar, week + uptime in tooltip
+# Clock module: time (with faint seconds) + compact date on bar
+# Tooltip: full date, ISO week, uptime, boot time
 
 uptime_human() {
   local s=$1
@@ -13,13 +14,16 @@ uptime_human() {
 
 emit() {
   TIME=$(date "+%H:%M")
-  DATE=$(date "+%a, %b %d")
+  SEC=$(date "+%S")
+  DATE=$(date "+%a %d" | tr '[:lower:]' '[:upper:]')
   WEEK=$(date "+%V")
   UPTIME=$(uptime_human "$(awk '{printf "%d", $1}' /proc/uptime)")
+  BOOT=$(uptime -s | cut -d' ' -f2 | cut -d: -f1,2)
 
-  TOOLTIP="Week ${WEEK}  •  Up ${UPTIME}"
+  TOOLTIP="<b>$(date '+%A')</b>\n$(date '+%B %d, %Y')\n\n<span alpha='40%'>Week ${WEEK}  ·  Up ${UPTIME}  ·  Boot ${BOOT}</span>"
 
-  printf '{"text":"󰥔  %s 🟆 %s","tooltip":"%s"}\n' "$TIME" "$DATE" "$TOOLTIP"
+  printf '{"text":"󰥔  %s<span alpha='"'"'35%%'"'"'>:%s</span> · %s","tooltip":"%s"}\n' \
+    "$TIME" "$SEC" "$DATE" "$TOOLTIP"
 }
 
 emit
