@@ -528,7 +528,6 @@ scale slider {
 }
 
 .notification {
-    background: @surface_container;
     padding: 12px 14px;
     margin: 0;
     border-radius: 0;
