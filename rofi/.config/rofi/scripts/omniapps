@@ -1,0 +1,573 @@
+#!/usr/bin/env bash
+
+set -u
+shopt -s nullglob
+shopt -u patsub_replacement 2>/dev/null || true
+
+# ---------- config ----------
+
+# Terminal as an array. The program to run is passed AFTER kitty's own
+# options (no `-e`), per kitty's documented `kitty [options] [program ...]`.
+TERM_CMD=("${TERMINAL:-kitty}")
+KITTY_CLASS="${KITTY_CLASS:-floating_kitty}"
+[[ ${TERM_CMD[0]##*/} == kitty* ]] && TERM_CMD+=(--class "$KITTY_CLASS")
+
+# Rofi's main config — sourced as the theme for every menu.
+ROFI_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi"
+
+WIDTH="35%"
+ROWS=13
+
+# The phone (termux over ssh). override with env vars if the address changes.
+TERMUX_HOST="${TERMUX_HOST:-u0_a485@100.86.220.0}"
+TERMUX_PORT="${TERMUX_PORT:-8022}"
+# pm2 process name for the openclaw gateway
+OC_GATEWAY="${OC_GATEWAY:-gateway}"
+
+PALETTE_LAYOUT="
+mainbox { children: [ listview, inputbar, message ]; }
+window {
+    width: $WIDTH;
+}
+listview {
+    lines: $ROWS;
+    dynamic: true;
+    fixed-height: false;
+}
+"
+
+HINT='<b>=</b> calc    <b>?</b> web    <b>&gt;</b> shell    <b>f</b> files    <b>~</b> path'
+
+HIST="${XDG_CACHE_HOME:-$HOME/.cache}/palette/history"
+
+APP_DIRS=(
+  "${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+  /usr/share/applications
+  /var/lib/flatpak/exports/share/applications
+  "${XDG_DATA_HOME:-$HOME/.local/share}/flatpak/exports/share/applications"
+)
+
+# ---------- helpers ----------
+
+esc() {
+  local s=$1
+  s=${s//&/"&amp;"}
+  s=${s//</"&lt;"}
+  s=${s//>/"&gt;"}
+  printf '%s' "$s"
+}
+
+trim() {
+  local s=$1
+  s=${s#"${s%%[![:space:]]*}"}
+  s=${s%"${s##*[![:space:]]}"}
+  printf '%s' "$s"
+}
+
+notify() {
+  command -v notify-send >/dev/null 2>&1 && notify-send -a palette "$@"
+  return 0
+}
+
+detach() { setsid -f "$@" >/dev/null 2>&1; }
+
+current_window_class() {
+  command -v hyprctl >/dev/null 2>&1 || return 0
+  hyprctl activewindow -j 2>/dev/null | jq -r '.class // empty'
+}
+
+menu() {
+  local ph=${1//\"/}
+  shift
+  local -a sortargs=(-sort -sorting-method fzf)
+  [[ -n ${PALETTE_NOSORT:-} ]] && sortargs=()
+  rofi -dmenu -i -matching fuzzy "${sortargs[@]}" \
+    -theme "$ROFI_CONFIG" \
+    -theme-str "$PALETTE_LAYOUT" \
+    -show-icons \
+    -theme-str "entry { placeholder: \"$ph\"; }" \
+    "$@"
+}
+
+ask() {
+  menu "$1" -p ">" -format f \
+    -theme-str 'listview { enabled: false; } message { enabled: false; }' </dev/null
+}
+
+# Run a command through the user's interactive shell in a terminal.
+in_term() {
+  setsid -f "${TERM_CMD[@]}" bash -c \
+    '"$1" -ic "$2"; echo; read -n1 -rsp "done. press any key"' _ "${SHELL:-bash}" "$1" \
+    >/dev/null 2>&1
+}
+
+# Run an arbitrary shell command string in a terminal, keep it open.
+run_in_term() {
+  setsid -f "${TERM_CMD[@]}" bash -c \
+    "$1; echo; read -n1 -rsp 'done. press any key'" >/dev/null 2>&1
+}
+
+# Run something on the phone over ssh, in a terminal.
+#   termux_run <hold> [remote command...]
+# hold=1 keeps the window open after the command ends; with hold=0 it only
+# stays open if ssh fails (so you can read the error). no command = plain shell.
+termux_run() {
+  local hold=$1 remote=""
+  shift
+  # login shell on the remote so termux's PATH (npm globals etc.) is loaded
+  [[ $# -gt 0 ]] && remote="bash -lc $(printf '%q' "$*")"
+  setsid -f "${TERM_CMD[@]}" bash -c '
+    ssh -t -p "$1" -o ConnectTimeout=8 -o ServerAliveInterval=15 "$2" ${3:+"$3"}
+    rc=$?
+    if [[ $4 == 1 || $rc -ne 0 ]]; then
+      echo; [[ $rc -ne 0 ]] && echo "ssh exited with $rc"
+      read -n1 -rsp "press any key"
+    fi' _ "$TERMUX_PORT" "$TERMUX_HOST" "$remote" "$hold" >/dev/null 2>&1
+}
+
+# ---------- history ----------
+
+declare -A HIST_COUNT
+
+load_history() {
+  [[ -f $HIST ]] || return 0
+  local k
+  while IFS= read -r k; do
+    HIST_COUNT[$k]=$((${HIST_COUNT[$k]:-0} + 1))
+  done <"$HIST"
+}
+
+record() {
+  mkdir -p "${HIST%/*}"
+  printf '%s\n' "$1" >>"$HIST"
+  if (($(wc -l <"$HIST") > 600)); then
+    tail -n 400 "$HIST" >"$HIST.tmp" && mv "$HIST.tmp" "$HIST"
+  fi
+}
+
+# ---------- entries ----------
+
+KIND=()
+LABEL=()
+ICON=()
+PAYLOAD=()
+SUB=()
+SCORE=()
+KEY=()
+ORDER=()
+
+add() {
+  local i=${#KIND[@]} key
+  case $1 in
+  app) key="app:${4##*/}" ;;
+  cmd) key="cmd:$2" ;;
+  *) key="" ;;
+  esac
+  KIND[i]=$1
+  LABEL[i]=$2
+  ICON[i]=$3
+  PAYLOAD[i]=$4
+  SUB[i]=$5
+  KEY[i]=$key
+  if [[ -n $key ]]; then SCORE[i]=${HIST_COUNT[$key]:-0}; else SCORE[i]=${6:-0}; fi
+}
+
+collect_windows() {
+  command -v hyprctl >/dev/null 2>&1 || return 0
+  local addr class ws title
+  while IFS=$'\x1f' read -r addr class ws title; do
+    [[ -n $title ]] || title=$class
+    ((${#title} > 60)) && title="${title:0:59}…"
+    add win "$title" "${class,,}" "$addr" "ws $ws · ${class:-?}" 1000
+  done < <(hyprctl clients -j 2>/dev/null | jq -r '
+      map(select(.mapped and (.hidden | not))) | sort_by(.focusHistoryID)[]
+      | [.address, (.class // ""), (.workspace.name // ""), (.title // "")]
+      | join("\u001f")' 2>/dev/null)
+}
+
+collect_apps() {
+  local d name icon path gen
+  local -a files=()
+  for d in "${APP_DIRS[@]}"; do
+    [[ -d $d ]] && files+=("$d"/*.desktop)
+  done
+  ((${#files[@]})) || return 0
+
+  while IFS=$'\x1f' read -r name icon path gen; do
+    add app "$name" "${icon:-application-x-executable}" "$path" "$gen"
+  done < <(awk '
+    function flush() {
+      if (path != "" && !(base in seen)) {
+        seen[base] = 1
+        if (name != "" && type == "Application" && !hide)
+          printf "%s\037%s\037%s\037%s\n", name, icon, path, gen
+      }
+      name = ""; icon = ""; type = ""; gen = ""; hide = 0
+    }
+    FNR == 1 { flush(); path = FILENAME; base = FILENAME; sub(/.*\//, "", base); insec = 0 }
+    /^\[/    { insec = ($0 == "[Desktop Entry]"); next }
+    !insec   { next }
+    /^Name=/ { name = substr($0, 6) }
+    /^GenericName=/ { gen = substr($0, 13) }
+    /^Icon=/ { icon = substr($0, 6) }
+    /^Type=/ { type = substr($0, 6) }
+    /^(NoDisplay|Hidden)=true/ { hide = 1 }
+    END { flush() }
+  ' "${files[@]}")
+}
+
+collect_commands() {
+  add cmd "Lock screen" system-lock-screen "loginctl lock-session" "Session"
+  add cmd "Sleep" system-suspend "systemctl suspend" "Session"
+  add cmd "Log out" system-log-out 'hyprctl dispatch "hl.dsp.exit()"' "Session"
+  add cmd "Restart" system-reboot "systemctl reboot" "Session"
+  add cmd "Shut down" system-shutdown "systemctl poweroff" "Session"
+
+  add cmd "Close window" window-close 'hyprctl dispatch "hl.dsp.window.close({})"' "Window"
+  add cmd "Toggle floating" view-restore 'hyprctl dispatch "hl.dsp.window.float({ action = \"toggle\" })"' "Window"
+  add cmd "Toggle fullscreen" view-fullscreen 'hyprctl dispatch "hl.dsp.window.fullscreen({ mode = \"fullscreen\", action = \"toggle\" })"' "Window"
+  add cmd "Pin window" emblem-pinned 'hyprctl dispatch "hl.dsp.window.pin({ action = \"toggle\" })"' "Window"
+  add cmd "Reload Hyprland" view-refresh "hyprctl reload" "Hyprland"
+
+  add cmd "Clipboard history" edit-paste "fn:clipboard" "Tools"
+  add cmd "Screenshot region" applets-screenshooter 'grim -g "$(slurp)" - | wl-copy' "Tools"
+  add cmd "Toggle mute" audio-volume-muted "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" "Tools"
+  add cmd "Search the web…" internet-web-browser "fn:web_prompt" "Tools"
+
+  add cmd "Termux…" utilities-terminal "fn:termux" "Phone · OpenClaw · pm2 · packages"
+
+  add cmd "Install package…" list-add "fn:pkg_install" "Packages"
+  add cmd "Remove package…" list-remove "fn:pkg_remove" "Packages"
+  add cmd "Search packages…" edit-find "fn:pkg_search" "Packages"
+  add cmd "Update system" system-software-update "fn:pkg_update" "Packages"
+}
+
+# ---------- command handlers ----------
+
+fn_clipboard() {
+  command -v cliphist >/dev/null 2>&1 || {
+    notify "palette" "cliphist is not installed"
+    return 0
+  }
+  local n line
+  n=$(cliphist list | wc -l)
+  ((n)) || {
+    notify "palette" "clipboard is empty"
+    return 0
+  }
+
+  line=$(cliphist list |
+    menu "Clipboard history  ($n entr$([[ $n == 1 ]] && echo y || echo ies))" \
+      -p ">" -no-custom) || return 0
+  printf '%s' "$line" | cliphist decode | wl-copy
+}
+
+# ---- termux menu (the phone, over ssh) ----
+
+TM_LABEL=()
+TM_ICON=()
+TM_SECTION=()
+TM_HOLD=()
+TM_CMD=()
+TM_ASK=()
+
+# tm <label> <icon> <section> <hold> <remote command> [prompt]
+# hold=1 keeps the window open when the command finishes (0 = close on exit,
+# for interactive things like the tui, htop, pm2 logs).
+# if a prompt is given, you're asked for text first and "{}" in the command
+# is replaced with it (shell-quoted). empty command = plain shell.
+tm() {
+  local i=${#TM_LABEL[@]}
+  TM_LABEL[i]=$1
+  TM_ICON[i]=$2
+  TM_SECTION[i]=$3
+  TM_HOLD[i]=$4
+  TM_CMD[i]=$5
+  TM_ASK[i]=${6:-}
+}
+
+collect_termux() {
+  ((${#TM_LABEL[@]})) && return 0
+
+  # openclaw (managed by pm2)
+  tm "Open TUI" utilities-terminal OpenClaw 0 "openclaw tui"
+  tm "Gateway logs" text-x-generic OpenClaw 0 "pm2 logs $OC_GATEWAY"
+  tm "Restart gateway" view-refresh OpenClaw 1 "pm2 restart $OC_GATEWAY"
+  tm "Status" dialog-information OpenClaw 1 "openclaw status"
+  tm "Doctor" emblem-system OpenClaw 1 "openclaw doctor"
+  tm "Update OpenClaw" system-software-update OpenClaw 1 "openclaw update"
+
+  # pm2
+  tm "Process list" view-list-details pm2 1 "pm2 list"
+  tm "Monitor" utilities-system-monitor pm2 0 "pm2 monit"
+  tm "Start gateway" media-playback-start pm2 1 "pm2 start $OC_GATEWAY"
+  tm "Stop gateway" media-playback-stop pm2 1 "pm2 stop $OC_GATEWAY"
+  tm "Save process list" document-save pm2 1 "pm2 save"
+  tm "Flush logs" edit-clear pm2 1 "pm2 flush"
+
+  # packages
+  tm "Update packages" system-software-update Packages 1 "pkg update && pkg upgrade -y"
+  tm "Install package…" list-add Packages 1 "pkg install {}" "Package to install"
+  tm "Remove package…" list-remove Packages 1 "pkg uninstall {}" "Package to remove"
+  tm "Search packages…" edit-find Packages 1 "pkg search {}" "Search packages"
+
+  # phone
+  tm "Resource monitor" utilities-system-monitor Phone 0 "htop 2>/dev/null || top"
+  tm "Uptime and memory" dialog-information Phone 1 "uptime; echo; free -h"
+  tm "Disk usage" drive-harddisk Phone 1 'df -h "$HOME"; echo; du -sh "$HOME"/* 2>/dev/null | sort -h | tail -n 12'
+  tm "Battery" battery Phone 1 "termux-battery-status"
+  tm "Keep awake (wake lock)" weather-clear-night Phone 1 "termux-wake-lock && echo wake lock on"
+  tm "Release wake lock" weather-clear Phone 1 "termux-wake-unlock && echo wake lock released"
+  tm "Send test notification" preferences-system-notifications Phone 1 'termux-notification -t palette -c "hello from the palette"'
+  tm "Termux info" dialog-information Phone 1 "termux-info"
+  tm "Shell on phone" utilities-terminal Phone 0 ""
+}
+
+fn_termux() {
+  collect_termux
+  local i pick cmd arg
+  pick=$(
+    PALETTE_NOSORT=1 menu "Termux  ·  $TERMUX_HOST" -p ">" -no-custom -markup-rows -format i < <(
+      for i in "${!TM_LABEL[@]}"; do
+        printf '%s  <span alpha="55%%" size="small">%s</span>\0icon\x1f%s\n' \
+          "$(esc "${TM_LABEL[i]}")" "${TM_SECTION[i]}" "${TM_ICON[i]}"
+      done
+    )
+  ) || return 0
+  [[ $pick =~ ^[0-9]+$ && -n ${TM_LABEL[pick]:-} ]] || return 0
+
+  cmd=${TM_CMD[pick]}
+  if [[ -n ${TM_ASK[pick]} ]]; then
+    arg=$(ask "${TM_ASK[pick]}") || return 0
+    arg=$(trim "$arg")
+    [[ -n $arg ]] || return 0
+    cmd=${cmd//\{\}/$(printf '%q' "$arg")}
+  fi
+
+  if [[ -z $cmd ]]; then
+    termux_run "${TM_HOLD[pick]}"
+  else
+    termux_run "${TM_HOLD[pick]}" "$cmd"
+  fi
+}
+
+fn_web_prompt() {
+  local cls ph q
+  cls=$(current_window_class)
+  ph="Search the web"
+  [[ -n $cls ]] && ph="Search the web  (from $cls)"
+  q=$(ask "$ph") || return 0
+  web "$(trim "$q")"
+}
+
+pkg() {
+  local ph=$2 n
+  [[ -n ${PKG_SOURCE:-} ]] && ph="$ph  (via $PKG_SOURCE)"
+  n=$(ask "$ph") || return 0
+  n=$(trim "$n")
+  [[ -n $n ]] && in_term "$1 $(printf '%q' "$n")"
+  return 0
+}
+fn_pkg_install() { pkg get "Package to install"; }
+fn_pkg_remove() { pkg remove "Package to remove"; }
+fn_pkg_search() { pkg search "Search packages"; }
+fn_pkg_update() { in_term update; }
+
+# ---------- inline tools ----------
+
+web() {
+  [[ -n $1 ]] || return 0
+  detach xdg-open "https://www.google.com/search?q=$(jq -rn --arg q "$1" '$q | @uri')"
+}
+
+is_math() {
+  local re='^[-0-9 .+*/^()%]+$'
+  [[ $1 =~ $re ]] && [[ $1 =~ [0-9] ]] && [[ $1 =~ [-+*/^%] ]]
+}
+
+calc() {
+  local expr=$1 res=""
+  [[ -n $expr ]] || return 0
+  if command -v qalc >/dev/null 2>&1; then
+    res=$(qalc -t "$expr" 2>/dev/null)
+  elif command -v bc >/dev/null 2>&1; then
+    res=$(printf 'scale=10; %s\n' "$expr" | bc -l 2>/dev/null)
+    [[ $res == *.* ]] && res=$(sed -E 's/0+$//; s/\.$//' <<<"$res")
+  fi
+  if [[ -z $res ]]; then
+    notify "palette" "couldn't calculate: $expr"
+    return 0
+  fi
+
+  menu "Enter copies:  $expr = $res" -p ">" -no-custom -show-icons -format s \
+    -theme-str 'listview { lines: 1; } message { enabled: false; }' \
+    < <(printf '%s = %s\0icon\x1faccessories-calculator\n' "$expr" "$res") >/dev/null || return 0
+  printf '%s' "$res" | wl-copy 2>/dev/null
+  notify "palette" "$res  (copied)"
+}
+
+files() {
+  local q=$1 p i tilde='~' ph
+  local -a found=() shown=()
+  [[ -n $q ]] || return 0
+  if command -v fd >/dev/null 2>&1; then
+    mapfile -t found < <(fd --hidden --follow --exclude .git --max-results 300 -- "$q" "$HOME" 2>/dev/null)
+  else
+    mapfile -t found < <(find "$HOME" -iname "*$q*" -not -path '*/.*' 2>/dev/null | head -n 300)
+  fi
+  ((${#found[@]})) || {
+    notify "palette" "no files match \"$q\""
+    return 0
+  }
+  for p in "${found[@]}"; do shown+=("${p/#$HOME/$tilde}"); done
+
+  ph="Open file  (${#found[@]} match$([[ ${#found[@]} == 1 ]] && echo '' || echo 'es'))"
+
+  i=$(printf '%s\n' "${shown[@]}" |
+    menu "$ph" -p ">" -no-custom -format i) || return 0
+  [[ -n $i ]] || return 0
+  [[ -n ${found[i]:-} ]] && detach xdg-open "${found[$i]}"
+}
+
+open_path() {
+  local p=${1/#\~/$HOME}
+  [[ -e $p ]] || return 1
+  detach xdg-open "$p"
+}
+
+looks_like_url() {
+  local re1='^https?://' re2='^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}(/.*)?$'
+  [[ $1 =~ $re1 ]] || [[ $1 =~ $re2 ]]
+}
+
+# ---------- main ----------
+
+build_order() {
+  local i
+  mapfile -t ORDER < <(
+    for i in "${!KIND[@]}"; do printf '%s\t%s\n' "${SCORE[i]}" "$i"; done |
+      sort -s -t$'\t' -k1,1nr | cut -f2
+  )
+}
+
+emit_rows() {
+  local i
+  for i in "${ORDER[@]}"; do
+    printf '%s' "$(esc "${LABEL[i]}")"
+    [[ -n ${SUB[i]} ]] &&
+      printf '  <span alpha="55%%" size="small">%s</span>' "$(esc "${SUB[i]}")"
+    printf '\0icon\x1f%s\n' "${ICON[i]}"
+  done
+}
+
+activate() {
+  local i=${ORDER[$1]}
+  [[ -n ${KIND[i]:-} ]] || {
+    printf 'palette: activate: empty slot idx=%s\n' "$1" >&2
+    return 0
+  }
+  local payload=${PAYLOAD[i]}
+  [[ -n ${KEY[i]:-} ]] && record "${KEY[i]}"
+  case ${KIND[i]} in
+  app) detach gio launch "$payload" ;;
+  win)
+    sleep 0.1
+    hyprctl dispatch "hl.dsp.focus({ window = \"address:$payload\" })" ||
+      hyprctl dispatch focuswindow "address:$payload"
+    ;;
+  cmd)
+    if [[ $payload == fn:* ]]; then
+      sleep 0.1
+      "fn_${payload#fn:}"
+    elif [[ $payload == hyprctl* ]]; then
+      sleep 0.1
+      bash -c "$payload"
+    else
+      detach bash -c "$payload"
+    fi
+    ;;
+  esac
+}
+
+main() {
+  command -v rofi >/dev/null 2>&1 || {
+    echo "palette: rofi not found" >&2
+    exit 1
+  }
+  [[ -f $ROFI_CONFIG ]] || {
+    echo "palette: $ROFI_CONFIG not found" >&2
+    exit 1
+  }
+
+  load_history
+  collect_windows
+  collect_apps
+  collect_commands
+  build_order
+
+  local out idx text cmd u ph k nw=0
+  for k in "${KIND[@]}"; do [[ $k == win ]] && nw=$((nw + 1)); done
+  ph="Search ${#KIND[@]} items  ·  $nw windows open"
+
+  out=$(emit_rows | menu "$ph" \
+    -p ">" -show-icons -markup-rows -format 'i|f' -mesg "$HINT") || exit 0
+  idx=${out%%|*}
+  text=$(trim "${out#*|}")
+
+  if [[ -n ${PALETTE_DEBUG:-} ]]; then
+    {
+      printf 'raw=%q idx=%q text=%q n_order=%s\n' "$out" "$idx" "$text" "${#ORDER[@]}"
+      if [[ $idx =~ ^[0-9]+$ ]] && ((idx < ${#ORDER[@]})); then
+        printf '  -> kind=%s label=%q payload=%q\n' \
+          "${KIND[${ORDER[$idx]}]}" \
+          "${LABEL[${ORDER[$idx]}]}" \
+          "${PAYLOAD[${ORDER[$idx]}]}"
+      fi
+    } >>/tmp/palette-debug.log
+  fi
+
+  case $text in
+  '='*)
+    sleep 0.1
+    calc "$(trim "${text#=}")"
+    exit 0
+    ;;
+  '>'*)
+    cmd=$(trim "${text#>}")
+    [[ -n $cmd ]] && run_in_term "$cmd"
+    exit 0
+    ;;
+  '?'*)
+    web "$(trim "${text#\?}")"
+    exit 0
+    ;;
+  'f '*)
+    sleep 0.1
+    files "$(trim "${text#f }")"
+    exit 0
+    ;;
+  '~'* | /*) open_path "$text" && exit 0 ;;
+  esac
+
+  if is_math "$text"; then
+    sleep 0.1
+    calc "$text"
+    exit 0
+  fi
+
+  if [[ $idx =~ ^[0-9]+$ ]] && ((idx < ${#ORDER[@]})); then
+    activate "$idx"
+    exit 0
+  fi
+
+  [[ -n $text ]] || exit 0
+  if looks_like_url "$text"; then
+    u=$text
+    [[ $u == http* ]] || u="https://$u"
+    detach xdg-open "$u"
+  else
+    web "$text"
+  fi
+}
+
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then main "$@"; fi

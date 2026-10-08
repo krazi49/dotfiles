@@ -2,7 +2,7 @@
 * {
     min-height: 0;
     min-width: 0;
-    font-family: "TikTok Sans", "Monaspace Krypton";
+    font-family: "Zalando Sans SemiExpanded", "Monaspace Krypton";
 }
 
 /* ── Bar ─────────────────────────────────────────────────── */
@@ -22,6 +22,7 @@ window#waybar {
 #custom-pitwall,
 #custom-space,
 #custom-bt-battery,
+#submap,
 #tray,
 #network,
 #pulseaudio,
@@ -35,8 +36,8 @@ window#waybar {
     margin: 4px 6px 6px 2px;
     padding: 2px 10px;
     font-weight: 700;
-    font-size: 11px;
-    min-height: 22px;
+    font-size: 12px;
+    min-height: 0px;
     transition:
         box-shadow       0.15s cubic-bezier(0.2, 0.0, 0.0, 1.0),
         background-color 0.15s linear,
@@ -46,6 +47,7 @@ window#waybar {
 
 #custom-adaptive-extra:hover,
 #custom-clock:hover,
+#submap:hover,
 #custom-mood:hover,
 #custom-pitwall:hover,
 #custom-space:hover,
@@ -106,7 +108,7 @@ window#waybar {
     box-shadow: 4px 4px 0 0 @primary_container;
     font-family: "Monaspace Krypton";
     font-weight: 900;
-    padding: 2px 14px;
+    padding: 2px 6px;
 }
 
 #custom-adaptive:hover {
@@ -181,7 +183,6 @@ window#waybar {
 #custom-space {
     font-family: "Monaspace Krypton Var";
     font-weight: 900;
-    font-size: 11px;
 }
 
 

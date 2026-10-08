@@ -1,151 +1,171 @@
-/**
- * Matugen & Waybar Size-Matched Rofi Theme
- * Pure text implementation: entirely removes application icons and icon layouts.
- **/
-
 @import "colors.rasi"
 
 configuration {
-    font:                   "TikTok Sans 10"; 
-    show-icons:             false;                  /* Disables icon asset loading globally */
-    display-drun:           "󰀻";
-    display-run:            "󰆍";
-    display-dmenu:          "";
+    font:                   "Zalando Sans 10";
+    show-icons:             true;
+    icon-theme:             "Papirus-Dark";
     drun-display-format:    "{name}";
     hover-select:           true;
-    me-select-entry:        "";
+    me-select-entry:        "MouseSecondary";
     me-accept-entry:        "MousePrimary";
+    drun-match-fields:      "name,generic,exec,categories,keywords";
+    display-drun:           "✦";
 }
 
 * {
     text-color:             @on-surface;
     background-color:       transparent;
+    font:                   "Zalando Sans 10";
 }
 
+/* ── The floating panel: tonal border, soft-toned hard shadow ─ */
 window {
-    background-color:       @surface; /* lumina: solid surface, no glass */
+    background-color:       @surface-container;
     border:                 2px;
     border-color:           @outline-variant;
-    border-radius:           0;
-    width:                  97.5%;
-    location:               north;
-    y-offset:               22px;
+    border-radius:          0;
+    width:                  25%;
+    location:               south;
+    anchor:                 south;
+    y-offset:               -15px;
+    x-offset:               14px;
     shadow:                 true;
-    shadow-radius:           0;
-    shadow-offset:           2px 2px;
-    shadow-color:            @outline-variant;
+    shadow-radius:          0;
+    shadow-offset:          6px 6px;
+    shadow-color:           @surface-container-highest;
     children:               [ mainbox ];
 }
 
 mainbox {
-    orientation:            horizontal;
+    orientation:            vertical;
     background-color:       transparent;
-    padding:                0px 14px 0px 6px;       
+    padding:                12px;
     spacing:                12px;
-    children:               [ inputbar, listview ];
+    children:               [ listview, inputbar, message ];
 }
 
-/* ── Search Input (Pill Block Container) ────────────────── */
+/* ── Search bar: boxed field, quiet border ──────────────── */
 inputbar {
-    background-color:       @surface-container-highest;
-    text-color:             @on-surface;
-    border-radius:           0;
+    background-color:       @surface;
     border:                 2px;
-    border-color:           @on-surface;
-    /* ADJUSTED: Replaced 0px with 6px vertical padding to handle font baseline discrepancies */
-    padding:                6px 14px;               
-    margin:                 6px 0px;                
-    spacing:                8px;
+    border-color:           @outline-variant;
+    text-color:             @on-surface;
+    border-radius:          0;
+    padding:                10px 12px;
+    margin:                 0;
+    spacing:                10px;
     children:               [ prompt, entry ];
 }
 
 prompt {
-    text-color:             @primary;
-    font:                   "TikTok Sans Bold 10";
-    /* FIXED: Prevent the prompt from expanding vertically and force the baseline center */
+    text-color:             @on-surface-variant;
+    font:                   "Zalando Sans Bold 11";
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "TikTok Sans 10";
-    placeholder:            "Search...";
+    font:                   "Zalando Sans Expanded Black 15";
+    placeholder:            "Search apps...";
     placeholder-color:      @on-surface-variant;
-    width:                  170px;                  
-
-    /* THE FIX: Remove vertical-align and manually nudge it down */
-    /* Syntax: TOP RIGHT BOTTOM LEFT */
-}
-
-
-/* ── Global Vertical Centering Rule ─────────────────────── */
-/* This explicitly targets the underlying text layout engine for input elements */
-prompt, entry, element-text {
+    cursor-color:           @on-surface-variant;
     vertical-align:         0.5;
 }
 
-/* ── Page/Entry Counter Badge ───────────────────────────── */
-num-filtered-rows {
-    text-color:             @primary;
-    font:                   "TikTok Sans SemiBold 10";
-    vertical-align:         0.5;
-}
-
-textbox-num-sep {
-    text-color:             @on-surface-variant;
-    font:                   "TikTok Sans 10";
-    expand:                 false;
-    str:                    "/";                    
-    vertical-align:         0.5;
-}
-
-num-total-rows {
-    text-color:             @on-surface-variant;
-    font:                   "TikTok Sans 10";
-    vertical-align:         0.5;
-}
-
-/* ── Dynamic Horizontal List Grid ────────────────────────── */
+/* ── App list (grows upward from the input) ─────────────── */
 listview {
-    layout:                 horizontal;
+    layout:                 vertical;
+    reverse:                true;
     background-color:       transparent;
-    scrollbar:              false;                  
-    spacing:                8px;
-    lines:                  100;                    
-    columns:                1;
+    border:                 @primary;
+    border-radius:          0;
+    padding:                0;
+    margin:                 0;
+    spacing:                2px;
+    cycle:                  true;
+    dynamic:                true;
+    scrollbar:              true;
+    lines:                  10;
+    columns:                3;
 }
 
-/* ── Pure Text Action Pills ─────────────────────────────── */
+/* ── Scrollbar: thin, tonal ─────────────────────────────── */
+scrollbar {
+    width:                  3px;
+    handle-width:           3px;
+    handle-color:           @outline-variant;
+    background-color:       transparent;
+    border:                 0;
+    border-radius:          0;
+    padding:                0;
+    margin:                 0 0 0 8px;
+}
+
+/* ── App rows: dimmed until selected ────────────────────── */
 element {
     background-color:       transparent;
-    text-color:             @on-surface;
-    border-radius:           0;
-    /* ADJUSTED: Match the vertical padding layout of the inputbar precisely */
-    padding:                6px 14px;               
-    margin:                 6px 0px;                
-    spacing:                0px;
+    text-color:             @on-surface-variant;
+    border:                 0 0 0 2px;
+    border-color:           transparent;
+    border-radius:          0;
+    padding:                6px 10px;
+    spacing:                12px;
     orientation:            horizontal;
-    
-    /* Explicitly limits node children to text contents only */
-    children:               [ element-text ];
+}
+
+element-icon {
+    size:                   22px;
+    vertical-align:         0.5;
 }
 
 element-text {
     text-color:             inherit;
-    vertical-align:         0.5;                    
+    font:                   "Zalando Sans 10";
+    vertical-align:         0.5;
 }
 
+/* selection: tonal fill with a thin accent edge, no loud fill */
 element selected {
-    background-color:       @secondary-container;    
-    text-color:             @on-secondary-container;
-    border-color:           @outline-variant;
-    border:                 2px; 
+    background-color:       @on-secondary;
+    text-color:             @secondary;
+    border-color:           @tertiary;
+}
+
+element selected element-text {
+    font:                   "Zalando Sans Bold 10";
 }
 
 element normal active {
     text-color:             @primary;
-    padding:                3px 0px 0px 3px;
 }
 
+element selected active {
+    text-color:             @primary;
+}
 
+element urgent element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+element selected urgent element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+/* ── Hint footer (-mesg) ────────────────────────────────── */
+message {
+    background-color:       transparent;
+    border:                 1px 0 0 0;
+    border-color:           @outline-variant;
+    padding:                6px 10px 0 10px;
+    margin:                 0;
+}
+
+textbox {
+    text-color:             @on-surface-variant;
+    background-color:       transparent;
+    font:                   "Zalando Sans 9";
+    vertical-align:         0.5;
+    padding:                0;
+    margin:                 0;
+}

@@ -2,63 +2,103 @@
 THEME="$HOME/.config/rofi/config-horiz.rasi"
 KEYBINDS="$HOME/dotfiles/hypr/.config/hypr/keybindings.lua"
 CACHE="$HOME/.cache/omnisearch/omnikeys"
-mkdir -p "$PROMPT"
+PROMPT="Omnikeys"
+mkdir -p "$(dirname "$CACHE")"
 
 if [[ ! -f "$KEYBINDS" ]]; then
   notify-send "Keybindings" "keybindings.lua not found" -t 3000
   exit 1
 fi
 
+LUA=$(command -v lua || command -v lua5.4 || command -v luajit)
+if [[ -z "$LUA" ]]; then
+  notify-send "Keybindings" "no lua interpreter found" -t 3000
+  exit 1
+fi
+
+# regenerate when keybindings.lua or this script is newer than the cache
 KEYBINDS_TIME=$(stat -c "%Y" "$KEYBINDS")
+SCRIPT_TIME=$(stat -c "%Y" "$0")
 CACHE_TIME=$([[ -f "$CACHE" ]] && stat -c "%Y" "$CACHE" || echo 0)
 
-if [[ "$KEYBINDS_TIME" -gt "$CACHE_TIME" ]] || [[ ! -f "$CACHE" ]]; then
-  MAINMOD=$(grep -oP '(?<=local main_mod = ")[^"]*' "$KEYBINDS" | head -n1)
-  [[ -z "$MAINMOD" ]] && MAINMOD="ALT"
+if [[ "$KEYBINDS_TIME" -gt "$CACHE_TIME" ]] || [[ "$SCRIPT_TIME" -gt "$CACHE_TIME" ]] || [[ ! -s "$CACHE" ]]; then
+  # run keybindings.lua against a stub `hl` table that records every bind.
+  # loops, variables and string concatenation are evaluated by lua itself,
+  # so generated binds show up correctly.
+  if ! GENERATED=$(
+    "$LUA" - "$KEYBINDS" <<'EOF'
+local path = arg[1]
+local submap = nil
+local entries = {}
 
-  NORMALIZED=$(
-    python3 - "$KEYBINDS" <<'EOF'
-import re, sys
+local function ser(v)
+  if type(v) ~= "table" then return tostring(v) end
+  local items = {}
+  for k, x in pairs(v) do
+    if not (k == "window" and x == "activewindow") then
+      items[#items + 1] = { tostring(k), ser(x) }
+    end
+  end
+  table.sort(items, function(a, b) return a[1] < b[1] end)
+  local parts = {}
+  for _, it in ipairs(items) do parts[#parts + 1] = it[1] .. "=" .. it[2] end
+  return table.concat(parts, " ")
+end
 
-with open(sys.argv[1]) as f:
-    content = f.read()
+local function dsp_node(p)
+  return setmetatable({}, {
+    __index = function(_, k) return dsp_node(p == "" and k or (p .. "." .. k)) end,
+    __call = function(_, ...)
+      local args = {}
+      for i = 1, select("#", ...) do args[#args + 1] = ser((select(i, ...))) end
+      return { __dsp = p, args = args }
+    end,
+  })
+end
 
-result = re.sub(r'hl\.bind\((.*?)\)', lambda m: 'hl.bind(' + re.sub(r'\s+', ' ', m.group(1)) + ')', content, flags=re.DOTALL)
-for line in result.splitlines():
-    line = line.strip()
-    if line.startswith('hl.bind('):
-        print(line)
+local function describe(action)
+  if type(action) == "function" then return "function" end
+  if type(action) ~= "table" or not action.__dsp then return "?" end
+  if action.__dsp == "exec_cmd" then return "exec  " .. (action.args[1] or "") end
+  local a = table.concat(action.args, " ")
+  return action.__dsp .. (a ~= "" and ("  " .. a) or "")
+end
+
+-- any hl.* function we don't care about becomes a no-op
+local hl = setmetatable({}, { __index = function() return function() end end })
+rawset(hl, "dsp", dsp_node(""))
+rawset(hl, "bind", function(combo, action)
+  local c = tostring(combo)
+  if submap then c = "[" .. submap .. "] " .. c end
+  entries[#entries + 1] = { c, describe(action) }
+end)
+rawset(hl, "define_submap", function(name, fn)
+  local prev = submap
+  submap = name
+  fn()
+  submap = prev
+end)
+_G.hl = hl
+
+local ok, err = pcall(dofile, path)
+if not ok then
+  io.stderr:write(tostring(err) .. "\n")
+  os.exit(1)
+end
+
+local max = 0
+for _, e in ipairs(entries) do
+  if #e[1] > max then max = #e[1] end
+end
+for _, e in ipairs(entries) do
+  print(string.format("󰌌  %-" .. max .. "s  │  %s", e[1], e[2]))
+end
 EOF
-  )
-
-  MAX=0
-  declare -a ENTRIES
-
-  while IFS= read -r line; do
-    COMBO=$(echo "$line" | grep -oP '(?<=hl\.bind\()[^,]+' | tr -d '"' | xargs)
-    COMBO=$(echo "$COMBO" | sed "s/main_mod/$MAINMOD/g; s/ \.\. \"/ + /g; s/\"//g" | xargs)
-    DSP=$(echo "$line" | grep -oP 'hl\.dsp\.\S+\(' | head -n1 | sed 's/hl\.dsp\.//' | sed 's/(//')
-    ARG=$(echo "$line" | grep -oP 'hl\.dsp\.[^(]+\(\{[^}]*\}\)' | grep -oP '\{[^}]*\}' | tr -d '{}' | xargs)
-    if echo "$line" | grep -q 'exec_cmd'; then
-      ARG=$(echo "$line" | grep -oP '(?<=exec_cmd\(")[^"]*' | head -n1)
-      DSP="exec"
-    fi
-
-    [[ -z "$COMBO" ]] && continue
-
-    DESC="${DSP}${ARG:+  $ARG}"
-    LEN=${#COMBO}
-    [[ $LEN -gt $MAX ]] && MAX=$LEN
-
-    ENTRIES+=("$COMBO|||$DESC")
-  done <<<"$NORMALIZED"
-
-  >"$CACHE"
-  for entry in "${ENTRIES[@]}"; do
-    COMBO="${entry%%|||*}"
-    DESC="${entry##*|||}"
-    printf "󰌌  %-${MAX}s  │  %s\n" "$COMBO" "$DESC" >>"$CACHE"
-  done
+  ); then
+    notify-send "Keybindings" "failed to parse keybindings.lua" -t 3000
+    exit 1
+  fi
+  printf '%s\n' "$GENERATED" >"$CACHE"
 fi
 
 if [[ ! -s "$CACHE" ]]; then
@@ -66,7 +106,7 @@ if [[ ! -s "$CACHE" ]]; then
   exit 1
 fi
 
-cat "$CACHE" | rofi -normal-window -dmenu \
+rofi -normal-window -dmenu \
   -theme "$THEME" \
   -i \
-  -p "$PROMPT"
+  -p "$PROMPT" <"$CACHE"

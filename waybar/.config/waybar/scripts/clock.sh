@@ -20,7 +20,11 @@ emit() {
   UPTIME=$(uptime_human "$(awk '{printf "%d", $1}' /proc/uptime)")
   BOOT=$(uptime -s | cut -d' ' -f2 | cut -d: -f1,2)
 
-  TOOLTIP="<b>$(date '+%A')</b>\n$(date '+%B %d, %Y')\n\n<span alpha='40%'>Week ${WEEK}  ·  Up ${UPTIME}  ·  Boot ${BOOT}</span>"
+  TOOLTIP="<span size='large' weight='bold'>$(date '+%A')</span>\n"
+  TOOLTIP+="<span alpha='75%'>$(date '+%B %d, %Y')</span>\n"
+  TOOLTIP+="\n"
+  TOOLTIP+="<span alpha='25%'>─────────────</span>\n"
+  TOOLTIP+="<span alpha='45%' size='small'>Week ${WEEK}   ·   Up ${UPTIME}   ·   Boot ${BOOT}</span>"
 
   printf '{"text":"󰥔  %s<span alpha='"'"'35%%'"'"'>:%s</span> · %s","tooltip":"%s"}\n' \
     "$TIME" "$SEC" "$DATE" "$TOOLTIP"

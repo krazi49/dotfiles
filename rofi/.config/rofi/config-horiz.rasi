@@ -1,107 +1,149 @@
 @import "colors.rasi"
 
 configuration {
-    font:                   "Monaspace Krypton 10";
+    font:                   "Zalando Sans 10";
     show-icons:             true;
-    icon-theme:             "hicolor";
+    icon-theme:             "Papirus-Dark";
+    drun-display-format:    "{name}";
     hover-select:           true;
     me-select-entry:        "";
     me-accept-entry:        "MousePrimary";
+    drun-match-fields:      "name,generic,exec,categories,keywords";
+    display-drun:           "";
 }
 
 * {
     text-color:             @on-surface;
     background-color:       transparent;
+    font:                   "Zalando Sans 10";
 }
 
+/* ── The floating panel ─────────────────────────────────── */
 window {
-    background-color:       transparent;
+    background-color:       @surface-container;
+    border:                 2px;
+    border-color:           @outline-variant;
     border-radius:           0;
-    width:                  97.5%;
-    location:               north;
+    /* Narrower than Win11 so it feels less imposing */
+    width:                  560px;
+    location:               south;
     anchor:                 south;
-    y-offset:               22px;
+    /* Slightly higher so it clears your bar */
+    y-offset:               -10px;
     shadow:                 true;
     shadow-radius:           0;
-    shadow-offset:           2px 2px;
-    shadow-color:            @outline-variant;
+    shadow-offset:           4px 4px;
+    shadow-color:           @surface-container-highest;
     children:               [ mainbox ];
 }
 
+/* ── Vertical stack: search on top, apps below ──────────── */
 mainbox {
     orientation:            vertical;
     background-color:       transparent;
-    padding:                0;
-    spacing:                10px;
+    padding:                6px;
+    spacing:                6px;
     children:               [ inputbar, listview ];
 }
 
+/* ── Search bar ─────────────────────────────────────────── */
 inputbar {
     background-color:       @surface-container-high;
     border:                 2px;
-    border-color:           @on-surface;
+    border-color:           @outline-variant;
     text-color:             @on-surface;
     border-radius:           0;
-    padding:                8px 14px;
-    margin:                 0 0px;
+    padding:                5px 10px;
+    margin:                 0;
     spacing:                8px;
     children:               [ prompt, entry ];
 }
 
 prompt {
     text-color:             @primary;
-    font:                   "TikTok Sans Bold 11";
+    font:                   "Zalando Sans Bold 10";
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "TikTok Sans 11";
-    placeholder:            "Quick jump...";
+    font:                   "Zalando Sans 10";
+    /* Friendlier, lowercase, less formal */
+    placeholder:            "Search apps...";
     placeholder-color:      @on-surface-variant;
     vertical-align:         0.5;
 }
 
+/* ── App list ───────────────────────────────────────────── */
 listview {
     layout:                 vertical;
-    background-color:       @surface-container;
-    border:                 2px;
-    border-color:           @outline-variant;
+    background-color:       transparent;
+    border:                 none;
     border-radius:           0;
-    padding:                4px 6px;
-    margin:                 0 8px;
-    spacing:                4px;
+    padding:                0;
+    margin:                 0;
+    spacing:                1px;
     cycle:                  true;
     dynamic:                true;
-    scrollbar:              false;
+    scrollbar:              true;
+    scrollbar-width:        3px;
+    scrollbar-handle-color: @outline-variant;
+    scrollbar-track-color:  transparent;
+    /* More rows visible — beginners see more at a glance */
+    lines:                  10;
+    columns:                1;
 }
 
+/* ── App rows — compact but breathable ──────────────────── */
 element {
     background-color:       transparent;
     text-color:             @on-surface;
+    border:                 2px;
+    border-color:           transparent;
     border-radius:           0;
-    padding:                6px 10px;
-    spacing:                6px;
+    /* Was 8px 12px — tighter vertically, same horizontally */
+    padding:                5px 10px;
+    spacing:                10px;
     orientation:            horizontal;
 }
 
+element-icon {
+    /* Was 28px — smaller so rows pack tighter */
+    size:                   22px;
+    vertical-align:         0.5;
+}
+
+element-text {
+    text-color:             inherit;
+    font:                   "Zalando Sans 10";
+    vertical-align:         0.5;
+}
+
+/* Hover / selected — softer accent, easier on the eyes */
 element selected {
-    background-color:       @secondary-container;
-    text-color:             @on-secondary-container;
-    padding:                6px 12px;
+    background-color:       @primary-container;
+    text-color:             @on-primary-container;
+    border-color:           @primary-container;
+}
+
+element selected element-text {
+    font:                   "Zalando Sans Bold 10";
 }
 
 element normal active {
     text-color:             @primary;
 }
 
-element-icon {
-    size:                   16px;
-    vertical-align:         0.5;
+element normal active element-text {
+    font:                   "Zalando Sans Bold 10";
 }
 
-element-text {
-    text-color:             inherit;
-    vertical-align:         0.5;
+element urgent element-text {
+    font:                   "Zalando Sans Black 10";
 }
+
+element selected urgent element-text {
+    font:                   "Zalando Sans Black 10";
+}
+

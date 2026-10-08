@@ -189,8 +189,8 @@ print_workspace() {
     cls="ws-$ws_id"
   fi
 
-  tooltip=""
-  local ws classes names line c
+  # ── Tooltip (headline / body / rule / stat strip) ───────
+  local ws classes names line c ws_lines=""
   for ws in $(seq 1 12); do
     classes=$(echo "$all_clients" | jq -r --arg id "$ws" '.[] | select(.workspace.id == ($id | tonumber)) | .class' | sort -u)
     [[ -z "$classes" ]] && continue
@@ -199,15 +199,29 @@ print_workspace() {
       [[ -z "$c" ]] && continue
       [[ -n "$names" ]] && names="$names, "
       names="$names$(friendly_name "$c")"
-    done <<< "$classes"
-    line="○ ws $ws [$names]"
-    [[ "$ws" == "$ws_id" ]] && line="●${line:1}"
-    tooltip="$tooltip$line\n"
+    done <<<"$classes"
+    if [[ "$ws" == "$ws_id" ]]; then
+      line="<span weight='bold'>● ws $ws</span>  <span alpha='75%'>[$names]</span>"
+    else
+      line="<span alpha='60%'>○ ws $ws  [$names]</span>"
+    fi
+    ws_lines="$ws_lines$line\n"
   done
+
+  local headline="Workspace $ws_id/12"
+  [[ -n "$title" ]] && headline="$title"
+
+  tooltip="<span size='large' weight='bold'>$headline</span>\n"
+  tooltip="${tooltip}\n"
+  tooltip="${tooltip}<span font_family='Monaspace Krypton NF'>${ws_lines%\\n}</span>\n"
+
   if [[ -n "$special_id" ]]; then
-    tooltip="${tooltip}────────────\n󰜉 special [$special_count window(s)]\n"
+    tooltip="${tooltip}\n<span alpha='25%'>─────────────</span>\n"
+    tooltip="${tooltip}<span alpha='70%'>󰜉 special · $special_count window(s)</span>\n"
   fi
-  tooltip="<span font_family='Monaspace Krypton NF'>${tooltip%\\n}</span>"
+
+  tooltip="${tooltip}\n<span alpha='25%'>─────────────</span>\n"
+  tooltip="${tooltip}<span alpha='45%' size='small'>$win_count/$total_count windows here   ·   $active_workspaces active</span>"
 
   printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$cls"
 }
