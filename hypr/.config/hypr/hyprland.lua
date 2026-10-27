@@ -1,12 +1,19 @@
--- ╔══════════════════════════════════════════╗
--- ║  volticOS · hyprland config              ║
--- ║  lumina edition                          ║
--- ╚══════════════════════════════════════════╝
-
 require("keybindings")
 require("windowrules")
 require("animations")
 require("monitors")
+require("colors")
+
+local colors = require("colors")
+
+local function hex(c)
+	local r, g, b, a = c:match("^#(%x%x)(%x%x)(%x%x)(%x%x)$")
+	if a then
+		return "0x" .. a .. r .. g .. b
+	end
+	local r2, g2, b2 = c:match("^#(%x%x)(%x%x)(%x%x)")
+	return "0xFF" .. r2 .. g2 .. b2
+end
 
 -- ── environment ────────────────────────────────────────────────────────────────
 
@@ -82,12 +89,11 @@ hl.config({
 		dim_strength = 0.15,
 		dim_special = 0.2,
 
-		-- lumina: deep cinematic shadows, clean falloff, tight scale
 		shadow = {
-			enabled = true,
-			color = "0xff555555",
-			color_inactive = "0xff222222",
-			offset = { 4, 4 },
+			enabled = false,
+			color = hex(colors.primary),
+			color_inactive = hex(colors.outline_variant),
+			offset = { 6, 6 },
 			range = 0,
 			render_power = 0,
 			scale = 1,
@@ -104,13 +110,13 @@ hl.config({
 	},
 
 	general = {
-		border_size = 3,
-		gaps_in = 10,
-		gaps_out = 8,
+		border_size = 4,
+		gaps_in = 5,
+		gaps_out = 12,
 		resize_on_border = true,
 		col = {
-			active_border = "0xff555555",
-			inactive_border = "0xff222222",
+			active_border = hex(colors.primary),
+			inactive_border = hex(colors.outline_variant),
 		},
 		snap = {
 			enabled = false,
@@ -206,7 +212,7 @@ hl.config({
 				-- controls how much the cursor is stretched
 				-- this value controls at which speed (px/s) the full stretch is reached
 				-- the full stretch being twice the original length
-				limit = 3000,
+				limit = 700,
 
 				-- relationship between speed and stretch amount, supports these values:
 				-- linear             - a linear function is used

@@ -25,10 +25,6 @@ switch slider,
 switch:checked,
 switch:focus,
 entry,
-entry undershoot.left,
-entry undershoot.right,
-entry overshoot.left,
-entry overshoot.right,
 text,
 textview,
 textview text,
@@ -63,13 +59,13 @@ row {
 
 scrollbar {
     background: @surface;
-    border-left: 1px solid @outline_variant;
+    border-left: 2px solid @surface_container_low;
     padding: 0;
     min-width: 8px;
 }
 
 scrollbar slider {
-    background: @outline_variant;
+    background: @surface_container_low;
     min-width: 6px;
     min-height: 40px;
     margin: 0;
@@ -91,7 +87,7 @@ scrollbar button {
 entry {
     background: @surface_container;
     color: @on_surface;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     border-radius: 0;
     padding: 6px 10px;
     caret-color: @primary;
@@ -113,8 +109,8 @@ window#osd {
 
 .control-center {
     background: @surface;
-    border-left: 4px solid @outline_variant;
-    box-shadow: none;
+    border: 2px solid @surface_container_low;
+    box-shadow: 6px 6px 0 0 @surface_container_lowest;
     margin: 0;
     padding: 0;
     min-width: 360px;
@@ -123,26 +119,31 @@ window#osd {
 /* ── Widget strip ─────────────────────────────────────────── */
 
 .widgets > .widget {
-    background: @surface;
-    margin: 0;
-    padding: 14px 16px;
+    background: @surface_container;
+    margin: 6px 6px 0 6px;
+    padding: 12px 14px;
     border-radius: 0;
-    box-shadow: none;
-    border-bottom: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
-/* ── Section labels — Lumina label-md ────────────────────── */
+.widgets > .widget:last-child {
+    margin-bottom: 6px;
+}
+
+/* ── Section labels ───────────────────────────────────────── */
 
 .widget-label {
-    background: @surface_container_low;
-    padding: 8px 16px 6px;
+    background: transparent;
+    padding: 0 0 6px 0;
     margin: 0;
-    border-bottom: 2px solid @outline_variant;
+    border: none;
     box-shadow: none;
 }
 
 .widget-label > label {
     color: @on_surface_variant;
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1.4px;
@@ -151,13 +152,14 @@ window#osd {
 
 .widget-label.display_label,
 .widget-label.sound_label {
-    background: @surface_container_low;
-    padding: 6px 16px 4px;
-    border-bottom: 1px solid @outline_variant;
+    background: transparent;
+    padding: 0 0 4px 0;
+    border: none;
 }
 
 .widget-label.display_label > label,
 .widget-label.sound_label > label {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 1.6px;
@@ -169,23 +171,11 @@ window#osd {
 
 .widgets > .widget-backlight,
 .widgets > .widget-volume {
-    background: @surface;
-    padding: 12px 16px;
-    margin: 0;
-    border-bottom: 1px solid @outline_variant;
-    box-shadow: none;
-}
-
-.widgets > .widget-label.display_label,
-.widgets > .widget-label.sound_label,
-.widgets > .widget-volume,
-.widgets > .widget-backlight {
-    background: @surface;
-}
-
-.widgets > .widget-volume:last-of-type,
-.widgets > .widget-backlight:last-of-type {
-    border-bottom: 2px solid @outline_variant;
+    background: @surface_container;
+    padding: 10px 14px;
+    margin: 6px 6px 0 6px;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 .widget-volume label,
@@ -199,10 +189,11 @@ window#osd {
 /* ── Sliders ──────────────────────────────────────────────── */
 
 scale trough {
-    background-color: @outline_variant;
+    background-color: @surface_container_low;
     border-radius: 0;
     border: none;
     box-shadow: none;
+    min-height: 8px;
 }
 
 scale highlight {
@@ -215,37 +206,39 @@ scale slider {
     background-color: @on_surface;
     margin: -7px 0;
     border-radius: 0;
-    border: none;
-    box-shadow: 2px 2px 0 0 @outline;
+    border: 2px solid @surface_container_lowest;
+    box-shadow: 2px 2px 0 0 @surface_container_lowest;
     outline: none;
+    min-width: 14px;
+    min-height: 14px;
 }
 
 /* ── DND toggle ───────────────────────────────────────────── */
 
 .widget-dnd {
-    background: @surface;
+    background: @surface_container;
     color: @on_surface;
-    padding: 12px 16px;
-    margin: 0;
-    border-bottom: 2px solid @outline_variant;
-    box-shadow: none;
+    padding: 10px 14px;
+    margin: 6px 6px 0 6px;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 .widget-dnd > label {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.6px;
     color: @on_surface;
 }
 
 .widget-dnd > switch {
     border-radius: 0;
-    background: @outline;
+    background: @surface_container_low;
     outline: none;
     min-width: 48px;
     min-height: 22px;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_lowest;
 }
 
 .widget-dnd > switch:checked {
@@ -269,39 +262,32 @@ scale slider {
 
 /* ── Button grids ─────────────────────────────────────────── */
 
-.widgets > .widget-buttons-grid.top,
-.widgets > .widget-buttons-grid.compact,
 .widget-buttons-grid {
-    background: @surface;
-    margin: 0;
-    padding: 12px 14px;
-    border-bottom: 2px solid @outline_variant;
+    background: @surface_container;
+    margin: 6px 6px 0 6px;
+    padding: 10px;
+    border: 2px solid @surface_container_low;
     border-radius: 0;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
-.widget-buttons-grid > flowbox,
-.widget-buttons-grid.top > flowbox,
-.widget-buttons-grid.compact > flowbox {
+.widget-buttons-grid > flowbox {
     background: transparent;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild,
-.widget-buttons-grid.top > flowbox > flowboxchild,
-.widget-buttons-grid.compact > flowbox > flowboxchild {
+.widget-buttons-grid > flowbox > flowboxchild {
     padding: 3px;
     outline: none;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button,
-.widget-buttons-grid.top > flowbox > flowboxchild > button,
-.widget-buttons-grid.compact > flowbox > flowboxchild > button {
-    background: @surface_container;
-    color: @on_surface_variant;
+.widget-buttons-grid > flowbox > flowboxchild > button {
+    background: @surface;
+    color: @on_surface;
     border-radius: 0;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     min-height: 46px;
     outline: none;
-    box-shadow: 3px 3px 0 0 @outline_variant;
+    box-shadow: 3px 3px 0 0 @surface_container_lowest;
     transition: box-shadow 80ms linear,
                 background-color 80ms linear,
                 color 80ms linear;
@@ -315,48 +301,40 @@ scale slider {
 .widget-buttons-grid.top > flowbox > flowboxchild > button label {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
-.widget-buttons-grid.compact > flowbox > flowboxchild > button,
-.widget-buttons-grid > flowbox > flowboxchild > button {
+.widget-buttons-grid.compact > flowbox > flowboxchild > button {
     min-width: 46px;
     font-size: 16px;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button:hover,
-.widget-buttons-grid.top > flowbox > flowboxchild > button:hover,
-.widget-buttons-grid.compact > flowbox > flowboxchild > button:hover {
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
     background: @surface_container_high;
     box-shadow: none;
-    color: @on_surface;
 }
 
-.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked,
-.widget-buttons-grid.top > flowbox > flowboxchild > button.toggle:checked,
-.widget-buttons-grid.compact > flowbox > flowboxchild > button.toggle:checked {
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
     background: @primary;
     color: @on_primary;
     border-color: @primary;
-    box-shadow: 3px 3px 0 0 @outline;
+    box-shadow: 3px 3px 0 0 @surface_container_lowest;
 }
 
 /* ── MPRIS — Now Playing ──────────────────────────────────── */
 
-.widgets > .widget-mpris {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
+.widget-mpris {
+    background: @surface_container;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    margin: 6px 6px 0 6px;
+    padding: 10px;
 }
 
 .widget-mpris-player {
-    background: @surface_container;
-    border-left: 4px solid @primary;
-    border-bottom: 2px solid @outline_variant;
-    padding: 12px 14px;
+    background: transparent;
+    border: none;
+    padding: 0;
     margin: 0;
     box-shadow: none;
 }
@@ -367,26 +345,23 @@ scale slider {
     min-height: 44px;
     max-width: 44px;
     max-height: 44px;
-    background: @outline_variant;
-    border: 2px solid @outline_variant;
+    background: @surface_container_low;
+    border: 2px solid @surface_container_lowest;
+    box-shadow: 2px 2px 0 0 @surface_container_lowest;
 }
 
 .widget-mpris-title {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-weight: 700;
     font-size: 13px;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.2px;
     color: @on_surface;
 }
 
 .widget-mpris-subtitle {
     font-size: 11px;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.2px;
     color: @on_surface_variant;
-}
-
-.widget-mpris-player > box {
-    padding: 0;
-    margin: 0;
 }
 
 .widget-mpris-player button {
@@ -404,120 +379,14 @@ scale slider {
     color: @on_primary;
 }
 
-.widget-mpris-player button:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-/* ── Calendar ─────────────────────────────────────────────── */
-
-.calendar-container {
-    padding: 12px 16px;
-    border-bottom: 2px solid @outline_variant;
-    background: @surface;
-}
-
-.calendar-container .day-label {
-    color: @on_surface_variant;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-}
-
-.calendar-container .date-label {
-    color: @on_surface;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    margin-bottom: 10px;
-}
-
-.calendar-container calendar.view {
-    background: transparent;
-    color: @on_surface;
-    border: none;
-    box-shadow: none;
-}
-
-.calendar-container calendar.view header {
-    background: transparent;
-    padding: 0 0 6px;
-    border-bottom: 1px solid @outline_variant;
-    margin-bottom: 4px;
-}
-
-.calendar-container calendar.view header label {
-    color: @on_surface;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-.calendar-container calendar.view header button {
-    background: transparent;
-    color: @on_surface_variant;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-    min-width: 24px;
-    min-height: 24px;
-    padding: 2px;
-    outline: none;
-    transition: background-color 80ms linear, color 80ms linear;
-}
-
-.calendar-container calendar.view header button:hover {
-    background: @surface_container_high;
-    color: @on_surface;
-}
-
-.calendar-container calendar.view .day-name {
-    color: @on_surface_variant;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    padding: 4px 2px;
-}
-
-.calendar-container calendar.view .day {
-    color: @on_surface;
-    border-radius: 0;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px;
-    margin: 1px;
-    transition: background-color 80ms linear;
-}
-
-.calendar-container calendar.view .day:hover {
-    background: @surface_container_highest;
-}
-
-.calendar-container calendar.view .today {
-    background: @primary;
-    color: @on_primary;
-    font-weight: 700;
-}
-
-.calendar-container calendar.view :selected {
-    background: @surface_container_high;
-    color: @on_surface;
-}
-
-.calendar-container calendar.view .other-month {
-    color: @outline;
-    font-weight: 400;
-}
-
 /* ── Notification list ────────────────────────────────────── */
 
 .notification-group {
     background: transparent;
     padding: 0;
-    margin: 0;
+    margin: 6px 6px 0 6px;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 .notification-group > box {
@@ -528,14 +397,19 @@ scale slider {
 }
 
 .notification {
-    padding: 12px 14px;
+    background: @surface_container;
+    padding: 10px 12px;
     margin: 0;
     border-radius: 0;
-    border-bottom: 1px solid @outline_variant;
-    border-left: 3px solid @outline_variant;
-    box-shadow: 3px 3px 0 0 @outline_variant;
+    border-bottom: 1px solid @surface_container_low;
+    border-left: 4px solid @surface_container_low;
+    box-shadow: none;
     transition: border-left-color 120ms linear,
                 background-color 120ms linear;
+}
+
+.notification:last-child {
+    border-bottom: none;
 }
 
 .notification:hover {
@@ -544,9 +418,10 @@ scale slider {
 }
 
 .notification-summary {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-weight: 700;
     font-size: 12px;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.2px;
     color: @on_surface;
 }
 
@@ -558,26 +433,22 @@ scale slider {
 }
 
 .notification-time {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
     color: @outline;
 }
 
 .notification-action {
     background: @surface;
     border-radius: 0;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     color: @on_surface;
     padding: 4px 12px;
     margin: 4px 3px 0;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
     outline: none;
-    box-shadow: 2px 2px 0 0 @outline_variant;
+    box-shadow: 2px 2px 0 0 @surface_container_lowest;
     transition: background-color 80ms linear,
                 color 80ms linear,
                 box-shadow 80ms linear;
@@ -587,11 +458,6 @@ scale slider {
     background: @primary;
     color: @on_primary;
     border-color: @primary;
-    box-shadow: none;
-}
-
-.notification-action:focus {
-    outline: none;
     box-shadow: none;
 }
 
@@ -612,8 +478,40 @@ scale slider {
     color: @on_error_container;
 }
 
-.close-button:focus {
-    outline: none;
+/* ── Title bar ────────────────────────────────────────────── */
+
+.widget-title {
+    background: @surface_container;
+    border: 2px solid @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    margin: 6px 6px 0 6px;
+    padding: 10px 14px;
+}
+
+.widget-title > label {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+    color: @on_surface;
+}
+
+.widget-title > button {
+    background: @surface;
+    border: 2px solid @surface_container_low;
+    border-radius: 0;
+    color: @on_surface;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: 2px 2px 0 0 @surface_container_lowest;
+    transition: background-color 80ms linear, box-shadow 80ms linear;
+}
+
+.widget-title > button:hover {
+    background: @primary;
+    color: @on_primary;
+    border-color: @primary;
     box-shadow: none;
 }
 
@@ -624,9 +522,9 @@ scale slider {
     border-radius: 0;
     margin-top: 8px;
     padding: 12px 14px;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     border-left: 4px solid @primary;
-    box-shadow: 4px 4px 0 0 @outline_variant;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 .notification-popup .notification-icon {
@@ -645,9 +543,10 @@ scale slider {
 }
 
 .notification-popup .notification-summary {
+    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
     font-weight: 700;
     font-size: 12px;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.2px;
     color: @on_surface;
 }
 

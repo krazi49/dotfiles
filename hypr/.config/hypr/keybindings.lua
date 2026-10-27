@@ -5,7 +5,7 @@ local alt_mod = "ALT"
 
 local TERMINAL = "kitty"
 local EDITOR = "nvim"
-local EXPLORER = "nautilus"
+local EXPLORER = "thunar"
 local BROWSER = "helium-browser"
 local OMNIAPPS = "bash ~/.config/rofi/scripts/omniapps"
 local SCREENSHOT = "bash ~/.config/rofi/scripts/omniscreenshot"
@@ -20,7 +20,6 @@ local REGION_SHOT_CLIP = 'grim -g "$(slurp)" - | wl-copy'
 -- --- Window Management ---
 hl.bind(main_mod .. " + Q", hl.dsp.window.close({ window = "activewindow" })) -- close
 hl.bind(main_mod .. " + F11", hl.dsp.window.fullscreen({ mode = 0 })) -- fullscreen
-hl.bind(main_mod .. " + F", hl.dsp.window.fullscreen({ mode = 1 })) -- maximize (keeps bar and gaps)
 -- NOTE: check that action = "enable" / "disable" are accepted in your version.
 -- if not, swap both for action = "toggle" and use one of the keys for something else.
 hl.bind(main_mod .. " + F", hl.dsp.window.float({ window = "activewindow" })) -- float
@@ -145,16 +144,16 @@ hl.bind(main_mod .. " + D", hl.dsp.exec_cmd("pkill rofi || " .. OMNIAPPS)) -- ap
 hl.bind(main_mod .. " + K", hl.dsp.exec_cmd("pkill rofi || " .. OMNIKEYS)) -- keybinds reference
 hl.bind(
 	main_mod .. " + period",
-	hl.dsp.exec_cmd("pkill rofi || rofi -show emoji -p Omniemoji -theme ~/.config/rofi/config-horiz.rasi")
+	hl.dsp.exec_cmd("pkill rofi || rofi -show emoji -p Omniemoji -theme ~/.config/rofi/config.rasi")
 )
 
 -- --- Apps ---
-hl.bind(main_mod .. " + T", hl.dsp.exec_cmd("kitty --class floating_kitty")) -- floating terminal
-hl.bind(main_mod .. " + CONTROL + T", hl.dsp.exec_cmd(TERMINAL)) -- tiled terminal
+hl.bind(main_mod .. " + T", hl.dsp.exec_cmd(TERMINAL)) -- tiled terminal
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("bash ~/.local/bin/asterisk"))
 hl.bind(main_mod .. " + B", hl.dsp.exec_cmd(BROWSER)) -- browser
 hl.bind(main_mod .. " + E", hl.dsp.exec_cmd(EXPLORER)) -- file explorer
 hl.bind(main_mod .. " + N", hl.dsp.exec_cmd("swaync-client -t")) -- notifications
+hl.bind(main_mod .. " + SHIFT + N", hl.dsp.exec_cmd("bash ~/.config/rofi/scripts/omniscreenshot")) -- ask snib about screen
 
 -- --- System ---
 hl.bind(main_mod .. " + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock")) -- lock (no stacking)

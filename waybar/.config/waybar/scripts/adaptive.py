@@ -9,8 +9,8 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 # ── Display ────────────────────────────────────────────────
-BAR_WIDTH_COMPACT   = 7          # island bar, in braille cells
-BADGE_CELLS         = 2          # badge tooltip bar
+BAR_WIDTH_COMPACT   = 5          # island bar, in braille cells
+BADGE_CELLS         = 3         # badge tooltip bar
 BAR_FONT            = "Monaspace Krypton"
 BAR_DIM_ALPHA       = "25%"      # empty part of the bar
 DND_ALPHA           = "55%"      # bar/number alpha while do-not-disturb is shown
@@ -47,8 +47,8 @@ ISLAND_PRIORITY = [
 
 # ── Idle state (battery fallback, nothing else going on) ───
 # the island also gets an "idle" css class in this state, e.g. #custom-island.idle
-IDLE_SHOW_PERCENT   = False      # False = icon + bar only
-IDLE_SHOW_BAR       = True
+IDLE_SHOW_PERCENT   = True      # False = icon + bar only
+IDLE_SHOW_BAR       = False
 IDLE_PERCENT_BELOW  = 30         # show the percentage anyway under this charge
 IDLE_ALPHA          = None       # e.g. "70%" to dim the whole island when idle
 
@@ -113,7 +113,7 @@ SWAYNC_PANEL_CMD    = ["swaync-client", "-t", "-sw"]
 SWAYNC_DND_CMD      = ["swaync-client", "-d", "-sw"]
 WAYBAR_SIGNAL       = 8          # RTMIN+N used to refresh the module
 SEEK_STEP_SECS      = 5
-SCREENREC_PROCESS   = "gpu-screen-recor"
+SCREENREC_PROCESS   = "gpu-screen-recorder"
 
 # ── Files ──────────────────────────────────────────────────
 FLASH_FILE          = "/tmp/waybar_adaptive_flash"

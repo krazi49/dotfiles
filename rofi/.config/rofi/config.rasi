@@ -24,11 +24,11 @@ window {
     border:                 2px;
     border-color:           @outline-variant;
     border-radius:          0;
-    width:                  25%;
-    location:               south;
-    anchor:                 south;
-    y-offset:               -15px;
-    x-offset:               14px;
+    width:                  15%;
+    location:               center;
+    anchor:                 center;
+    y-offset:               0px;
+    x-offset:               0px;
     shadow:                 true;
     shadow-radius:          0;
     shadow-offset:          6px 6px;
@@ -41,7 +41,7 @@ mainbox {
     background-color:       transparent;
     padding:                12px;
     spacing:                12px;
-    children:               [ listview, inputbar, message ];
+    children:               [ inputbar, message, listview ];
 }
 
 /* ── Search bar: boxed field, quiet border ──────────────── */
@@ -67,7 +67,7 @@ prompt {
 entry {
     text-color:             @on-surface;
     font:                   "Zalando Sans Expanded Black 15";
-    placeholder:            "Search apps...";
+    placeholder:            "";
     placeholder-color:      @on-surface-variant;
     cursor-color:           @on-surface-variant;
     vertical-align:         0.5;
@@ -76,8 +76,7 @@ entry {
 /* ── App list (grows upward from the input) ─────────────── */
 listview {
     layout:                 vertical;
-    reverse:                true;
-    background-color:       transparent;
+    background-color:       @surface-container;
     border:                 @primary;
     border-radius:          0;
     padding:                0;
@@ -87,7 +86,7 @@ listview {
     dynamic:                true;
     scrollbar:              true;
     lines:                  10;
-    columns:                3;
+    columns:                1;
 }
 
 /* ── Scrollbar: thin, tonal ─────────────────────────────── */
@@ -121,7 +120,7 @@ element-icon {
 
 element-text {
     text-color:             inherit;
-    font:                   "Zalando Sans 10";
+    font:                   "Zalando Sans 11";
     vertical-align:         0.5;
 }
 
@@ -130,6 +129,7 @@ element selected {
     background-color:       @on-secondary;
     text-color:             @secondary;
     border-color:           @tertiary;
+    font:                   "Zalando Sans Bold 11";
 }
 
 element selected element-text {
@@ -168,4 +168,18 @@ textbox {
     vertical-align:         0.5;
     padding:                0;
     margin:                 0;
+}
+
+
+/* Use alpha variants from colors.rasi, never hard-coded palette values. */
+window {
+    background-color: @surface-container-alpha;
+}
+
+inputbar {
+    background-color: @surface-alpha;
+}
+
+element selected {
+    background-color: @on-secondary-alpha;
 }

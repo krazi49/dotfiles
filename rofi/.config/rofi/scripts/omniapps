@@ -15,8 +15,8 @@ KITTY_CLASS="${KITTY_CLASS:-floating_kitty}"
 # Rofi's main config — sourced as the theme for every menu.
 ROFI_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/config.rasi"
 
-WIDTH="35%"
-ROWS=13
+WIDTH="25%"
+ROWS=16
 
 # The phone (termux over ssh). override with env vars if the address changes.
 TERMUX_HOST="${TERMUX_HOST:-u0_a485@100.86.220.0}"
@@ -25,7 +25,7 @@ TERMUX_PORT="${TERMUX_PORT:-8022}"
 OC_GATEWAY="${OC_GATEWAY:-gateway}"
 
 PALETTE_LAYOUT="
-mainbox { children: [ listview, inputbar, message ]; }
+mainbox { children: [ inputbar, message, listview ]; }
 window {
     width: $WIDTH;
 }

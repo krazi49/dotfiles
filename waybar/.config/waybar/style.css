@@ -2,7 +2,7 @@
 * {
     min-height: 0;
     min-width: 0;
-    font-family: "Zalando Sans SemiExpanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton";
 }
 
 /* ── Bar ─────────────────────────────────────────────────── */
@@ -11,10 +11,15 @@ window#waybar {
     border: none;
     border-radius: 0;
     margin: 0;
-    padding: 4px 0;
+    padding: 0px 4;
     color: @on_surface;
 }
 
+window#waybar.empty .modules-center {
+    opacity: 0;
+}
+
+/* ── Base block ──────────────────────────────────────────── */
 #custom-adaptive,
 #custom-adaptive-extra,
 #custom-clock,
@@ -27,16 +32,17 @@ window#waybar {
 #network,
 #pulseaudio,
 #backlight,
-#group-system {
-    background: @surface_container;
-    color: @on_surface;
-    border: 2px solid @outline_variant;
+#group-system,
+#taskbar {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border: 2px solid @surface_container_low;
     border-radius: 0;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
-    margin: 4px 6px 6px 2px;
-    padding: 2px 10px;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    margin: 6px 4px 4px 2px;
+    padding: 6px 0px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 13.5px;
     min-height: 0px;
     transition:
         box-shadow       0.15s cubic-bezier(0.2, 0.0, 0.0, 1.0),
@@ -52,26 +58,26 @@ window#waybar {
 #custom-pitwall:hover,
 #custom-space:hover,
 #custom-bt-battery:hover,
-#tray:hover,
 #network:hover,
 #pulseaudio:hover,
 #backlight:hover,
 #group-system:hover {
-    background: @primary_container;
-    color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 0 0 0 0 @surface_container_highest;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     opacity: 1;
 }
 
+/* ── Adaptive (leader) ───────────────────────────────────── */
 #custom-adaptive-extra {
-    background: @on_surface;
-    color: @surface;
-    border-color: @on_surface;
-    box-shadow: 4px 4px 0 0 @primary_container;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-family: "Monaspace Krypton";
     font-weight: 900;
-    padding: 2px 10px;
+    padding: 6px 2px;
     min-width: 0;
     opacity: 1;
     transition:
@@ -95,56 +101,91 @@ window#waybar {
 }
 
 #custom-adaptive-extra:hover {
-    background: @primary_container;
-    color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 0 0 0 0 @primary_container;
+    background: @on_primary;
+    color: @primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 #custom-adaptive {
-    background: @on_surface;
-    color: @surface;
-    border-color: @on_surface;
-    box-shadow: 4px 4px 0 0 @primary_container;
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-family: "Monaspace Krypton";
     font-weight: 900;
-    padding: 2px 6px;
 }
 
 #custom-adaptive:hover {
-    background: @primary_container;
-    color: @on_primary_container;
-    border-color: @on_primary_container;
-    box-shadow: 0 0 0 0 @on_surface;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
-#custom-adaptive.notification,
-#custom-adaptive.downloading,
+/* Adaptive states */
+#custom-adaptive.notification {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
+#custom-adaptive.downloading {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
 #custom-adaptive.plugged,
-#custom-adaptive.charging,
+#custom-adaptive.charging {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
 #custom-adaptive.full {
     background: @primary;
     color: @on_primary;
-    border-color: @primary;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-weight: 900;
-  }
+}
 
-#custom-adaptive.music,
-#custom-adaptive.auth-waiting,
+#custom-adaptive.music {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
+#custom-adaptive.auth-waiting {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
 #custom-adaptive.hardware-alert {
-    background: @tertiary;
-    color: @on_tertiary;
-    border-color: @tertiary;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-weight: 900;
 }
 
 #custom-adaptive.bt-flash {
-    background: @secondary;
-    color: @on_secondary;
-    border-color: @secondary;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-weight: 900;
 }
 
@@ -154,40 +195,90 @@ window#waybar {
 #custom-adaptive.critical {
     background: @error;
     color: @on_error;
-    border-color: @error;
-    box-shadow: 4px 4px 0 0 @on_surface;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-weight: 900;
 }
 
 #custom-adaptive.music-paused {
-    background: @surface_container;
-    color: @outline;
-    border-color: @outline;
-    box-shadow: 4px 4px 0 0 @outline_variant;
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-weight: 700;
 }
 
+/* ── Clock ───────────────────────────────────────────────── */
 #custom-clock {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-family: "Monaspace Neon Var";
     font-weight: 900;
 }
 
 #custom-clock.alt {
-    background: @tertiary_container;
-    color: @on_tertiary_container;
-    border-color: @on_tertiary_container;
-    box-shadow: 4px 4px 0 0 @on_surface;
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     opacity: 1;
 }
 
+/* ── Space ───────────────────────────────────────────────── */
 #custom-space {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     font-family: "Monaspace Krypton Var";
     font-weight: 900;
 }
 
+/* ── Mood / Pitwall / BT battery ─────────────────────────── */
+#custom-mood {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+}
 
+#custom-pitwall {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+}
+
+#custom-bt-battery {
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+}
+
+#submap {
+    background: @error_container;
+    color: @on_error_container;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+    font-weight: 900;
+}
+
+/* ── Group system ────────────────────────────────────────── */
 #group-system {
-    padding: 2px 6px;
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+}
+
+#group-system:hover {
+    background: @primary;
+    color: @on_primary;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 #network,
@@ -195,12 +286,17 @@ window#waybar {
 #backlight {
     font-family: "JetBrains Mono NerdFont Propo";
     min-width: 10px;
-    padding: 0 5px;
+    padding: 2 0px;
     font-weight: 600;
 }
 
+/* ── Tray ────────────────────────────────────────────────── */
 #tray {
-    padding: 2px 8px;
+    padding: 2px 2px;
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
 }
 
 #tray > .passive {
@@ -211,17 +307,61 @@ window#waybar {
     -gtk-icon-effect: highlight;
     background: @error;
     color: @on_error;
-    border-color: @on_error;
-    box-shadow: 4px 4px 0 0 @on_surface;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     border-radius: 0;
     opacity: 1;
 }
 
+/* ── Taskbar ─────────────────────────────────────────────── */
+#taskbar {
+    padding: 0px 0px;
+    background: @surface_variant;
+    color: @on_surface_variant;
+    border-color: @surface_container_low;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
+}
+
+#taskbar button {
+    background: transparent;
+    color: @on_surface_variant;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 4 4px;
+    padding: 1px 0px;
+    min-height: 0px;
+}
+
+#taskbar button:hover {
+    background: @primary;
+    color: @on_primary;
+}
+
+#taskbar button.active {
+    background: @secondary;
+    color: @on_primary;
+    padding: 2px 2px;
+    font-weight: 900;
+}
+
+#taskbar button.active:hover {
+    background: @on_primary;
+    color: @primary;
+}
+
+#taskbar button.urgent {
+    background: @error;
+    color: @on_error;
+    font-weight: 900;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────── */
 tooltip {
     background-color: @surface;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     border-radius: 0;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     padding: 6px 10px;
     font-size: 11px;
     font-weight: 700;
@@ -232,13 +372,14 @@ tooltip label {
     color: @on_surface;
 }
 
+/* ── Menu ────────────────────────────────────────────────── */
 menu {
     margin-top: 8px;
     background-color: @surface;
     color: @on_surface;
-    border: 2px solid @outline_variant;
+    border: 2px solid @surface_container_low;
     border-radius: 0;
-    box-shadow: 4px 4px 0 0 @surface_container_highest;
+    box-shadow: 4px 4px 0 0 @surface_container_lowest;
     padding: 4px 0;
     font-size: 12px;
     font-weight: 600;
@@ -255,15 +396,45 @@ menuitem {
 }
 
 menuitem:hover {
-    background-color: @primary_container;
-    color: @on_primary_container;
+    background-color: @primary;
+    color: @on_primary;
 }
 
 menu separator {
-    background-color: @outline_variant;
+    background-color: @surface_container_low;
     margin: 4px 12px;
     min-height: 1px;
     border-radius: 0;
 }
 
 decoration { box-shadow: none; }
+
+/* Softer version of the original blocks: keep their shape, let the wallpaper through. */
+#custom-clock,
+#custom-mood,
+#custom-pitwall,
+#custom-space,
+#custom-bt-battery,
+#submap,
+#tray,
+#network,
+#pulseaudio,
+#backlight,
+#group-system,
+#taskbar {
+    background: rgba(85, 67, 58, 0.42);
+    border-color: rgba(38, 24, 17, 0.55);
+    box-shadow: 2px 2px 0 0 rgba(23, 11, 5, 0.38);
+}
+
+#custom-adaptive-extra,
+#custom-adaptive.notification,
+#custom-adaptive.downloading,
+#custom-adaptive.plugged,
+#custom-adaptive.charging,
+#custom-adaptive.full,
+#custom-adaptive.music,
+#custom-adaptive.auth-waiting,
+#custom-adaptive.hardware-alert {
+    box-shadow: 2px 2px 0 0 rgba(23, 11, 5, 0.38);
+}

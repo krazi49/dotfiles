@@ -226,7 +226,8 @@ help() {
 }
 
 export CHROMIUM_FLAGS="--password-store=basic"
-
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
 export YAY_ANSI=1
 export PATH="$HOME/.local/bin:$PATH"
 
