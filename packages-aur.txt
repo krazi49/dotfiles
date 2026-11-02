@@ -1,0 +1,13 @@
+blueberry
+chromium-vencord
+firefox-developer-edition-vencord
+firefox-vencord
+gnome-bluetooth
+gpu-screen-recorder-gtk-git
+input-remapper-git
+librewolf-vencord
+pano-scrobbler-bin
+tsshd
+vencord
+vencord-installer-git
+vesktop
