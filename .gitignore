@@ -1,13 +1,9 @@
-# auto-generated
-config/hypr/colors.conf
-config/hypr/colors.lua
-
 # OS metadata
 .DS_Store
 Thumbs.db
 Desktop.ini
 
-# editor/IDE
+# editor temp files
 *.swp
 *.swo
 *~
