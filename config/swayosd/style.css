@@ -1,0 +1,72 @@
+@import 'colors.css';
+
+/* Waybar-inspired style for swayosd */
+
+/* Window - frosted glass like waybar */
+window {
+    background:
+        
+        @surface;
+    border: 2px solid @on_surface;
+    border-radius:  0;
+    margin: 0;
+    padding: 2px 6px;
+    min-height: 0px;
+}
+
+/* Container holding icon and label - like waybar modules */
+#container {
+    margin: 2px 2px;
+    padding: 3px 4px;
+    background: transparent;
+    color: @on_surface;
+    opacity: 0.75;
+    border-radius:  0;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#container:hover {
+    background: @surface_container_high;
+    opacity: 1;
+}
+
+/* Progress bar trough */
+progressbar trough {
+    background-color: @surface-variant;
+    border-radius:  0;
+    min-height: 8px;
+    border: 2px solid @outline_variant;
+    box-shadow: none;
+    margin: 2px 0;
+}
+
+/* Progress bar fill */
+progressbar progress {
+    background-color: @primary;
+    border-radius:  0;
+    min-height: 8px;
+    box-shadow: none;
+    margin: 2px 0;
+}
+
+/* Icon */
+#icon {
+    color: @on-surface;
+    opacity: 0.75;
+    margin-right: 6px;
+    font-size: 4px;
+}
+
+/* Label */
+#label {
+    color: @on-surface;
+    opacity: 0.75;
+    font-weight: 500;
+    font-size: 11px;
+}

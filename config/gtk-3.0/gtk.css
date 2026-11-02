@@ -1,0 +1,347 @@
+/* ── Palette ─────────────────────────────────────────────────── */
+@define-color accent_color            #fea9ff;
+@define-color accent_fg_color         #580063;
+@define-color accent_bg_color         #d265db;
+@define-color accent_bg_fg_color      #000000;
+
+@define-color secondary_color         #eeb3ec;
+@define-color secondary_bg_color      #663868;
+@define-color secondary_fg_color      #ffd8fb;
+
+@define-color tertiary_color          #ffb2bc;
+@define-color tertiary_bg_color       #f25d7c;
+@define-color tertiary_fg_color       #000000;
+
+@define-color error_color             #ffb4ab;
+@define-color error_bg_color          #93000a;
+@define-color error_fg_color          #ffdad6;
+
+@define-color border_color            #51424f;
+@define-color border_strong           #9d8b9a;
+
+@define-color surface_low             #211920;
+@define-color surface_mid             #251d24;
+@define-color surface_high            #30272f;
+@define-color surface_highest         #3b323a;
+@define-color text_dim                #d5c1d1;
+
+@define-color window_bg_color         #181118;
+@define-color window_fg_color         #eddee9;
+@define-color headerbar_bg_color      #211920;
+@define-color headerbar_fg_color      #eddee9;
+@define-color popover_bg_color        #251d24;
+@define-color popover_fg_color        #eddee9;
+@define-color view_bg_color           #181118;
+@define-color view_fg_color           #eddee9;
+@define-color card_bg_color           #211920;
+@define-color card_fg_color           #eddee9;
+@define-color sidebar_bg_color        #211920;
+@define-color sidebar_fg_color        #eddee9;
+@define-color sidebar_border_color    @border_color;
+@define-color sidebar_backdrop_color  @window_bg_color;
+
+/* ── Wofi ────────────────────────────────────────────────────── */
+window.background.wofi, .wofi-window {
+    background: transparent; border: none; box-shadow: none;
+}
+window.background.wofi *, .wofi-window * {
+    background: unset; box-shadow: unset; border-radius: unset; transition: unset;
+}
+
+/* ── Fonts ───────────────────────────────────────────────────── */
+* {
+    border-radius: 0;
+    font-family: "Zalando Sans", "Inter", "Cantarell", "Noto Sans", sans-serif;
+}
+
+/* mono where it belongs */
+entry, searchentry, spinbutton, textview, textview text,
+.monospace, .numeric, .dim-label, header label, footer label,
+menuitem accelerator, tooltip, treeview, columnview cell,
+headerbar .title, headerbar label.title {
+    font-family: "JetBrains Mono", "Iosevka", "Fira Code", monospace;
+}
+
+label, image { transition: none; }
+
+button, entry, switch, scale, row, notebook tab,
+checkbutton check, radiobutton radio {
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+/* ── Headerbar ───────────────────────────────────────────────── */
+headerbar {
+    background: @headerbar_bg_color; color: @headerbar_fg_color;
+    border-bottom: 1px solid @border_color;
+    box-shadow: none;
+    min-height: 32px; padding: 0 8px;
+}
+headerbar:backdrop { background: @window_bg_color; color: @text_dim; }
+headerbar button {
+    background: transparent; color: @headerbar_fg_color;
+    border: 1px solid transparent; box-shadow: none;
+    padding: 3px 8px; min-height: 22px; font-size: 11px;
+}
+headerbar button:hover { background: @surface_high; border-color: @border_color; }
+headerbar button:active { background: @surface_highest; }
+
+windowcontrols, headerbar windowcontrols { display: none; }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+button {
+    background: @surface_mid; color: @window_fg_color;
+    border: 1px solid @border_color;
+    box-shadow: none;
+    padding: 5px 12px; font-size: 12px; min-height: 26px;
+}
+button:hover { background: @surface_high; border-color: @border_strong; }
+button:focus { border-color: @accent_color; }
+button:active { background: @surface_highest; border-color: @accent_color; }
+button:disabled { opacity: 0.45; }
+
+button.suggested-action { background: @accent_bg_color; color: @accent_bg_fg_color; border-color: @accent_color; }
+button.suggested-action:hover { background: @accent_color; color: @accent_fg_color; }
+
+button.destructive-action { background: @error_bg_color; color: @error_fg_color; border-color: @error_color; }
+button.destructive-action:hover { background: @error_color; color: @window_bg_color; }
+
+button.flat { background: transparent; border-color: transparent; }
+button.flat:hover { background: @surface_mid; border-color: @border_color; }
+
+/* ── Entries ─────────────────────────────────────────────────── */
+entry {
+    background: @surface_low; color: @window_fg_color;
+    border: 1px solid @border_color; box-shadow: none;
+    padding: 4px 8px; min-height: 26px; font-size: 12px;
+    caret-color: @accent_color;
+}
+entry:hover { border-color: @border_strong; }
+entry:focus { border-color: @accent_color; box-shadow: inset 0 0 0 1px @accent_color; }
+entry:disabled { opacity: 0.45; }
+entry selection, selection { background: @accent_bg_color; color: @accent_bg_fg_color; }
+
+/* ── Switch ──────────────────────────────────────────────────── */
+switch {
+    background: @surface_mid; border: 1px solid @border_color;
+    box-shadow: none; min-width: 34px; min-height: 18px;
+}
+switch slider { background: @text_dim; min-width: 14px; min-height: 14px; margin: 1px; border: none; box-shadow: none; }
+switch:checked { background: @accent_bg_color; border-color: @accent_color; }
+switch:checked slider { background: @accent_color; }
+
+/* ── Scale ───────────────────────────────────────────────────── */
+scale trough { background: @surface_high; border: none; min-height: 4px; box-shadow: none; }
+scale highlight { background: @accent_color; border: none; }
+scale slider {
+    background: @window_fg_color; border: 1px solid @border_strong; box-shadow: none;
+    min-width: 12px; min-height: 12px; margin: -4px 0;
+}
+scale slider:hover { background: @accent_color; border-color: @accent_color; }
+
+/* ── Rows / lists ────────────────────────────────────────────── */
+row { padding: 4px 8px; font-size: 13px; border-bottom: 1px solid alpha(@border_color, 0.5); }
+row:hover { background: @surface_mid; }
+row:selected { background: @accent_bg_color; color: @accent_bg_fg_color; }
+
+listview, columnview, treeview, list {
+    background: @view_bg_color; color: @view_fg_color;
+}
+columnview, listview { border: 1px solid @border_color; box-shadow: none; }
+listview row { padding: 3px 6px; }
+columnview header button {
+    background: @surface_low; color: @text_dim;
+    border: none; border-bottom: 1px solid @border_color;
+    padding: 4px 8px; font-size: 11px;
+}
+columnview header button:hover { background: @surface_mid; color: @window_fg_color; }
+
+treeview { font-size: 12px; }
+treeview:selected { background: @accent_bg_color; color: @accent_bg_fg_color; }
+treeview header button { background: @surface_low; color: @text_dim; border: none; border-bottom: 1px solid @border_color; }
+
+.nautilus-list-view .icon-and-expander-box { spacing: 8px; margin-right: 8px; }
+.nautilus-list-view .icon-and-expander-box .expander { margin-right: 6px; }
+listview .expander:dir(ltr) { margin-right: 8px; }
+listview .expander:dir(rtl) { margin-left: 8px; }
+
+/* ── Popover / tooltip ───────────────────────────────────────── */
+popover, popover.background {
+    background: @popover_bg_color; color: @popover_fg_color;
+    border: 1px solid @border_color; box-shadow: 0 4px 12px alpha(black, 0.25);
+    padding: 4px;
+}
+popover > arrow { background: @popover_bg_color; border: 1px solid @border_color; }
+popover row:hover { background: @surface_high; }
+
+tooltip, tooltip.background {
+    background: @surface_highest; color: @window_fg_color;
+    border: 1px solid @border_color; box-shadow: none;
+    padding: 3px 8px; font-size: 11px;
+}
+tooltip label { color: @window_fg_color; }
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+scrollbar { background: transparent; border: none; }
+scrollbar trough { background: transparent; }
+scrollbar slider {
+    background: @border_strong; min-width: 6px; min-height: 6px;
+    border: none; box-shadow: none; opacity: 0.6;
+}
+scrollbar slider:hover { background: @accent_color; opacity: 1; }
+scrollbar slider:active { background: @accent_color; }
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar, placessidebar {
+    background: @sidebar_bg_color; color: @sidebar_fg_color;
+    border-right: 1px solid @border_color; box-shadow: none;
+}
+.sidebar row, placessidebar row { padding: 3px 8px; font-size: 13px; border-bottom: none; }
+.sidebar row:hover, placessidebar row:hover { background: @surface_high; }
+.sidebar row:selected, placessidebar row:selected { background: @accent_bg_color; color: @accent_bg_fg_color; }
+
+/* ── Menus ───────────────────────────────────────────────────── */
+menu, popover.menu, popover.menu contents {
+    background: @popover_bg_color; color: @popover_fg_color;
+    border: 1px solid @border_color; box-shadow: none; padding: 3px;
+}
+popover.menu > arrow { background: @popover_bg_color; border: none; box-shadow: none; }
+
+menuitem, popover.menu modelbutton {
+    background: transparent; color: @popover_fg_color;
+    padding: 4px 12px; font-size: 13px; border: none;
+}
+menuitem:hover, menuitem:focus, popover.menu modelbutton:hover, popover.menu modelbutton:focus {
+    background: @accent_bg_color; color: @accent_bg_fg_color;
+}
+menuitem accelerator { color: @text_dim; font-size: 11px; }
+menuitem check, menuitem radio {
+    border: 1px solid @border_strong; background: @surface_low;
+    min-width: 14px; min-height: 14px; box-shadow: none;
+}
+menuitem check:checked, menuitem radio:checked { background: @accent_color; border-color: @accent_color; }
+
+menubar { background: @window_bg_color; color: @window_fg_color; border-bottom: 1px solid @border_color; padding: 2px 4px; }
+menubar > menuitem { padding: 3px 8px; font-size: 12px; }
+menubar > menuitem:hover { background: @surface_high; color: @window_fg_color; }
+
+/* ── Check / radio ───────────────────────────────────────────── */
+checkbutton, radiobutton { background: transparent; border: none; }
+checkbutton check, radiobutton radio {
+    background: @surface_low; border: 1px solid @border_strong; box-shadow: none;
+    min-width: 14px; min-height: 14px;
+}
+radiobutton radio { border-radius: 50%; }
+checkbutton check:checked, radiobutton radio:checked { background: @accent_color; border-color: @accent_color; color: @accent_fg_color; }
+checkbutton check:indeterminate { background: @text_dim; border-color: @text_dim; }
+
+/* ── Notebook ────────────────────────────────────────────────── */
+notebook { background: @window_bg_color; border: 1px solid @border_color; box-shadow: none; }
+notebook header { background: @surface_low; border: none; border-bottom: 1px solid @border_color; }
+notebook tab {
+    background: transparent; color: @text_dim;
+    border: none; border-bottom: 2px solid transparent;
+    box-shadow: none; padding: 4px 12px; font-size: 12px;
+}
+notebook tab:hover { background: @surface_mid; color: @window_fg_color; }
+notebook tab:checked { background: transparent; color: @accent_color; border-bottom-color: @accent_color; }
+
+/* ── Progress / level ────────────────────────────────────────── */
+progressbar trough { background: @surface_high; border: none; min-height: 4px; box-shadow: none; }
+progressbar progress { background: @accent_color; border: none; }
+levelbar trough { background: @surface_high; border: none; min-height: 6px; }
+levelbar block { background: @accent_color; border: none; }
+levelbar block.empty { background: transparent; }
+
+/* ── Spin button ─────────────────────────────────────────────── */
+spinbutton { background: @surface_low; border: 1px solid @border_color; box-shadow: none; }
+spinbutton:focus-within { border-color: @accent_color; }
+spinbutton button { background: transparent; border: none; border-left: 1px solid @border_color; box-shadow: none; min-width: 22px; min-height: 22px; padding: 0; }
+spinbutton button:hover { background: @surface_high; }
+spinbutton entry { border: none; box-shadow: none; background: transparent; min-height: 22px; }
+
+/* ── Expander ────────────────────────────────────────────────── */
+expander { background: transparent; border: none; box-shadow: none; }
+expander title { padding: 4px 8px; font-size: 13px; color: @text_dim; }
+expander title:hover { color: @window_fg_color; background: @surface_mid; }
+
+/* ── Misc ────────────────────────────────────────────────────── */
+separator { background: @border_color; border: none; min-height: 1px; min-width: 1px; }
+header label, footer label, .dim-label { color: @text_dim; font-size: 11px; }
+.linked button:not(:last-child) { border-right-width: 0; }
+.linked button:not(:first-child) { border-left-width: 1px; }
+
+stackswitcher button { padding: 3px 12px; font-size: 12px; }
+stackswitcher button:checked { background: @accent_bg_color; color: @accent_bg_fg_color; border-color: @accent_color; }
+
+infobar { border: 1px solid @border_color; box-shadow: none; padding: 6px 12px; font-size: 13px; }
+infobar.info     { background: @secondary_bg_color; color: @secondary_fg_color; border-color: @secondary_color; }
+infobar.warning  { background: @tertiary_bg_color;  color: @tertiary_fg_color;  border-color: @tertiary_color; }
+infobar.error    { background: @error_bg_color;     color: @error_fg_color;     border-color: @error_color; }
+infobar.question { background: @accent_bg_color;    color: @accent_bg_fg_color; border-color: @accent_color; }
+
+scrolledwindow { background: transparent; border: none; box-shadow: none; }
+scrolledwindow viewport, viewport { background: transparent; }
+frame, .frame { border: 1px solid @border_color; box-shadow: none; background: transparent; padding: 4px; }
+overlay { background: transparent; }
+actionbar { background: @surface_low; border-top: 1px solid @border_color; box-shadow: none; padding: 4px 10px; }
+
+dialog, window.dialog { background: @window_bg_color; border: 1px solid @border_strong; box-shadow: none; padding: 6px; }
+dialog headerbar { border-bottom: 1px solid @border_color; box-shadow: none; }
+
+filechooser, filechooser placessidebar { background: @window_bg_color; }
+filechooser placessidebar { border-right: 1px solid @border_color; }
+
+textview, textview text { background: @surface_low; color: @window_fg_color; font-size: 12px; }
+textview { border: 1px solid @border_color; box-shadow: none; }
+textview text selection { background: @accent_bg_color; color: @accent_bg_fg_color; }
+
+searchentry { background: @surface_low; border: 1px solid @border_color; box-shadow: none; }
+searchentry:focus-within { border-color: @accent_color; }
+searchentry entry { border: none; box-shadow: none; background: transparent; padding: 3px 24px 3px 8px; min-height: 22px; }
+searchentry button { border: none; box-shadow: none; background: transparent; min-width: 22px; min-height: 22px; padding: 0; }
+
+combobox { background: @surface_low; border: 1px solid @border_color; box-shadow: none; }
+combobox button { border: none; box-shadow: none; background: transparent; padding: 4px 8px; font-size: 13px; }
+combobox button:hover { background: @surface_high; }
+combobox entry { border: none; box-shadow: none; background: transparent; }
+
+colorchooser, fontchooser { background: @window_bg_color; border: 1px solid @border_color; box-shadow: none; }
+paned { background: @window_bg_color; }
+paned separator { background: @border_color; min-width: 1px; min-height: 1px; }
+
+buttonbox { padding: 4px; }
+revealer { transition: all 180ms ease; }
+
+/* ── Motion / contrast ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0ms !important; transition-duration: 0ms !important; }
+}
+@media (prefers-contrast: more) {
+    * { border-color: @window_fg_color !important; }
+}
+
+/* ══ GTK4 ONLY ─ delete everything below for gtk-3.0 ═══════════ */
+
+/* sans (zalando sans: variable, wght + wdth axes) */
+* {
+    font-variation-settings: "wght" 400;
+}
+button, notebook tab, stackswitcher button, columnview header button {
+    font-variation-settings: "wght" 500;
+}
+headerbar, .heading {
+    font-variation-settings: "wght" 600;
+}
+
+/* mono (jetbrains mono variable: wght only) */
+entry, searchentry, textview text, .monospace, treeview, columnview cell {
+    font-variation-settings: "wght" 400;
+}
+.dim-label, header label, footer label, tooltip, menuitem accelerator {
+    font-variation-settings: "wght" 350;
+}
+headerbar .title, headerbar label.title {
+    font-variation-settings: "wght" 600;
+}
+
+@import url("noctalia.css");

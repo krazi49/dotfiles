@@ -1,0 +1,149 @@
+@import "colors.rasi"
+
+configuration {
+    font:                   "Zalando Sans 10";
+    show-icons:             true;
+    icon-theme:             "Papirus-Dark";
+    drun-display-format:    "{name}";
+    hover-select:           true;
+    me-select-entry:        "";
+    me-accept-entry:        "MousePrimary";
+    drun-match-fields:      "name,generic,exec,categories,keywords";
+    display-drun:           "";
+}
+
+* {
+    text-color:             @on-surface;
+    background-color:       transparent;
+    font:                   "Zalando Sans 10";
+}
+
+/* ── The floating panel ─────────────────────────────────── */
+window {
+    background-color:       @surface-container;
+    border:                 2px;
+    border-color:           @outline-variant;
+    border-radius:           0;
+    /* Narrower than Win11 so it feels less imposing */
+    width:                  560px;
+    location:               south;
+    anchor:                 south;
+    /* Slightly higher so it clears your bar */
+    y-offset:               -10px;
+    shadow:                 true;
+    shadow-radius:           0;
+    shadow-offset:           4px 4px;
+    shadow-color:           @surface-container-highest;
+    children:               [ mainbox ];
+}
+
+/* ── Vertical stack: search on top, apps below ──────────── */
+mainbox {
+    orientation:            vertical;
+    background-color:       transparent;
+    padding:                6px;
+    spacing:                6px;
+    children:               [ inputbar, listview ];
+}
+
+/* ── Search bar ─────────────────────────────────────────── */
+inputbar {
+    background-color:       @surface-container-high;
+    border:                 2px;
+    border-color:           @outline-variant;
+    text-color:             @on-surface;
+    border-radius:           0;
+    padding:                5px 10px;
+    margin:                 0;
+    spacing:                8px;
+    children:               [ prompt, entry ];
+}
+
+prompt {
+    text-color:             @primary;
+    font:                   "Zalando Sans Bold 10";
+    expand:                 false;
+    vertical-align:         0.5;
+}
+
+entry {
+    text-color:             @on-surface;
+    font:                   "Zalando Sans 10";
+    /* Friendlier, lowercase, less formal */
+    placeholder:            "Search apps...";
+    placeholder-color:      @on-surface-variant;
+    vertical-align:         0.5;
+}
+
+/* ── App list ───────────────────────────────────────────── */
+listview {
+    layout:                 vertical;
+    background-color:       transparent;
+    border:                 none;
+    border-radius:           0;
+    padding:                0;
+    margin:                 0;
+    spacing:                1px;
+    cycle:                  true;
+    dynamic:                true;
+    scrollbar:              true;
+    scrollbar-width:        3px;
+    scrollbar-handle-color: @outline-variant;
+    scrollbar-track-color:  transparent;
+    /* More rows visible — beginners see more at a glance */
+    lines:                  10;
+    columns:                1;
+}
+
+/* ── App rows — compact but breathable ──────────────────── */
+element {
+    background-color:       transparent;
+    text-color:             @on-surface;
+    border:                 2px;
+    border-color:           transparent;
+    border-radius:           0;
+    /* Was 8px 12px — tighter vertically, same horizontally */
+    padding:                5px 10px;
+    spacing:                10px;
+    orientation:            horizontal;
+}
+
+element-icon {
+    /* Was 28px — smaller so rows pack tighter */
+    size:                   22px;
+    vertical-align:         0.5;
+}
+
+element-text {
+    text-color:             inherit;
+    font:                   "Zalando Sans 10";
+    vertical-align:         0.5;
+}
+
+/* Hover / selected — softer accent, easier on the eyes */
+element selected {
+    background-color:       @primary-container;
+    text-color:             @on-primary-container;
+    border-color:           @primary-container;
+}
+
+element selected element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+element normal active {
+    text-color:             @primary;
+}
+
+element normal active element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+element urgent element-text {
+    font:                   "Zalando Sans Black 10";
+}
+
+element selected urgent element-text {
+    font:                   "Zalando Sans Black 10";
+}
+

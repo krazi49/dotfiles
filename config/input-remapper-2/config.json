@@ -1,0 +1,8 @@
+{
+    "version": "2.2.1",
+    "autoload": {
+        "HS6209 2.4G Wireless Receiver": "new preset",
+        "OM6239 USB Game Mouse": "new preset"
+    },
+    "enable_system_tray": true
+}

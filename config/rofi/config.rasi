@@ -1,0 +1,171 @@
+@import "colors.rasi"
+
+configuration {
+    font:                   "Zalando Sans 10";
+    show-icons:             true;
+    icon-theme:             "Papirus-Dark";
+    drun-display-format:    "{name}";
+    hover-select:           true;
+    me-select-entry:        "MouseSecondary";
+    me-accept-entry:        "MousePrimary";
+    drun-match-fields:      "name,generic,exec,categories,keywords";
+    display-drun:           "✦";
+}
+
+* {
+    text-color:             @on-surface;
+    background-color:       transparent;
+    font:                   "Zalando Sans 10";
+}
+
+/* ── The floating panel: tonal border, soft-toned hard shadow ─ */
+window {
+    background-color:       @surface-container;
+    border:                 2px;
+    border-color:           @outline-variant;
+    border-radius:          0;
+    width:                  15%;
+    location:               center;
+    anchor:                 center;
+    y-offset:               0px;
+    x-offset:               0px;
+    shadow:                 true;
+    shadow-radius:          0;
+    shadow-offset:          6px 6px;
+    shadow-color:           @surface-container-highest;
+    children:               [ mainbox ];
+}
+
+mainbox {
+    orientation:            vertical;
+    background-color:       transparent;
+    padding:                12px;
+    spacing:                12px;
+    children:               [ inputbar, message, listview ];
+}
+
+/* ── Search bar: boxed field, quiet border ──────────────── */
+inputbar {
+    background-color:       @surface;
+    border:                 2px;
+    border-color:           @outline-variant;
+    text-color:             @on-surface;
+    border-radius:          0;
+    padding:                10px 12px;
+    margin:                 0;
+    spacing:                10px;
+    children:               [ prompt, entry ];
+}
+
+prompt {
+    text-color:             @on-surface-variant;
+    font:                   "Zalando Sans Bold 11";
+    expand:                 false;
+    vertical-align:         0.5;
+}
+
+entry {
+    text-color:             @on-surface;
+    font:                   "Zalando Sans Expanded Black 15";
+    placeholder:            "";
+    placeholder-color:      @on-surface-variant;
+    cursor-color:           @on-surface-variant;
+    vertical-align:         0.5;
+}
+
+/* ── App list (grows upward from the input) ─────────────── */
+listview {
+    layout:                 vertical;
+    background-color:       @surface-container;
+    border:                 @primary;
+    border-radius:          0;
+    padding:                0;
+    margin:                 0;
+    spacing:                2px;
+    cycle:                  true;
+    dynamic:                true;
+    scrollbar:              true;
+    lines:                  10;
+    columns:                1;
+}
+
+/* ── Scrollbar: thin, tonal ─────────────────────────────── */
+scrollbar {
+    width:                  3px;
+    handle-width:           3px;
+    handle-color:           @outline-variant;
+    background-color:       transparent;
+    border:                 0;
+    border-radius:          0;
+    padding:                0;
+    margin:                 0 0 0 8px;
+}
+
+/* ── App rows: dimmed until selected ────────────────────── */
+element {
+    background-color:       transparent;
+    text-color:             @on-surface-variant;
+    border:                 0 0 0 2px;
+    border-color:           transparent;
+    border-radius:          0;
+    padding:                6px 10px;
+    spacing:                12px;
+    orientation:            horizontal;
+}
+
+element-icon {
+    size:                   22px;
+    vertical-align:         0.5;
+}
+
+element-text {
+    text-color:             inherit;
+    font:                   "Zalando Sans 11";
+    vertical-align:         0.5;
+}
+
+/* selection: tonal fill with a thin accent edge, no loud fill */
+element selected {
+    background-color:       @on-secondary;
+    text-color:             @secondary;
+    border-color:           @tertiary;
+    font:                   "Zalando Sans Bold 11";
+}
+
+element selected element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+element normal active {
+    text-color:             @primary;
+}
+
+element selected active {
+    text-color:             @primary;
+}
+
+element urgent element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+element selected urgent element-text {
+    font:                   "Zalando Sans Bold 10";
+}
+
+/* ── Hint footer (-mesg) ────────────────────────────────── */
+message {
+    background-color:       transparent;
+    border:                 1px 0 0 0;
+    border-color:           @outline-variant;
+    padding:                6px 10px 0 10px;
+    margin:                 0;
+}
+
+textbox {
+    text-color:             @on-surface-variant;
+    background-color:       transparent;
+    font:                   "Zalando Sans 9";
+    vertical-align:         0.5;
+    padding:                0;
+    margin:                 0;
+}

@@ -1,0 +1,53 @@
+[config]
+
+[templates.rofi]
+input_path = './templates/colors.rasi'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.waybar]
+input_path = './templates/colors.css'
+output_path = '~/.config/waybar/theme.css'
+post_hook = 'pkill -SIGUSR2 waybar'
+
+[templates.kitty]
+input_path = './templates/colors-kitty.conf'
+output_path = '~/.config/kitty/themes/Matugen.conf'
+post_hook = "kitty +kitten themes --reload-in=all Matugen"
+
+[templates.nvim]
+input_path = './templates/colors-nvim.vim'
+output_path = '~/.config/nvim/colors/matugen.vim'
+post_hook = 'pkill -SIGUSR1 nvim'
+
+[templates.gtk3]
+input_path = './templates/colors-gtk.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
+
+[templates.gtk4]
+input_path = './templates/colors-gtk.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+post_hook = 'ln -sf ~/.config/gtk-3.0/gtk.css ~/.config/gtk-4.0/gtk.css'
+
+[templates.swaync]
+input_path = "./templates/colors.css"
+output_path = "~/.config/swaync/colors.css"
+post_hook = "swaync-client -rs"
+
+[templates.swayosd]
+input_path = "./templates/colors.css"
+output_path = "~/.config/swayosd/colors.css"
+
+[templates.hyprland-conf]
+input_path = './templates/colors-conf.conf'
+output_path = '~/.config/hypr/colors.conf'
+
+[templates.hyprland-lua]
+input_path = './templates/colors-lua.lua'
+output_path = '~/.config/hypr/colors.lua'
+post_hook = 'hyprctl reload'
+
+[templates.lua-nvim]
+input_path = './templates/colors-lua-nvim.lua'
+output_path = '~/.config/nvim/lua/matugen_res.lua'
+post_hook = 'pkill -SIGUSR1 nvim'
