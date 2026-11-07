@@ -17,7 +17,7 @@ OOMPolicy=continue
 KillMode=mixed
 Environment=HOME=/home/mari
 Environment=TMPDIR=/tmp
-Environment=PATH=/usr/bin:/home/mari/.npm-global/bin:/usr/local/bin:/bin:/home/mari/.local/bin:/home/mari/bin:/home/mari/.nix-profile/bin
+Environment=PATH=/home/mari/.local/share/pnpm:/usr/bin:/home/mari/.npm-global/bin:/usr/local/bin:/bin:/home/mari/.local/bin:/home/mari/bin:/home/mari/.nix-profile/bin
 Environment=NODE_OPTIONS=
 Environment=OPENCLAW_GATEWAY_PORT=18789
 Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service

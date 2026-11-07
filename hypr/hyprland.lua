@@ -290,6 +290,7 @@ hl.config({
 			-- position of the title bar: "top", "bottom", "left" or "right"
 			-- "left"/"right" render a vertical bar with a rotated title
 			bar_position = "top",
+			bar_title_enabled = false,
 			bar_color = colors.primary,
 			bar_height = 5,
 		},

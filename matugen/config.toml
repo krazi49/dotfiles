@@ -51,3 +51,11 @@ post_hook = 'hyprctl reload'
 input_path = './templates/colors-lua-nvim.lua'
 output_path = '~/.config/nvim/lua/matugen_res.lua'
 post_hook = 'pkill -SIGUSR1 nvim'
+
+[templates.web-dark]
+input_path = './templates/web-colors.css'
+output_path = '~/github/stocki.nx.kg/web-vars.css'
+
+[templates.web-light]
+input_path = './templates/web-colors-light.css'
+output_path = '~/github/stocki.nx.kg/web-vars-light.css'

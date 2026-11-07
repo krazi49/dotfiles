@@ -25,10 +25,10 @@ window {
     border-color:           @outline-variant;
     border-radius:          0;
     width:                  15%;
-    location:               center;
-    anchor:                 center;
-    y-offset:               0px;
-    x-offset:               0px;
+    location:               northwest;
+    anchor:                 northwest;
+    y-offset:               10px;
+    x-offset:               10px;
     shadow:                 true;
     shadow-radius:          0;
     shadow-offset:          6px 6px;

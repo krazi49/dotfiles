@@ -10,13 +10,14 @@
     "spacing": 10,
     "fixed-center": false,
     "modules-left": [
-      "custom/space",
       "custom/adaptive",
       "custom/adaptive-extra"
     ],
-    "modules-center": [],
-    "modules-right": [
+    "modules-center": [
       "custom/clock",
+      "custom/space"
+    ],
+    "modules-right": [
       "custom/updates",
       "hyprland/submap"
     ],

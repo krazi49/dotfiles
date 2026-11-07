@@ -1,0 +1,77 @@
+{
+  "name": "oganesson",
+  "version": "1.0.0",
+
+  "typography": {
+    "sans": {
+      "family": "Zalando Sans",
+      "size_ui": 10,
+      "size_body": 13,
+      "size_sm": 12,
+      "size_xs": 11,
+      "size_2xs": 10
+    },
+    "mono": {
+      "family": "JetBrains Mono Nerd Font Propo",
+      "size_base": 10,
+      "size_sm": 12,
+      "size_xs": 11
+    },
+    "display": {
+      "family": "Monaspace Argon Var"
+    },
+    "alt": {
+      "family": "Monaspace Krypton Var"
+    },
+    "weight": {
+      "thin": 100,
+      "extralight": 200,
+      "light": 300,
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700,
+      "extrabold": 800,
+      "black": 900
+    }
+  },
+
+  "shape": {
+    "corner_radius": 0
+  },
+
+  "border": {
+    "style": "solid",
+    "width_thick": 4,
+    "width_medium": 3,
+    "width_thin": 2,
+    "width_hairline": 1
+  },
+
+  "spacing": {
+    "0": 0, "1": 4, "2": 8, "3": 12, "4": 16,
+    "5": 20, "6": 24, "7": 28, "8": 32, "9": 36,
+    "10": 40, "11": 44, "12": 48, "14": 56, "16": 64,
+    "20": 80, "24": 96, "28": 112, "32": 128
+  },
+
+  "motion": {
+    "duration_fast": 100,
+    "duration_normal": 200,
+    "duration_moderate": 350,
+    "duration_slow": 500,
+    "easing_standard": "cubic-bezier(0.2, 0.0, 0.0, 1.0)"
+  },
+
+  "window": {
+    "padding": 9
+  },
+
+  "notification": {
+    "timeout": 6,
+    "timeout_low": 5,
+    "timeout_critical": 0,
+    "width": 500,
+    "icon_size": 32
+  }
+}
