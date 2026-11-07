@@ -10,3 +10,9 @@ Desktop.ini
 .vscode/
 .idea/
 .brand/
+wallpapers/
+*.png
+*.jpg
+*.jpeg
+*.webp
+!screenshots/*.png
