@@ -3,46 +3,22 @@ return {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = function()
-        vim.opt.termguicolors = false
+        -- termguicolors is set in config/options.lua; matugen owns all colors via
+        -- colors/matugen.vim (guifg/guibg). No cterm overrides here — they clobber
+        -- the matugen palette.
         local hl = vim.api.nvim_set_hl
 
-        -- 1. THE SOLID SHIELD (Context Menu & Popups)
-        hl(0, "NormalFloat", { ctermbg = 0, ctermfg = 7, force = true })
-        hl(0, "FloatBorder", { ctermbg = 0, ctermfg = 12, force = true })
-        hl(0, "Pmenu", { ctermbg = 0, ctermfg = 7, force = true })
-        hl(0, "MatchParen", { ctermbg = "NONE", ctermfg = 12, bold = true, underline = true })
-        hl(0, "Visual", { ctermbg = 8, ctermfg = 12, bold = true })
-        hl(0, "PmenuSel", { ctermbg = 8, ctermfg = 12, bold = true, force = true })
-
-        -- 2. TRANSPARENCY & CORE UI DESIGN
-        hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
-        hl(0, "NormalNC", { bg = "NONE", ctermbg = "NONE" })
-        hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
-
-        -- Custom Sidebar Line Number Highlights
-        hl(0, "LineNr", { ctermfg = 8, bg = "NONE" })
-        hl(0, "CursorLineNr", { ctermfg = 12, bg = "NONE", bold = true })
-
-        hl(0, "IblIndent", { ctermfg = 8 })
-        hl(0, "IblWhitespace", { ctermfg = 8 })
-        hl(0, "IblScope", { ctermfg = 12 })
-
-        -- 3. SYNTAX
-        hl(0, "Comment", { ctermfg = 8 })
-        hl(0, "String", { ctermfg = 10 })
-        hl(0, "Keyword", { ctermfg = 12 })
-        hl(0, "Function", { ctermfg = 12 })
-        -- Append these lines inside your colorscheme.lua function block:
-        local hl = vim.api.nvim_set_hl
-
-        -- 1. Obliterate the vertical split separator lines entirely
-        hl(0, "WinSeparator", { bg = "NONE", ctermbg = "NONE", fg = 0, ctermfg = 0 })
-        hl(0, "RenderMarkdownH1Bg", { bg = "NONE", ctermbg = "NONE" })
-
-        -- 2. Make the file tree background seamlessly match the editor background
-        hl(0, "NeoTreeNormal", { bg = "NONE", ctermbg = "NONE" })
-        hl(0, "NeoTreeNormalNC", { bg = "NONE", ctermbg = "NONE" })
-        hl(0, "SnacksExplorerNormal", { bg = "NONE", ctermbg = "NONE" })
+        -- transparency & core UI (bg only, never force cterm colors over matugen)
+        hl(0, "Normal", { bg = "NONE" })
+        hl(0, "NormalNC", { bg = "NONE" })
+        hl(0, "SignColumn", { bg = "NONE" })
+        hl(0, "NormalFloat", { bg = "NONE" })
+        hl(0, "FloatBorder", { bg = "NONE" })
+        hl(0, "Pmenu", { bg = "NONE" })
+        hl(0, "WinSeparator", { bg = "NONE" })
+        hl(0, "NeoTreeNormal", { bg = "NONE" })
+        hl(0, "NeoTreeNormalNC", { bg = "NONE" })
+        hl(0, "SnacksExplorerNormal", { bg = "NONE" })
       end,
     },
   },
@@ -50,82 +26,49 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function(_, opts)
-      vim.opt.cmdheight = 1 -- Set to 1 to keep the screen bottom tight and modular
-      vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE", ctermbg = "NONE" })
-      vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE", ctermbg = "NONE" })
+      vim.opt.cmdheight = 1
 
-      local m3_theme = {
-        normal = {
-          a = { fg = 0, bg = 13, gui = "bold" },
-          b = { fg = 7, bg = 8 },
-          c = { fg = 7, bg = "NONE" },
-        },
-        insert = { a = { fg = 0, bg = 14, gui = "bold" } },
-        visual = { a = { fg = 0, bg = 15, gui = "bold" } },
-        command = { a = { fg = 0, bg = 13, gui = "bold" } },
-        replace = { a = { fg = 0, bg = 9, gui = "bold" } },
-        inactive = { c = { fg = 8, bg = "NONE" } },
-      }
+      -- lualine theme built from matugen_res.lua so the status bar stays in
+      -- sync when the wallpaper changes
+      local ok, res = pcall(require, "matugen_res")
+      local m3_theme
+      if ok and res then
+        m3_theme = {
+          normal = {
+            a = { fg = res.on_primary, bg = res.primary, gui = "bold" },
+            b = { fg = res.on_surface, bg = res.surface_container_high },
+            c = { fg = res.on_surface, bg = "NONE" },
+          },
+          insert = { a = { fg = res.on_secondary, bg = res.secondary, gui = "bold" } },
+          visual = { a = { fg = res.on_tertiary, bg = res.tertiary, gui = "bold" } },
+          command = { a = { fg = res.on_primary, bg = res.primary, gui = "bold" } },
+          replace = { a = { fg = res.on_error_container, bg = res.error_container, gui = "bold" } },
+          inactive = { c = { fg = res.outline, bg = "NONE" } },
+        }
+      else
+        m3_theme = "auto"
+      end
 
       opts.options = {
         theme = m3_theme,
         globalstatus = true,
-        component_separators = "",
-        section_separators = "",
+        component_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
       }
 
       opts.sections = {
         lualine_a = {
-          {
-            "mode",
-            separator = { left = "", right = "" },
-            padding = 1,
-            fmt = function(str)
-              return str:lower()
-            end,
-          },
+          { "mode", padding = 1, fmt = function(str) return str:lower() end },
         },
         lualine_b = {
-          {
-            function()
-              return " "
-            end,
-            padding = 0,
-            color = { bg = "NONE" },
-          },
-          { "branch", icon = "", separator = { left = "", right = "" }, padding = 0 },
+          { "branch", icon = "", padding = 0 },
         },
         lualine_c = {
-          {
-            function()
-              return "  "
-            end,
-            padding = 0,
-            color = { bg = "NONE" },
-          },
-          { "filename", path = 1, separator = "", padding = 0 },
+          { "filename", path = 1, padding = 0 },
         },
-        lualine_x = { { "filetype", separator = { left = "", right = "" }, padding = 0 } },
-        lualine_y = {
-          {
-            function()
-              return " "
-            end,
-            padding = 0,
-            color = { bg = "NONE" },
-          },
-          { "progress", separator = { left = "", right = "" }, padding = 0 },
-        },
-        lualine_z = {
-          {
-            function()
-              return " "
-            end,
-            padding = 0,
-            color = { bg = "NONE" },
-          },
-          { "location", separator = { left = "", right = "" }, padding = 1 },
-        },
+        lualine_x = { { "filetype", padding = 0 } },
+        lualine_y = { { "progress", padding = 0 } },
+        lualine_z = { { "location", padding = 1 } },
       }
       opts.winbar = {}
     end,

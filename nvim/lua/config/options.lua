@@ -1,4 +1,4 @@
-vim.opt.termguicolors = false -- Rely strictly on your terminal ANSI profile
+vim.opt.termguicolors = true -- matugen writes guifg/guibg; nvim ignores them without this
 vim.opt.list = false
 
 -- ── LINE NUMBER DESIGN CONFIGURATION ──
@@ -8,7 +8,7 @@ vim.opt.relativenumber = false
 -- Keymaps & Utility Configs
 vim.keymap.set({ "i", "c" }, "`", "<Esc>", { noremap = true, silent = true })
 vim.keymap.set({ "i", "c" }, "<C-Left>", "<C-o>b", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-Right>", "<C-o>w", { noremap = true, silent = true })
+vim.keymap.set({ "i", "c" }, "<C-Right>", "<C-o>w", { noremap = true, silent = true })
 vim.keymap.set("c", "<C-Right>", "<C-f>w", { noremap = true, silent = true })
 vim.keymap.set({ "i", "c" }, "<C-H>", "<C-w>", { noremap = true, silent = true })
 vim.keymap.set({ "i", "c" }, "<C-bs>", "<C-w>", { noremap = true, silent = true })
