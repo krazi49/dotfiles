@@ -13,6 +13,14 @@
 @define-color tertiary_fg_color       {{colors.on_tertiary_container.default.hex}};
 
 @define-color error_color             {{colors.error.default.hex}};
+
+/* ── Appearance (overridden by build.js) ── */
+@define-color font_sans                "Zalando Sans";
+@define-color font_mono                "JetBrains Mono";
+@define-color font_size_ui             11;
+@define-color font_size_body           13;
+@define-color corner_radius            0;
+@define-color border_width_thin        2;
 @define-color error_bg_color          {{colors.error_container.default.hex}};
 @define-color error_fg_color          {{colors.on_error_container.default.hex}};
 
@@ -50,8 +58,8 @@ window.background.wofi *, .wofi-window * {
 
 /* ── Fonts ───────────────────────────────────────────────────── */
 * {
-    border-radius: 0;
-    font-family: "Zalando Sans", "Inter", "Cantarell", "Noto Sans", sans-serif;
+    border-radius: @corner_radius;
+    font-family: @font_sans, "Inter", "Cantarell", "Noto Sans", sans-serif;
 }
 
 /* mono where it belongs */
@@ -59,7 +67,7 @@ entry, searchentry, spinbutton, textview, textview text,
 .monospace, .numeric, .dim-label, header label, footer label,
 menuitem accelerator, tooltip, treeview, columnview cell,
 headerbar .title, headerbar label.title {
-    font-family: "JetBrains Mono", "Iosevka", "Fira Code", monospace;
+    font-family: @font_mono, "Iosevka", "Fira Code", monospace;
 }
 
 label, image { transition: none; }
@@ -80,7 +88,7 @@ headerbar:backdrop { background: @window_bg_color; color: @text_dim; }
 headerbar button {
     background: transparent; color: @headerbar_fg_color;
     border: 1px solid transparent; box-shadow: none;
-    padding: 3px 8px; min-height: 22px; font-size: 11px;
+    padding: 3px 8px; min-height: 22px; font-size: @font_size_ui;
 }
 headerbar button:hover { background: @surface_high; border-color: @border_color; }
 headerbar button:active { background: @surface_highest; }
@@ -112,7 +120,7 @@ button.flat:hover { background: @surface_mid; border-color: @border_color; }
 entry {
     background: @surface_low; color: @window_fg_color;
     border: 1px solid @border_color; box-shadow: none;
-    padding: 4px 8px; min-height: 26px; font-size: 12px;
+    padding: 4px 8px; min-height: 26px; font-size: @font_size_body;
     caret-color: @accent_color;
 }
 entry:hover { border-color: @border_strong; }

@@ -1,42 +1,50 @@
 /* ── Palette ─────────────────────────────────────────────────── */
-@define-color accent_color            #d1bcff;
-@define-color accent_fg_color         #382463;
-@define-color accent_bg_color         #4f3b7b;
-@define-color accent_bg_fg_color      #e9ddff;
+@define-color accent_color            #e2c600;
+@define-color accent_fg_color         #383000;
+@define-color accent_bg_color         #524700;
+@define-color accent_bg_fg_color      #ffe33d;
 
-@define-color secondary_color         #cfc890;
-@define-color secondary_bg_color      #4c481c;
-@define-color secondary_fg_color      #ece4aa;
+@define-color secondary_color         #cbc992;
+@define-color secondary_bg_color      #49491e;
+@define-color secondary_fg_color      #e8e5ac;
 
-@define-color tertiary_color          #ebc078;
-@define-color tertiary_bg_color       #5e4102;
-@define-color tertiary_fg_color       #ffdeaa;
+@define-color tertiary_color          #c1cd87;
+@define-color tertiary_bg_color       #414b13;
+@define-color tertiary_fg_color       #dde9a0;
 
 @define-color error_color             #ffb4ab;
+
+/* ── Appearance (overridden by build.js) ── */
+@define-color font_sans                "Zalando Sans";
+@define-color font_mono                "JetBrains Mono";
+@define-color font_size_ui             11;
+@define-color font_size_body           13;
+@define-color corner_radius            0;
+@define-color border_width_thin        2;
 @define-color error_bg_color          #93000a;
 @define-color error_fg_color          #ffdad6;
 
-@define-color border_color            #524432;
-@define-color border_strong           #a08e77;
+@define-color border_color            #4b4736;
+@define-color border_strong           #96917c;
 
-@define-color surface_low             #221a10;
-@define-color surface_mid             #261e14;
-@define-color surface_high            #31291e;
-@define-color surface_highest         #3c3328;
-@define-color text_dim                #d8c3ab;
+@define-color surface_low             #1f1c0d;
+@define-color surface_mid             #232011;
+@define-color surface_high            #2d2a1b;
+@define-color surface_highest         #383525;
+@define-color text_dim                #cdc6b0;
 
-@define-color window_bg_color         #191209;
-@define-color window_fg_color         #f0e0cf;
-@define-color headerbar_bg_color      #221a10;
-@define-color headerbar_fg_color      #f0e0cf;
-@define-color popover_bg_color        #261e14;
-@define-color popover_fg_color        #f0e0cf;
-@define-color view_bg_color           #191209;
-@define-color view_fg_color           #f0e0cf;
-@define-color card_bg_color           #221a10;
-@define-color card_fg_color           #f0e0cf;
-@define-color sidebar_bg_color        #221a10;
-@define-color sidebar_fg_color        #f0e0cf;
+@define-color window_bg_color         #161306;
+@define-color window_fg_color         #eae2cb;
+@define-color headerbar_bg_color      #1f1c0d;
+@define-color headerbar_fg_color      #eae2cb;
+@define-color popover_bg_color        #232011;
+@define-color popover_fg_color        #eae2cb;
+@define-color view_bg_color           #161306;
+@define-color view_fg_color           #eae2cb;
+@define-color card_bg_color           #1f1c0d;
+@define-color card_fg_color           #eae2cb;
+@define-color sidebar_bg_color        #1f1c0d;
+@define-color sidebar_fg_color        #eae2cb;
 @define-color sidebar_border_color    @border_color;
 @define-color sidebar_backdrop_color  @window_bg_color;
 
@@ -50,8 +58,8 @@ window.background.wofi *, .wofi-window * {
 
 /* ── Fonts ───────────────────────────────────────────────────── */
 * {
-    border-radius: 0;
-    font-family: "Zalando Sans", "Inter", "Cantarell", "Noto Sans", sans-serif;
+    border-radius: @corner_radius;
+    font-family: @font_sans, "Inter", "Cantarell", "Noto Sans", sans-serif;
 }
 
 /* mono where it belongs */
@@ -59,7 +67,7 @@ entry, searchentry, spinbutton, textview, textview text,
 .monospace, .numeric, .dim-label, header label, footer label,
 menuitem accelerator, tooltip, treeview, columnview cell,
 headerbar .title, headerbar label.title {
-    font-family: "JetBrains Mono", "Iosevka", "Fira Code", monospace;
+    font-family: @font_mono, "Iosevka", "Fira Code", monospace;
 }
 
 label, image { transition: none; }
@@ -80,7 +88,7 @@ headerbar:backdrop { background: @window_bg_color; color: @text_dim; }
 headerbar button {
     background: transparent; color: @headerbar_fg_color;
     border: 1px solid transparent; box-shadow: none;
-    padding: 3px 8px; min-height: 22px; font-size: 11px;
+    padding: 3px 8px; min-height: 22px; font-size: @font_size_ui;
 }
 headerbar button:hover { background: @surface_high; border-color: @border_color; }
 headerbar button:active { background: @surface_highest; }
@@ -112,7 +120,7 @@ button.flat:hover { background: @surface_mid; border-color: @border_color; }
 entry {
     background: @surface_low; color: @window_fg_color;
     border: 1px solid @border_color; box-shadow: none;
-    padding: 4px 8px; min-height: 26px; font-size: 12px;
+    padding: 4px 8px; min-height: 26px; font-size: @font_size_body;
     caret-color: @accent_color;
 }
 entry:hover { border-color: @border_strong; }

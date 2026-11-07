@@ -1,7 +1,9 @@
 @import "colors.rasi"
 
 configuration {
+/* OGANESSON_FONT_START */
     font:                   "Zalando Sans 10";
+/* OGANESSON_FONT_END */
     show-icons:             true;
     icon-theme:             "Papirus-Dark";
     drun-display-format:    "{name}";
@@ -23,7 +25,7 @@ window {
     background-color:       @surface-container;
     border:                 2px;
     border-color:           @outline-variant;
-    border-radius:           0;
+    border-radius:          15;
     /* Narrower than Win11 so it feels less imposing */
     width:                  560px;
     location:               south;
@@ -52,7 +54,7 @@ inputbar {
     border:                 2px;
     border-color:           @outline-variant;
     text-color:             @on-surface;
-    border-radius:           0;
+    border-radius:          15;
     padding:                5px 10px;
     margin:                 0;
     spacing:                8px;
@@ -61,14 +63,16 @@ inputbar {
 
 prompt {
     text-color:             @primary;
+/* OGANESSON_FONT_BOLD_START */
     font:                   "Zalando Sans Bold 10";
+/* OGANESSON_FONT_BOLD_END */
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "Zalando Sans 10";
+    font:                   "Zalando Sans SemiExpanded Bold 16";
     /* Friendlier, lowercase, less formal */
     placeholder:            "Search apps...";
     placeholder-color:      @on-surface-variant;
@@ -80,7 +84,7 @@ listview {
     layout:                 vertical;
     background-color:       transparent;
     border:                 none;
-    border-radius:           0;
+    border-radius:          15;
     padding:                0;
     margin:                 0;
     spacing:                1px;
@@ -101,7 +105,7 @@ element {
     text-color:             @on-surface;
     border:                 2px;
     border-color:           transparent;
-    border-radius:           0;
+    border-radius:          15;
     /* Was 8px 12px — tighter vertically, same horizontally */
     padding:                5px 10px;
     spacing:                10px;
@@ -140,10 +144,10 @@ element normal active element-text {
 }
 
 element urgent element-text {
-    font:                   "Zalando Sans Black 10";
+    font:                   "Zalando Sans 10";
 }
 
 element selected urgent element-text {
-    font:                   "Zalando Sans Black 10";
+    font:                   "Zalando Sans 10";
 }
 

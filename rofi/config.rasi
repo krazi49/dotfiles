@@ -23,7 +23,7 @@ window {
     background-color:       @surface-container;
     border:                 2px;
     border-color:           @outline-variant;
-    border-radius:          0;
+    border-radius:          15;
     width:                  15%;
     location:               northwest;
     anchor:                 northwest;
@@ -50,7 +50,7 @@ inputbar {
     border:                 2px;
     border-color:           @outline-variant;
     text-color:             @on-surface;
-    border-radius:          0;
+    border-radius:          15;
     padding:                10px 12px;
     margin:                 0;
     spacing:                10px;
@@ -59,14 +59,14 @@ inputbar {
 
 prompt {
     text-color:             @on-surface-variant;
-    font:                   "Zalando Sans Bold 11";
+    font:                   "Zalando Sans Bold 10";
     expand:                 false;
     vertical-align:         0.5;
 }
 
 entry {
     text-color:             @on-surface;
-    font:                   "Zalando Sans Expanded Black 15";
+    font:                   "Zalando Sans SemiExpanded Bold 16";
     placeholder:            "";
     placeholder-color:      @on-surface-variant;
     cursor-color:           @on-surface-variant;
@@ -78,7 +78,7 @@ listview {
     layout:                 vertical;
     background-color:       @surface-container;
     border:                 @primary;
-    border-radius:          0;
+    border-radius:          15;
     padding:                0;
     margin:                 0;
     spacing:                2px;
@@ -96,7 +96,7 @@ scrollbar {
     handle-color:           @outline-variant;
     background-color:       transparent;
     border:                 0;
-    border-radius:          0;
+    border-radius:          15;
     padding:                0;
     margin:                 0 0 0 8px;
 }
@@ -107,7 +107,7 @@ element {
     text-color:             @on-surface-variant;
     border:                 0 0 0 2px;
     border-color:           transparent;
-    border-radius:          0;
+    border-radius:          15;
     padding:                6px 10px;
     spacing:                12px;
     orientation:            horizontal;
@@ -120,7 +120,7 @@ element-icon {
 
 element-text {
     text-color:             inherit;
-    font:                   "Zalando Sans 11";
+    font:                   "Zalando Sans 10";
     vertical-align:         0.5;
 }
 
@@ -129,7 +129,7 @@ element selected {
     background-color:       @on-secondary;
     text-color:             @secondary;
     border-color:           @tertiary;
-    font:                   "Zalando Sans Bold 11";
+    font:                   "Zalando Sans Bold 10";
 }
 
 element selected element-text {
@@ -155,7 +155,7 @@ element selected urgent element-text {
 /* ── Hint footer (-mesg) ────────────────────────────────── */
 message {
     background-color:       transparent;
-    border:                 1px 0 0 0;
+    border:                 2px 0 0 0;
     border-color:           @outline-variant;
     padding:                6px 10px 0 10px;
     margin:                 0;
@@ -164,7 +164,7 @@ message {
 textbox {
     text-color:             @on-surface-variant;
     background-color:       transparent;
-    font:                   "Zalando Sans 9";
+    font:                   "Zalando Sans 10";
     vertical-align:         0.5;
     padding:                0;
     margin:                 0;

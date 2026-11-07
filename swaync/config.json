@@ -1,146 +1,143 @@
 {
-  "$schema": "/etc/xdg/swaync/configSchema.json",
-  "positionX": "left",
-  "positionY": "top",
-  "control-center-positionX": "left",
-  "control-center-positionY": "top",
-  "control-center-margin-top": 14,
-  "control-center-margin-bottom": 14,
-  "control-center-margin-right": 14,
-  "control-center-margin-left": 14,
-  "control-center-width": 400,
-  "control-center-height": 1000,
-  "fit-to-screen": false,
-  "layer-shell-cover-screen": true,
-  "layer-shell": true,
-  "layer": "overlay",
-  "control-center-layer": "overlay",
-  "cssPriority": "user",
-  "notification-icon-size": 32,
-  "notification-body-image-height": 100,
-  "notification-body-image-width": 200,
-  "notification-inline-replies": true,
-  "timeout": 6,
-  "timeout-low": 5,
-  "timeout-critical": 0,
-  "notification-window-width": 500,
-  "keyboard-shortcuts": true,
-  "image-visibility": "when-available",
-  "transition-time": 250,
-  "hide-on-clear": true,
-  "hide-on-action": false,
-  "script-fail-notify": true,
-  "widgets": [
-    "title",
-    "mpris",
-    "buttons-grid#top",
-    "buttons-grid#compact",
-    "backlight",
-    "volume",
-    "dnd",
-    "notifications"
-  ],
-  "widget-config": {
-    "title": {
-      "text": "RECENTLY MISSED",
-      "clear-all-button": true,
-      "button-text": "Clear all"
-    },
-    "dnd": {
-      "text": "FOCUS MODE"
-    },
-    "buttons-grid#top": {
-      "buttons-per-row": 2,
-      "actions": [
-        {
-          "label": "󰤨   Wi-Fi",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
-          "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
+    "$schema": "/etc/xdg/swaync/configSchema.json",
+    "positionX": "left",
+    "positionY": "top",
+    "control-center-positionX": "left",
+    "control-center-positionY": "top",
+    "control-center-margin-top": 14,
+    "control-center-margin-bottom": 14,
+    "control-center-margin-right": 14,
+    "control-center-margin-left": 14,
+    "control-center-width": 400,
+    "control-center-height": 1000,
+    "fit-to-screen": false,
+    "layer-shell-cover-screen": true,
+    "layer-shell": true,
+    "layer": "overlay",
+    "control-center-layer": "overlay",
+    "cssPriority": "user",
+    "notification-icon-size": 32,
+    "notification-body-image-height": 100,
+    "notification-body-image-width": 200,
+    "notification-inline-replies": true,
+    "timeout": 6,
+    "timeout-low": 5,
+    "timeout-critical": 0,
+    "notification-window-width": 500,
+    "keyboard-shortcuts": true,
+    "image-visibility": "when-available",
+    "transition-time": 250,
+    "hide-on-clear": true,
+    "hide-on-action": false,
+    "script-fail-notify": true,
+    "widgets": [
+        "title",
+        "mpris",
+        "buttons-grid#top",
+        "buttons-grid#compact",
+        "backlight",
+        "volume",
+        "dnd",
+        "notifications"
+    ],
+    "widget-config": {
+        "title": {
+            "text": "RECENTLY MISSED",
+            "clear-all-button": true,
+            "button-text": "Clear all"
         },
-        {
-          "label": "󰂯   Bluetooth",
-          "type": "normal",
-          "active": false,
-          "command": "blueberry"
+        "dnd": {
+            "text": "Do Not Disturb"
         },
-        {
-          "label": "󰴽   Communications",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == false ]] && rfkill block all || rfkill unblock all'",
-          "update-command": "sh -c 'rfkill list all | grep -q \"yes\" && echo false || echo true'"
+        "buttons-grid#top": {
+            "buttons-per-row": 2,
+            "actions": [
+                {
+                    "label": "󰤨   Wi-Fi",
+                    "type": "toggle",
+                    "active": false,
+                    "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
+                    "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
+                },
+                {
+                    "label": "󰂯   Bluetooth",
+                    "type": "normal",
+                    "active": false,
+                    "command": "blueberry"
+                },
+                {
+                    "label": "󰴽   Communications",
+                    "type": "toggle",
+                    "active": false,
+                    "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == false ]] && rfkill block all || rfkill unblock all'",
+                    "update-command": "sh -c 'rfkill list all | grep -q \"yes\" && echo false || echo true'"
+                },
+                {
+                    "label": "󰝩   Night light",
+                    "type": "toggle",
+                    "active": false,
+                    "command": "sh -c 'pgrep hyprsunset && pkill hyprsunset || hyprsunset -t 2600'",
+                    "update-command": "sh -c 'pgrep hyprsunset && echo true || echo false'"
+                }
+            ]
         },
-        {
-          "label": "󰝩   Night light",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c 'pgrep hyprsunset && pkill hyprsunset || hyprsunset -t 2600'",
-          "update-command": "sh -c 'pgrep hyprsunset && echo true || echo false'"
+        "buttons-grid#compact": {
+            "buttons-per-row": 5,
+            "actions": [
+                {
+                    "label": "󰪓",
+                    "type": "toggle",
+                    "active": false,
+                    "command": "swaync-client -d -sw",
+                    "update-command": "sh -c 'swaync-client -D && echo true || echo false'"
+                },
+                {
+                    "label": "󰑊",
+                    "type": "normal",
+                    "active": false,
+                    "command": "gpu-screen-recorder-gtk"
+                },
+                {
+                    "label": "󰝟",
+                    "type": "toggle",
+                    "active": false,
+                    "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && pactl set-sink-mute @DEFAULT_SINK@ 1 || pactl set-sink-mute @DEFAULT_SINK@ 0'",
+                    "update-command": "sh -c 'pactl get-sink-mute @DEFAULT_SINK@ | grep -q \"yes\" && echo true || echo false'"
+                },
+                {
+                    "label": "󰄀",
+                    "type": "normal",
+                    "active": false,
+                    "command": "bash ~/.config/rofi/scripts/omniscreenshot"
+                },
+                {
+                    "label": "󰌾",
+                    "type": "normal",
+                    "active": false,
+                    "command": "hyprlock"
+                }
+            ]
+        },
+        "notifications": {
+            "vexpand": true
+        },
+        "inhibitors": {
+            "text": "Inhibitors",
+            "button-text": "Clear all",
+            "clear-all-button": true
+        },
+        "mpris": {
+            "autohide": true,
+            "image-size": 72,
+            "image-radius": 0
+        },
+        "backlight": {
+            "label": "󰳲",
+            "device": "intel_backlight",
+            "subcommand": "brightnessctl"
+        },
+        "volume": {
+            "label": "󰖀"
         }
-      ]
-    },
-    "buttons-grid#compact": {
-      "buttons-per-row": 5,
-      "actions": [
-        {
-          "label": "󰪓",
-          "type": "toggle",
-          "active": false,
-          "command": "swaync-client -d -sw",
-          "update-command": "sh -c 'swaync-client -D && echo true || echo false'"
-        },
-        {
-          "label": "󰑊",
-          "type": "normal",
-          "active": false,
-          "command": "gpu-screen-recorder-gtk"
-        },
-        {
-          "label": "󰝟",
-          "type": "toggle",
-          "active": false,
-          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && pactl set-sink-mute @DEFAULT_SINK@ 1 || pactl set-sink-mute @DEFAULT_SINK@ 0'",
-          "update-command": "sh -c 'pactl get-sink-mute @DEFAULT_SINK@ | grep -q \"yes\" && echo true || echo false'"
-        },
-        {
-          "label": "󰄀",
-          "type": "normal",
-          "active": false,
-          "command": "bash ~/.config/rofi/scripts/omniscreenshot"
-        },
-        {
-          "label": "󰌾",
-          "type": "normal",
-          "active": false,
-          "command": "hyprlock"
-        }
-      ]
-    },
-    "notifications": {
-      "vexpand": true
-    },
-    "inhibitors": {
-      "text": "Inhibitors",
-      "button-text": "Clear all",
-      "clear-all-button": true
-    },
-    "mpris": {
-      "autohide": true,
-      "image-size": 72,
-      "image-radius": 0
-    },
-    "backlight": {
-      "label": "󰳲",
-      "device": "intel_backlight",
-      "subcommand": "brightnessctl"
-    },
-    "volume": {
-      "label": "󰖀"
-    },
-    "dnd": {
-      "text": "Do Not Disturb"
     }
-  }
 }

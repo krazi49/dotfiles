@@ -2,7 +2,7 @@
 :root {
   /* ── Material 3 tokens ── */
 <* for name, value in colors *>
-  --color-{{name | replace("_", "-")}}: {{value.default.hex}};
+  --color-{{name}}: {{value.default.hex}};
 <* endfor *>
 
   /* ── oganesson custom aliases ── */

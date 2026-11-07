@@ -1,11 +1,11 @@
 @import "colors.css";
 
 * {
-    font-family: "Zalando Sans", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-size: 13px;
     outline: none;
-    border-radius: 0px;
-    -gtk-outline-radius: 0;
+    border-radius: 15px;
+    -gtk-outline-radius: 15;
 }
 
 *:focus,
@@ -54,7 +54,7 @@ list,
 listrow,
 row {
     border-radius: 0;
-    -gtk-outline-radius: 0;
+    -gtk-outline-radius: 15;
 }
 
 scrollbar {
@@ -143,8 +143,8 @@ window#osd {
 
 .widget-label > label {
     color: @on_surface_variant;
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
-    font-size: 10px;
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 1.4px;
     text-transform: uppercase;
@@ -159,8 +159,8 @@ window#osd {
 
 .widget-label.display_label > label,
 .widget-label.sound_label > label {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
-    font-size: 9px;
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 1.6px;
     text-transform: uppercase;
@@ -180,7 +180,7 @@ window#osd {
 
 .widget-volume label,
 .widget-backlight label {
-    font-size: 14px;
+    font-size: 13px;
     color: @on_surface;
     margin-left: 8px;
     min-width: 22px;
@@ -225,9 +225,9 @@ scale slider {
 }
 
 .widget-dnd > label {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-weight: 700;
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0.6px;
     color: @on_surface;
 }
@@ -299,14 +299,14 @@ scale slider {
 }
 
 .widget-buttons-grid.top > flowbox > flowboxchild > button label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.4px;
 }
 
 .widget-buttons-grid.compact > flowbox > flowboxchild > button {
     min-width: 46px;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button:hover {
@@ -351,7 +351,7 @@ scale slider {
 }
 
 .widget-mpris-title {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 0.2px;
@@ -359,7 +359,7 @@ scale slider {
 }
 
 .widget-mpris-subtitle {
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0.2px;
     color: @on_surface_variant;
 }
@@ -418,22 +418,22 @@ scale slider {
 }
 
 .notification-summary {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-weight: 700;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.2px;
     color: @on_surface;
 }
 
 .notification-body {
-    font-size: 11px;
+    font-size: 13px;
     color: @on_surface_variant;
     margin-top: 2px;
     line-height: 1.45;
 }
 
 .notification-time {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
     color: @outline;
 }
@@ -445,7 +445,7 @@ scale slider {
     color: @on_surface;
     padding: 4px 12px;
     margin: 4px 3px 0;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     outline: none;
     box-shadow: 2px 2px 0 0 @surface_container_lowest;
@@ -469,7 +469,7 @@ scale slider {
     min-width: 22px;
     min-height: 22px;
     outline: none;
-    font-size: 14px;
+    font-size: 13px;
     transition: background-color 80ms linear, color 80ms linear;
 }
 
@@ -489,7 +489,7 @@ scale slider {
 }
 
 .widget-title > label {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 0.2px;
@@ -502,7 +502,7 @@ scale slider {
     border-radius: 0;
     color: @on_surface;
     padding: 4px 10px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     box-shadow: 2px 2px 0 0 @surface_container_lowest;
     transition: background-color 80ms linear, box-shadow 80ms linear;
@@ -543,15 +543,15 @@ scale slider {
 }
 
 .notification-popup .notification-summary {
-    font-family: "Zalando Sans Expanded", "Monaspace Krypton";
+    font-family: "Zalando Sans", "Monaspace Krypton Var";
     font-weight: 700;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.2px;
     color: @on_surface;
 }
 
 .notification-popup .notification-body {
-    font-size: 11px;
+    font-size: 13px;
     color: @on_surface_variant;
     margin-top: 2px;
     line-height: 1.45;

@@ -1,15 +1,17 @@
 @import 'theme.css';
 * {
+/* OGANESSON_APPEARANCE_START */
+    font-family: "Zalando Sans";
+/* OGANESSON_APPEARANCE_END */
     min-height: 0;
     min-width: 0;
-    font-family: "Zalando Sans";
 }
 
 /* ── Bar ─────────────────────────────────────────────────── */
 window#waybar {
     background: transparent;
     border: none;
-    border-radius: 0;
+    border-radius: 15;
     margin: 0;
     padding: 0px 4;
     color: @on_surface;
@@ -38,7 +40,7 @@ window#waybar.empty .modules-center {
     background: @surface_variant;
     color: @on_surface_variant;
     border: 2px solid @surface_container_low;
-    border-radius: 0;
+    border-radius: 15;
     box-shadow: 4px 4px 0 0 @surface_container_lowest;
     margin: 6px 4px 4px 2px;
     padding: 0px 6px;
@@ -116,7 +118,7 @@ window#waybar.empty .modules-center {
     color: @on_surface_variant;
     border-color: @surface_container_low;
     box-shadow: 4px 4px 0 0 @surface_container_lowest;
-    font-family: "Monaspace Krypton";
+    font-family: "Monaspace Krypton Var";
     font-weight: 900;
 }
 
@@ -305,7 +307,7 @@ window#waybar.empty .modules-center {
 #network,
 #pulseaudio,
 #backlight {
-    font-family: "JetBrains Mono NerdFont Propo";
+    font-family: "JetBrains Mono Nerd Font Propo";
     min-width: 25px;
     padding: 2 0px;
     margin: 0px 2px;
@@ -331,7 +333,7 @@ window#waybar.empty .modules-center {
     color: @on_error;
     border-color: @surface_container_low;
     box-shadow: 4px 4px 0 0 @surface_container_lowest;
-    border-radius: 0;
+    border-radius: 15;
     opacity: 1;
 }
 
@@ -348,7 +350,7 @@ window#waybar.empty .modules-center {
     background: transparent;
     color: @on_surface;
     border: none;
-    border-radius: 0;
+    border-radius: 15;
     box-shadow: none;
     margin: 4 4px;
     padding: 4px;
@@ -408,7 +410,7 @@ window#waybar.empty .modules-center {
 tooltip {
     background-color: @surface;
     border: 2px solid @surface_container_low;
-    border-radius: 0;
+    border-radius: 15;
     box-shadow: 4px 4px 0 0 @surface_container_lowest;
     padding: 6px 10px;
     font-size: 11px;
@@ -426,7 +428,7 @@ menu {
     background-color: @surface;
     color: @on_surface;
     border: 2px solid @surface_container_low;
-    border-radius: 0;
+    border-radius: 15;
     box-shadow: 4px 4px 0 0 @surface_container_lowest;
     padding: 4px 0;
     font-size: 12px;
@@ -437,7 +439,7 @@ menuitem {
     margin: 0;
     padding: 5px 14px;
     border: none;
-    border-radius: 0;
+    border-radius: 15;
     transition:
         background-color 0.08s linear,
         color            0.08s linear;
@@ -452,7 +454,7 @@ menu separator {
     background-color: @surface_container_low;
     margin: 4px 12px;
     min-height: 1px;
-    border-radius: 0;
+    border-radius: 15;
 }
 
 decoration { box-shadow: none; }

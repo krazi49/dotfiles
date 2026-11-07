@@ -12,16 +12,24 @@
       "size_2xs": 10
     },
     "mono": {
-      "family": "JetBrains Mono Nerd Font Propo",
+      "family": "Monaspace Krypton Var",
       "size_base": 10,
       "size_sm": 12,
       "size_xs": 11
+    },
+    "nerd": {
+      "family": "JetBrains Mono Nerd Font Propo",
+      "size_base": 10
     },
     "display": {
       "family": "Monaspace Argon Var"
     },
     "alt": {
       "family": "Monaspace Krypton Var"
+    },
+    "search": {
+      "family": "Zalando Sans SemiExpanded Bold",
+      "size": 16
     },
     "weight": {
       "thin": 100,
@@ -37,7 +45,7 @@
   },
 
   "shape": {
-    "corner_radius": 0
+    "corner_radius": 15
   },
 
   "border": {
