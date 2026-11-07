@@ -104,8 +104,8 @@ if [ -f "$DOTDIR/homes/.zshrc" ]; then
     link_file "$DOTDIR/homes/.zshrc" "$HOME/.zshrc"
 fi
 
-# 6. wallpapers
-if [ -d "$DOTDIR/wallpapers" ]; then
+# 6. wallpapers (gitignored — keep large images out of the repo; stow the dir itself)
+if [ -d "$DOTDIR/wallpapers" ] && [ -L "$HOME/wallpapers" -o ! -e "$HOME/wallpapers" ]; then
     link_dir "$DOTDIR/wallpapers" "$HOME/wallpapers"
 fi
 

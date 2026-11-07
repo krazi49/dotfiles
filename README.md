@@ -71,7 +71,17 @@ linking, and is safe to re-run
 | `SUPER + 1-9` | switch workspace |
 | `SUPER + SHIFT + 1-9` | move window to workspace |
 
-the full list is in `hypr/keybindings.lua`
+| `SUPER + D` | app launcher (omniapps) |
+| `SUPER + K` | **keybind cheatsheet** (omnicheatsheet — grouped, Alt+C copies a line) |
+| `SUPER + M` | window move/resize submap |
+| `SUPER + L` | lock |
+| `SUPER + N` | notifications |
+| `Print` / `Menu` | screenshot menu |
+| `SHIFT + Print` | region → satty annotate |
+| `CTRL + Print` | region → clipboard |
+| `SUPER + SHIFT + P` | colour picker → clipboard |
+
+the full list is generated live from `hypr/keybindings.lua` via `SUPER + K`
 
 ## layout
 
@@ -86,5 +96,5 @@ the full list is in `hypr/keybindings.lua`
 ├── build.js         # appearance + matugen → all configs
 ├── install.sh       # package install + stow-style symlinking
 ├── screenshots/     # readme gallery
-└── wallpapers/
+├── wallpapers/      # gitignored — symlinked to ~/wallpapers, images not committed
 ```

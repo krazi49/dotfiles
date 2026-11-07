@@ -9,7 +9,7 @@ local EXPLORER = "nautilus"
 local BROWSER = "helium-browser"
 local OMNIAPPS = "bash ~/.config/rofi/scripts/omniapps"
 local SCREENSHOT = "bash ~/.config/rofi/scripts/omniscreenshot"
-local OMNIKEYS = "bash ~/.config/rofi/scripts/omnikeys"
+local OMNIKEYS = "bash ~/.config/rofi/scripts/omnicheatsheet"
 local power_menu = "bash ~/.config/hypr/scripts/power-menu.sh"
 
 local HELIUM_FLAGS = "--password-store=basic"

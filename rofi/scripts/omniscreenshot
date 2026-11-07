@@ -6,14 +6,23 @@ take_screenshot() {
   local tmpfile
   tmpfile=$(mktemp --suffix=.png)
   trap "rm -f $tmpfile" EXIT HUP INT TERM
-  local choice=$(printf "󰒉  region\n󰹑  fullscreen\n󰖲  active window" | rofi -dmenu \
+  local choice=$(printf "󰒉  region → annotate (satty)\n󰒉  region → clipboard\n󰹑  fullscreen\n󰖲  active window" | rofi -dmenu \
     -theme "$THEME" \
     -p "${PROMPT:-screenshot}")
   [[ -z "$choice" ]] && exit 0
   sleep 0.5
   case "$choice" in
-  *"region"*)
-    grim -g "$(slurp)" "$tmpfile"
+  *"region → annotate"*)
+    # one-key region shot straight into satty for markup, save on exit
+    grim -g "$(slurp)" - | satty -f - --save-to "$HOME/Pictures/Screenshots/screenshot_$(date +%Y%m%d_%H%M%S).png" &
+    trap - EXIT
+    return
+    ;;
+  *"region → clipboard"*)
+    grim -g "$(slurp)" - | wl-copy
+    notify-send "Screenshot" "region copied to clipboard" -t 2000
+    trap - EXIT
+    return
     ;;
   *"fullscreen"*)
     grim "$tmpfile"
@@ -24,34 +33,23 @@ take_screenshot() {
     ;;
   esac
   [[ ! -s "$tmpfile" ]] && exit 0
-  local post_choice=$(printf "󰳻  save to file\n󰅏  copy to clipboard\n󰣕  open in satty\n󰠮  ask snib about it" | rofi -dmenu \
+  local post_choice=$(printf "󰳻  save to file\n󰅏  copy to clipboard\n󰣕  open in satty" | rofi -dmenu \
     -theme "$THEME" \
     -p "action:")
   [[ -z "$post_choice" ]] && exit 0
   case "$post_choice" in
   *"save to file"*)
+    mkdir -p "$HOME/Pictures/Screenshots"
     local default_filename="screenshot_$(date +%Y%m%d_%H%M%S).png"
     local save_path=$(rofi -dmenu -theme "$THEME" -p "save as:" -initial-selection "$HOME/Pictures/Screenshots/$default_filename")
     [[ -z "$save_path" ]] && exit 0
     mv "$tmpfile" "$save_path"
     trap - EXIT
+    notify-send "Screenshot" "saved to $save_path" -t 2000
     ;;
   *"copy to clipboard"*)
     wl-copy <"$tmpfile"
-    ;;
-  *"ask snib about it"*)
-    trap - EXIT HUP INT TERM
-    local question=$(rofi -dmenu -theme "$THEME" -p "ask snib:" | head -n 1)
-    [[ -z "$question" ]] && exit 0
-    mkdir -p /tmp/snib-eyes
-    echo "$question" >/tmp/snib-eyes/question
-    cp "$tmpfile" /tmp/snib-eyes/shot.png
-    # Run openclaw in main script context (PATH is set above), then open Kitty to show the result
-    ans=$(openclaw infer model run --model snibble/eyes --file /tmp/snib-eyes/shot.png --prompt "$question" 2>/tmp/snib-eyes/error.log)
-    setsid -f kitty --class floating_snib --title "snib·eyes" bash -c '
-      printf "\n%s\n\n" "$1"
-      read -n1 -rsp "done. press any key"
-    ' bash "$ans" >/dev/null 2>&1
+    notify-send "Screenshot" "copied to clipboard" -t 2000
     ;;
   *"open in satty"*)
     trap - EXIT HUP INT TERM

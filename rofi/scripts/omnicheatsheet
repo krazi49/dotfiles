@@ -1,0 +1,152 @@
+#!/bin/bash
+# omnicheatsheet — pretty keybind cheatsheet rendered from keybindings.lua,
+# grouped by section. Replaces/augments the raw omnikeys list.
+THEME="$HOME/.config/rofi/config.rasi"
+KEYBINDS="$HOME/dotfiles/hypr/keybindings.lua"
+CACHE="$HOME/.cache/omnisearch/omnicheatsheet"
+PROMPT="󰌌  keybinds"
+mkdir -p "$(dirname "$CACHE")"
+
+if [[ ! -f "$KEYBINDS" ]]; then
+  notify-send "Cheatsheet" "keybindings.lua not found" -t 3000
+  exit 1
+fi
+
+LUA=$(command -v lua || command -v lua5.4 || command -v luajit)
+[[ -z "$LUA" ]] && { notify-send "Cheatsheet" "no lua interpreter" -t 3000; exit 1; }
+
+KEYBINDS_TIME=$(stat -c "%Y" "$KEYBINDS")
+SCRIPT_TIME=$(stat -c "%Y" "$0")
+CACHE_TIME=$([[ -f "$CACHE" ]] && stat -c "%Y" "$CACHE" || echo 0)
+
+if [[ "$KEYBINDS_TIME" -gt "$CACHE_TIME" ]] || [[ "$SCRIPT_TIME" -gt "$CACHE_TIME" ]] || [[ ! -s "$CACHE" ]]; then
+  GENERATED=$("$LUA" - "$KEYBINDS" <<'EOF'
+local path = arg[1]
+local submap = nil
+local entries = {}
+
+local function ser(v)
+  if type(v) ~= "table" then return tostring(v) end
+  local items = {}
+  for k, x in pairs(v) do
+    if not (k == "window" and x == "activewindow") then
+      items[#items + 1] = { tostring(k), ser(x) }
+    end
+  end
+  table.sort(items, function(a, b) return a[1] < b[1] end)
+  local parts = {}
+  for _, it in ipairs(items) do parts[#parts + 1] = it[1] .. "=" .. it[2] end
+  return table.concat(parts, " ")
+end
+
+local function dsp_node(p)
+  return setmetatable({}, {
+    __index = function(_, k) return dsp_node(p == "" and k or (p .. "." .. k)) end,
+    __call = function(_, ...)
+      local args = {}
+      for i = 1, select("#", ...) do args[#args + 1] = ser((select(i, ...))) end
+      return { __dsp = p, args = args }
+    end,
+  })
+end
+
+local function describe(action)
+  if type(action) == "function" then return "function" end
+  if type(action) ~= "table" or not action.__dsp then return "?" end
+  local d = action.__dsp
+  local a = table.concat(action.args, " ")
+  -- friendly labels for the common dispatchers
+  local map = {
+    ["window.close"] = "close window",
+    ["window.fullscreen"] = "fullscreen",
+    ["window.float"] = "toggle float",
+    ["window.center"] = "center window",
+    ["window.cycle_next"] = "cycle windows",
+    ["window.pin"] = "pin window",
+    ["window.move"] = "move window",
+    ["window.drag"] = "drag window",
+    ["window.resize"] = "resize window",
+    ["layout.togglesplit"] = "flip split",
+    ["group.toggle"] = "toggle group",
+    ["group.next"] = "next tab",
+    ["group.prev"] = "prev tab",
+    ["focus"] = "focus",
+    ["workspace.toggle_special"] = "toggle scratchpad",
+    ["submap"] = "submap",
+    ["gesture"] = "gesture",
+    ["exec_cmd"] = "run",
+  }
+  local label = map[d]
+  if d == "exec_cmd" then
+    local cmd = action.args[1] or ""
+    -- shorten common commands
+    cmd = cmd:gsub("pkill rofi || ", "")
+    cmd = cmd:gsub("bash ~/?%.config/", "~/")
+    cmd = cmd:gsub("~/.config/", "~/")
+    return "run  " .. cmd
+  end
+  if d == "focus" and a:match("workspace") then
+    local ws = a:match('workspace="([^"]+)"') or a:match("workspace=([%w:+-]+)")
+    if ws and ws:match("^e") then return "workspace " .. ws end
+    return "goto workspace " .. (ws or "?")
+  end
+  if d == "window.move" and a:match("workspace") then
+    local ws = a:match('workspace="([^"]+)"') or a:match("workspace=([%w:+-]+)")
+    return "move to ws " .. (ws or "?")
+  end
+  if d == "focus" and a:match("direction") then
+    local dir = a:match('direction="([^"]+)"') or ""
+    local dirs = { u = "up", d = "down", l = "left", r = "right" }
+    return "focus " .. (dirs[dir] or dir)
+  end
+  return (label or d) .. (a ~= "" and ("  " .. a) or "")
+end
+
+local section = "general"
+local hl = setmetatable({}, { __index = function() return function() end end })
+rawset(hl, "dsp", dsp_node(""))
+rawset(hl, "bind", function(combo, action)
+  local c = tostring(combo)
+  if submap then c = "[" .. submap .. "] " .. c end
+  entries[#entries + 1] = { section, c, describe(action) }
+end)
+rawset(hl, "define_submap", function(name, fn)
+  local prev = submap
+  submap = name
+  section = name
+  fn()
+  submap = prev
+  section = "general"
+end)
+_G.hl = hl
+
+local ok, err = pcall(dofile, path)
+if not ok then
+  io.stderr:write(tostring(err) .. "\n")
+  os.exit(1)
+end
+
+-- print grouped, aligned
+local cur = nil
+local max = 0
+for _, e in ipairs(entries) do if #e[2] > max then max = #e[2] end end
+for _, e in ipairs(entries) do
+  if e[1] ~= cur then
+    cur = e[1]
+    print("")
+    print("── " .. cur:upper() .. " " .. string.rep("─", math.max(0, 40 - #cur)))
+  end
+  print(string.format("  %-" .. max .. "s  %s", e[2], e[3]))
+end
+EOF
+  ) || { notify-send "Cheatsheet" "failed to parse keybindings.lua" -t 3000; exit 1; }
+  printf '%s\n' "$GENERATED" >"$CACHE"
+fi
+
+[[ ! -s "$CACHE" ]] && { notify-send "Cheatsheet" "no keybinds found" -t 3000; exit 1; }
+
+# show as a scrollable rofi list; selecting a line just copies it for reference
+rofi -normal-window -dmenu -i -p "$PROMPT" \
+  -theme "$THEME" \
+  -kb-custom-1 "Alt+c" \
+  <"$CACHE" | { read -r line; [[ -n "$line" ]] && echo "$line" | wl-copy && notify-send "Cheatsheet" "copied: $line" -t 1500; }
